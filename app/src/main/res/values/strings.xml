@@ -3,6 +3,12 @@
 
     <!-- Labels -->
     <string name="labelPlayers">Players</string>
+    <string name="labelMastermind">Mastermind</string>
+    <string name="labelScheme">Scheme</string>
+    <string name="labelVillains">Villains</string>
+    <string name="labelHenchmen">Henchmen</string>
+    <string name="labelHeroes">Heroes</string>
+    <string name="labelLock">Lock</string>
 
     <!-- Buttons -->
     <string name="button1">1</string>
