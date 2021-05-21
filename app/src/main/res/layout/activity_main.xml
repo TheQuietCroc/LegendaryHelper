@@ -11,7 +11,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp"
         android:text="@string/labelPlayers"
         app:layout_constraintStart_toStartOf="parent"
@@ -22,9 +21,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
         android:orientation="horizontal"
         app:checkedButton="@id/buttonPlayers1"
         app:layout_constraintBottom_toBottomOf="@+id/labelPlayers"
@@ -80,38 +77,35 @@
         android:id="@+id/toggleMastermindLock"
         android:layout_width="30dp"
         android:layout_height="30dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
         android:background="@drawable/lock"
         android:textOff=""
         android:textOn=""
-        app:layout_constraintBottom_toBottomOf="@+id/selectMasterminds"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/selectMasterminds" />
+        app:layout_constraintTop_toBottomOf="@+id/buttonGroupPlayers" />
 
     <TextView
         android:id="@+id/labelMastermind"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginStart="46dp"
         android:text="@string/labelMastermind"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toBottomOf="@+id/toggleMastermindLock"
+        app:layout_constraintEnd_toStartOf="@+id/toggleMastermindLock"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonGroupPlayers" />
+        app:layout_constraintTop_toTopOf="@+id/toggleMastermindLock" />
 
     <Spinner
-        android:id="@+id/selectMasterminds"
+        android:id="@+id/spinnerMasterminds"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        app:layout_constraintBottom_toBottomOf="@+id/labelMastermind"
-        app:layout_constraintEnd_toStartOf="@+id/toggleMastermindLock"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/labelMastermind"
-        app:layout_constraintTop_toTopOf="@+id/labelMastermind" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/labelMastermind" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

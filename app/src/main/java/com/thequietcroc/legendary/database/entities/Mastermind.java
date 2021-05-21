@@ -48,4 +48,16 @@ public class Mastermind extends BaseCard {
     public Integer villainId;
 
     public Integer henchmenId;
+
+    public boolean isEpic() {
+        return isEpic;
+    }
+
+    public Integer getVillainId() {
+        return villainId;
+    }
+
+    public Integer getHenchmenId() {
+        return henchmenId;
+    }
 }

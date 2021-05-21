@@ -5,6 +5,7 @@ import androidx.room.ColumnInfo;
 import androidx.room.PrimaryKey;
 
 public abstract class BaseCard {
+
     @PrimaryKey
     public int id;
 
@@ -18,4 +19,20 @@ public abstract class BaseCard {
 
     @ColumnInfo(defaultValue = "0")
     public boolean isExcluded;
+
+    public int getId() {
+        return id;
+    }
+
+    public String name() {
+        return name;
+    }
+
+    public boolean isCustom() {
+        return isCustom;
+    }
+
+    public boolean isExcluded() {
+        return isExcluded;
+    }
 }
