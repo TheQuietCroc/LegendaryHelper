@@ -25,4 +25,10 @@ public interface SchemeDao {
 
     @Query("SELECT * FROM tblSchemes WHERE isCustom = 0")
     LiveData<List<Scheme>> getAllStock();
+
+    @Query("SELECT name FROM tblSchemes ORDER BY name ASC")
+    LiveData<List<String>> getAllNames();
+
+    @Query("SELECT name FROM tblSchemes WHERE isExcluded = 0 ORDER BY name ASC")
+    LiveData<List<String>> getAllFilteredNames();
 }

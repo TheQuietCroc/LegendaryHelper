@@ -58,30 +58,56 @@ public class MainActivity extends AppCompatActivity {
 
         switch(cardType) {
             case HERO: {
-
+//                db.heroDao().getAllFilteredNames()
+//                        .observe(this, generateObserver(R.id.spinnerHero1));
+//                db.heroDao().getAllFilteredNames()
+//                        .observe(this, generateObserver(R.id.spinnerHero2));
+//                db.heroDao().getAllFilteredNames()
+//                        .observe(this, generateObserver(R.id.spinnerHero3));
+//                db.heroDao().getAllFilteredNames()
+//                        .observe(this, generateObserver(R.id.spinnerHero4));
+//                db.heroDao().getAllFilteredNames()
+//                        .observe(this, generateObserver(R.id.spinnerHero5));
+//                db.heroDao().getAllFilteredNames()
+//                        .observe(this, generateObserver(R.id.spinnerHero6));
             } break;
             case MASTERMIND: {
-                final Observer<List<String>> observer = list -> {
-                    final Spinner spinner = findViewById(R.id.spinnerMasterminds);
-                    final ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                            getApplicationContext(),
-                            R.layout.spinner_layout,
-                            list);
-
-                    adapter.setDropDownViewResource(R.layout.spinner_layout);
-                    spinner.setAdapter(adapter);
-                };
-                db.mastermindDao().getAllFilteredNames().observe(this, observer);
+                db.mastermindDao().getAllFilteredNames()
+                        .observe(this, generateObserver(R.id.spinnerMasterminds));
             } break;
             case VILLAINS: {
-
+//                db.villainsDao().getAllFilteredNames()
+//                        .observe(this, generateObserver(R.id.spinnerVillains1));
+//                db.villainsDao().getAllFilteredNames()
+//                        .observe(this, generateObserver(R.id.spinnerVillains2));
+//                db.villainsDao().getAllFilteredNames()
+//                        .observe(this, generateObserver(R.id.spinnerVillains3));
+//                db.villainsDao().getAllFilteredNames()
+//                        .observe(this, generateObserver(R.id.spinnerVillains4));
             } break;
             case HENCHMEN: {
-
+//                db.henchmenDao().getAllFilteredNames()
+//                        .observe(this, generateObserver(R.id.spinnerHenchmen1));
+//                db.henchmenDao().getAllFilteredNames()
+//                        .observe(this, generateObserver(R.id.spinnerHenchmen2));
             } break;
             case SCHEME: {
-
+                db.schemeDao().getAllFilteredNames()
+                        .observe(this, generateObserver(R.id.spinnerScheme));
             } break;
         }
+    }
+
+    private Observer<List<String>> generateObserver(final int viewId) {
+        return list -> {
+            final Spinner spinner = findViewById(viewId);
+            final ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                    getApplicationContext(),
+                    R.layout.spinner_layout,
+                    list);
+
+            adapter.setDropDownViewResource(R.layout.spinner_layout);
+            spinner.setAdapter(adapter);
+        };
     }
 }

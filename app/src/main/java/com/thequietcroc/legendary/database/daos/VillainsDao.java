@@ -25,4 +25,10 @@ public interface VillainsDao {
 
     @Query("SELECT * FROM tblVillains WHERE isCustom = 0")
     LiveData<List<Villains>> getAllStock();
+
+    @Query("SELECT name FROM tblVillains ORDER BY name ASC")
+    LiveData<List<String>> getAllNames();
+
+    @Query("SELECT name FROM tblVillains WHERE isExcluded = 0 ORDER BY name ASC")
+    LiveData<List<String>> getAllFilteredNames();
 }

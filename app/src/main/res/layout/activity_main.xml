@@ -6,6 +6,18 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <ToggleButton
+        android:id="@+id/toggleSchemeLock"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/lock"
+        android:textOff=""
+        android:textOn=""
+        app:layout_constraintBottom_toBottomOf="@+id/spinnerScheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/spinnerScheme" />
+
     <TextView
         android:id="@+id/labelPlayers"
         android:layout_width="wrap_content"
@@ -77,25 +89,26 @@
         android:id="@+id/toggleMastermindLock"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:background="@drawable/lock"
         android:textOff=""
         android:textOn=""
+        app:layout_constraintBottom_toBottomOf="@+id/spinnerMasterminds"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonGroupPlayers" />
+        app:layout_constraintTop_toTopOf="@+id/spinnerMasterminds" />
 
     <TextView
         android:id="@+id/labelMastermind"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="46dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
         android:text="@string/labelMastermind"
         android:textAlignment="center"
-        app:layout_constraintBottom_toBottomOf="@+id/toggleMastermindLock"
-        app:layout_constraintEnd_toStartOf="@+id/toggleMastermindLock"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/toggleMastermindLock" />
+        app:layout_constraintTop_toBottomOf="@+id/buttonGroupPlayers" />
 
     <Spinner
         android:id="@+id/spinnerMasterminds"
@@ -103,9 +116,31 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/toggleMastermindLock"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/labelMastermind" />
+
+    <TextView
+        android:id="@+id/labelScheme"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:text="@string/labelScheme"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/spinnerMasterminds" />
+
+    <Spinner
+        android:id="@+id/spinnerScheme"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toStartOf="@+id/toggleSchemeLock"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/labelScheme" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

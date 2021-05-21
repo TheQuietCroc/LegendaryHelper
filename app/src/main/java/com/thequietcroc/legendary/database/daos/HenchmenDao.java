@@ -25,4 +25,10 @@ public interface HenchmenDao {
 
     @Query("SELECT * FROM tblHenchmen WHERE isCustom = 0")
     LiveData<List<Henchmen>> getAllStock();
+
+    @Query("SELECT name FROM tblHenchmen ORDER BY name ASC")
+    LiveData<List<String>> getAllNames();
+
+    @Query("SELECT name FROM tblHenchmen WHERE isExcluded = 0 ORDER BY name ASC")
+    LiveData<List<String>> getAllFilteredNames();
 }

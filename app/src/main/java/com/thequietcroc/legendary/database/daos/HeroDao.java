@@ -26,5 +26,11 @@ public interface HeroDao {
     @Query("SELECT * FROM tblHeroes WHERE isCustom = 0")
     LiveData<List<Hero>> getAllStock();
 
+    @Query("SELECT name FROM tblHeroes ORDER BY name ASC")
+    LiveData<List<String>> getAllNames();
+
+    @Query("SELECT name FROM tblHeroes WHERE isExcluded = 0 ORDER BY name ASC")
+    LiveData<List<String>> getAllFilteredNames();
+
 
 }
