@@ -58,38 +58,38 @@ public class MainActivity extends AppCompatActivity {
 
         switch(cardType) {
             case HERO: {
-//                db.heroDao().getAllFilteredNames()
-//                        .observe(this, generateObserver(R.id.spinnerHero1));
-//                db.heroDao().getAllFilteredNames()
-//                        .observe(this, generateObserver(R.id.spinnerHero2));
-//                db.heroDao().getAllFilteredNames()
-//                        .observe(this, generateObserver(R.id.spinnerHero3));
-//                db.heroDao().getAllFilteredNames()
-//                        .observe(this, generateObserver(R.id.spinnerHero4));
-//                db.heroDao().getAllFilteredNames()
-//                        .observe(this, generateObserver(R.id.spinnerHero5));
-//                db.heroDao().getAllFilteredNames()
-//                        .observe(this, generateObserver(R.id.spinnerHero6));
+                db.heroDao().getAllFilteredNames()
+                        .observe(this, generateObserver(R.id.spinnerHeroes1));
+                db.heroDao().getAllFilteredNames()
+                        .observe(this, generateObserver(R.id.spinnerHeroes2));
+                db.heroDao().getAllFilteredNames()
+                        .observe(this, generateObserver(R.id.spinnerHeroes3));
+                db.heroDao().getAllFilteredNames()
+                        .observe(this, generateObserver(R.id.spinnerHeroes4));
+                db.heroDao().getAllFilteredNames()
+                        .observe(this, generateObserver(R.id.spinnerHeroes5));
+                db.heroDao().getAllFilteredNames()
+                        .observe(this, generateObserver(R.id.spinnerHeroes6));
             } break;
             case MASTERMIND: {
                 db.mastermindDao().getAllFilteredNames()
                         .observe(this, generateObserver(R.id.spinnerMasterminds));
             } break;
             case VILLAINS: {
-//                db.villainsDao().getAllFilteredNames()
-//                        .observe(this, generateObserver(R.id.spinnerVillains1));
-//                db.villainsDao().getAllFilteredNames()
-//                        .observe(this, generateObserver(R.id.spinnerVillains2));
-//                db.villainsDao().getAllFilteredNames()
-//                        .observe(this, generateObserver(R.id.spinnerVillains3));
-//                db.villainsDao().getAllFilteredNames()
-//                        .observe(this, generateObserver(R.id.spinnerVillains4));
+                db.villainsDao().getAllFilteredNames()
+                        .observe(this, generateObserver(R.id.spinnerVillains1));
+                db.villainsDao().getAllFilteredNames()
+                        .observe(this, generateObserver(R.id.spinnerVillains2));
+                db.villainsDao().getAllFilteredNames()
+                        .observe(this, generateObserver(R.id.spinnerVillains3));
+                db.villainsDao().getAllFilteredNames()
+                        .observe(this, generateObserver(R.id.spinnerVillains4));
             } break;
             case HENCHMEN: {
-//                db.henchmenDao().getAllFilteredNames()
-//                        .observe(this, generateObserver(R.id.spinnerHenchmen1));
-//                db.henchmenDao().getAllFilteredNames()
-//                        .observe(this, generateObserver(R.id.spinnerHenchmen2));
+                db.henchmenDao().getAllFilteredNames()
+                        .observe(this, generateObserver(R.id.spinnerHenchmen1));
+                db.henchmenDao().getAllFilteredNames()
+                        .observe(this, generateObserver(R.id.spinnerHenchmen2));
             } break;
             case SCHEME: {
                 db.schemeDao().getAllFilteredNames()
