@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    tools:menu="@menu/main_activity_menu_actions">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -25,7 +26,9 @@
                 android:text="@string/labelPlayers"
                 android:textAlignment="center"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginLeft="16dp"
+                android:gravity="center_horizontal" />
 
             <com.google.android.material.button.MaterialButtonToggleGroup
                 android:id="@+id/buttonGroupPlayers"
@@ -95,7 +98,8 @@
                 android:textAlignment="center"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/buttonGroupPlayers" />
+                app:layout_constraintTop_toBottomOf="@+id/buttonGroupPlayers"
+                android:gravity="center_horizontal" />
 
             <com.thequietcroc.legendary.custom.views.CardControl
                 android:id="@+id/cardControlMastermind"
@@ -119,7 +123,8 @@
                 android:textAlignment="center"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cardControlMastermind" />
+                app:layout_constraintTop_toBottomOf="@+id/cardControlMastermind"
+                android:gravity="center_horizontal" />
 
             <com.thequietcroc.legendary.custom.views.CardControl
                 android:id="@+id/cardControlScheme"
@@ -143,7 +148,8 @@
                 android:textAlignment="center"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cardControlScheme" />
+                app:layout_constraintTop_toBottomOf="@+id/cardControlScheme"
+                android:gravity="center_horizontal" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/containerVillains"
@@ -209,7 +215,8 @@
                 android:textAlignment="center"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/containerVillains" />
+                app:layout_constraintTop_toBottomOf="@+id/containerVillains"
+                android:gravity="center_horizontal" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/containerHenchmen"
@@ -253,7 +260,8 @@
                 android:textAlignment="center"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/containerHenchmen" />
+                app:layout_constraintTop_toBottomOf="@+id/containerHenchmen"
+                android:gravity="center_horizontal" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/containerHeroes"

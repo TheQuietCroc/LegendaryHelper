@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Legendary</string>
+    <string name="app_name">Legendary Helper</string>
 
     <!-- Labels -->
     <string name="labelPlayers">Players</string>
