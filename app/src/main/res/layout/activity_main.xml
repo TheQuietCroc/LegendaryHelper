@@ -84,18 +84,6 @@
 
             </com.google.android.material.button.MaterialButtonToggleGroup>
 
-            <ToggleButton
-                android:id="@+id/toggleMastermindLock"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginEnd="16dp"
-                android:background="@drawable/lock"
-                android:textOff=""
-                android:textOn=""
-                app:layout_constraintBottom_toBottomOf="@+id/spinnerMasterminds"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/spinnerMasterminds" />
-
             <TextView
                 android:id="@+id/labelMastermind"
                 android:layout_width="0dp"
@@ -109,15 +97,16 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/buttonGroupPlayers" />
 
-            <Spinner
-                android:id="@+id/spinnerMasterminds"
+            <com.thequietcroc.legendary.custom.views.CardControl
+                android:id="@+id/cardControlMastermind"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                app:layout_constraintEnd_toStartOf="@+id/toggleMastermindLock"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/labelMastermind" />
+                app:layout_constraintTop_toBottomOf="@id/labelMastermind" />
 
             <TextView
                 android:id="@+id/labelScheme"
@@ -130,29 +119,18 @@
                 android:textAlignment="center"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/spinnerMasterminds" />
+                app:layout_constraintTop_toBottomOf="@+id/cardControlMastermind" />
 
-            <Spinner
-                android:id="@+id/spinnerScheme"
+            <com.thequietcroc.legendary.custom.views.CardControl
+                android:id="@+id/cardControlScheme"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                app:layout_constraintEnd_toStartOf="@+id/toggleSchemeLock"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/labelScheme" />
-
-            <ToggleButton
-                android:id="@+id/toggleSchemeLock"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
                 android:layout_marginEnd="16dp"
-                android:background="@drawable/lock"
-                android:textOff=""
-                android:textOn=""
-                app:layout_constraintBottom_toBottomOf="@+id/spinnerScheme"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/spinnerScheme" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/labelScheme" />
 
             <TextView
                 android:id="@+id/labelVillains"
@@ -165,95 +143,60 @@
                 android:textAlignment="center"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/spinnerScheme" />
+                app:layout_constraintTop_toBottomOf="@+id/cardControlScheme" />
 
-            <Spinner
-                android:id="@+id/spinnerVillains1"
-                android:layout_width="0dp"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/containerVillains"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                app:layout_constraintEnd_toStartOf="@+id/toggleVillainsLock1"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/labelVillains" />
-
-            <ToggleButton
-                android:id="@+id/toggleVillainsLock1"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginEnd="16dp"
-                android:background="@drawable/lock"
-                android:textOff=""
-                android:textOn=""
-                app:layout_constraintBottom_toBottomOf="@+id/spinnerVillains1"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/spinnerVillains1" />
-
-            <Spinner
-                android:id="@+id/spinnerVillains2"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                app:layout_constraintEnd_toStartOf="@+id/toggleVillainsLock2"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/spinnerVillains1" />
+                app:layout_constraintTop_toBottomOf="@+id/labelVillains">
 
-            <ToggleButton
-                android:id="@+id/toggleVillainsLock2"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginEnd="16dp"
-                android:background="@drawable/lock"
-                android:textOff=""
-                android:textOn=""
-                app:layout_constraintBottom_toBottomOf="@+id/spinnerVillains2"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/spinnerVillains2" />
+                <com.thequietcroc.legendary.custom.views.CardControl
+                    android:id="@+id/cardControlVillains1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-            <Spinner
-                android:id="@+id/spinnerVillains3"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                app:layout_constraintEnd_toStartOf="@+id/toggleVillainsLock3"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/spinnerVillains2" />
+                <com.thequietcroc.legendary.custom.views.CardControl
+                    android:id="@+id/cardControlVillains2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/cardControlVillains1" />
 
-            <ToggleButton
-                android:id="@+id/toggleVillainsLock3"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginEnd="16dp"
-                android:background="@drawable/lock"
-                android:textOff=""
-                android:textOn=""
-                app:layout_constraintBottom_toBottomOf="@+id/spinnerVillains3"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/spinnerVillains3" />
+                <com.thequietcroc.legendary.custom.views.CardControl
+                    android:id="@+id/cardControlVillains3"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/cardControlVillains2" />
 
-            <Spinner
-                android:id="@+id/spinnerVillains4"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                app:layout_constraintEnd_toStartOf="@+id/toggleVillainsLock4"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/spinnerVillains3" />
-
-            <ToggleButton
-                android:id="@+id/toggleVillainsLock4"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginEnd="16dp"
-                android:background="@drawable/lock"
-                android:textOff=""
-                android:textOn=""
-                app:layout_constraintBottom_toBottomOf="@+id/spinnerVillains4"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/spinnerVillains4" />
+                <com.thequietcroc.legendary.custom.views.CardControl
+                    android:id="@+id/cardControlVillains4"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/cardControlVillains3" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <TextView
                 android:id="@+id/labelHenchmen"
@@ -266,51 +209,38 @@
                 android:textAlignment="center"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/spinnerVillains4" />
+                app:layout_constraintTop_toBottomOf="@+id/containerVillains" />
 
-            <Spinner
-                android:id="@+id/spinnerHenchmen1"
-                android:layout_width="0dp"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/containerHenchmen"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                app:layout_constraintEnd_toStartOf="@+id/toggleHenchmenLock1"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/labelHenchmen" />
-
-            <ToggleButton
-                android:id="@+id/toggleHenchmenLock1"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginEnd="16dp"
-                android:background="@drawable/lock"
-                android:textOff=""
-                android:textOn=""
-                app:layout_constraintBottom_toBottomOf="@+id/spinnerHenchmen1"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/spinnerHenchmen1" />
-
-            <Spinner
-                android:id="@+id/spinnerHenchmen2"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                app:layout_constraintEnd_toStartOf="@+id/toggleHenchmenLock2"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/spinnerHenchmen1" />
+                app:layout_constraintTop_toBottomOf="@+id/labelHenchmen">
 
-            <ToggleButton
-                android:id="@+id/toggleHenchmenLock2"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginEnd="16dp"
-                android:background="@drawable/lock"
-                android:textOff=""
-                android:textOn=""
-                app:layout_constraintBottom_toBottomOf="@+id/spinnerHenchmen2"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/spinnerHenchmen2" />
+                <com.thequietcroc.legendary.custom.views.CardControl
+                    android:id="@+id/cardControlHenchmen1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.thequietcroc.legendary.custom.views.CardControl
+                    android:id="@+id/cardControlHenchmen2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/cardControlHenchmen1" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <TextView
                 android:id="@+id/labelHeroes"
@@ -323,140 +253,80 @@
                 android:textAlignment="center"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/spinnerHenchmen2" />
+                app:layout_constraintTop_toBottomOf="@+id/containerHenchmen" />
 
-            <Spinner
-                android:id="@+id/spinnerHeroes1"
-                android:layout_width="0dp"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/containerHeroes"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                app:layout_constraintEnd_toStartOf="@+id/toggleHeroesLock1"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/labelHeroes" />
+                app:layout_constraintTop_toBottomOf="@+id/labelHeroes">
 
-            <ToggleButton
-                android:id="@+id/toggleHeroesLock1"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginEnd="16dp"
-                android:background="@drawable/lock"
-                android:textOff=""
-                android:textOn=""
-                app:layout_constraintBottom_toBottomOf="@+id/spinnerHeroes1"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/spinnerHeroes1" />
+                <com.thequietcroc.legendary.custom.views.CardControl
+                    android:id="@+id/cardControlHeroes1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-            <Spinner
-                android:id="@+id/spinnerHeroes2"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                app:layout_constraintEnd_toStartOf="@+id/toggleHeroesLock2"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/spinnerHeroes1" />
+                <com.thequietcroc.legendary.custom.views.CardControl
+                    android:id="@+id/cardControlHeroes2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/cardControlHeroes1" />
 
-            <ToggleButton
-                android:id="@+id/toggleHeroesLock2"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginEnd="16dp"
-                android:background="@drawable/lock"
-                android:textOff=""
-                android:textOn=""
-                app:layout_constraintBottom_toBottomOf="@+id/spinnerHeroes2"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/spinnerHeroes2" />
+                <com.thequietcroc.legendary.custom.views.CardControl
+                    android:id="@+id/cardControlHeroes3"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/cardControlHeroes2" />
 
-            <Spinner
-                android:id="@+id/spinnerHeroes3"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                app:layout_constraintEnd_toStartOf="@+id/toggleHeroesLock3"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/spinnerHeroes2" />
+                <com.thequietcroc.legendary.custom.views.CardControl
+                    android:id="@+id/cardControlHeroes4"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/cardControlHeroes3" />
 
-            <ToggleButton
-                android:id="@+id/toggleHeroesLock3"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginEnd="16dp"
-                android:background="@drawable/lock"
-                android:textOff=""
-                android:textOn=""
-                app:layout_constraintBottom_toBottomOf="@+id/spinnerHeroes3"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/spinnerHeroes3" />
+                <com.thequietcroc.legendary.custom.views.CardControl
+                    android:id="@+id/cardControlHeroes5"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/cardControlHeroes4" />
 
-            <Spinner
-                android:id="@+id/spinnerHeroes4"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                app:layout_constraintEnd_toStartOf="@+id/toggleHeroesLock4"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/spinnerHeroes3" />
-
-            <ToggleButton
-                android:id="@+id/toggleHeroesLock4"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginEnd="16dp"
-                android:background="@drawable/lock"
-                android:textOff=""
-                android:textOn=""
-                app:layout_constraintBottom_toBottomOf="@+id/spinnerHeroes4"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/spinnerHeroes4" />
-
-            <Spinner
-                android:id="@+id/spinnerHeroes5"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                app:layout_constraintEnd_toStartOf="@+id/toggleHeroesLock5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/spinnerHeroes4" />
-
-            <ToggleButton
-                android:id="@+id/toggleHeroesLock5"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginEnd="16dp"
-                android:background="@drawable/lock"
-                android:textOff=""
-                android:textOn=""
-                app:layout_constraintBottom_toBottomOf="@+id/spinnerHeroes5"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/spinnerHeroes5" />
-
-            <Spinner
-                android:id="@+id/spinnerHeroes6"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                app:layout_constraintEnd_toStartOf="@+id/toggleHeroesLock6"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/spinnerHeroes5" />
-
-            <ToggleButton
-                android:id="@+id/toggleHeroesLock6"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginEnd="16dp"
-                android:background="@drawable/lock"
-                android:textOff=""
-                android:textOn=""
-                app:layout_constraintBottom_toBottomOf="@+id/spinnerHeroes6"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/spinnerHeroes6" />
+                <com.thequietcroc.legendary.custom.views.CardControl
+                    android:id="@+id/cardControlHeroes6"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/cardControlHeroes5" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

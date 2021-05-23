@@ -7,6 +7,7 @@ import android.widget.Spinner;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 
+import com.thequietcroc.legendary.custom.views.CardControl;
 import com.thequietcroc.legendary.database.LegendaryDatabase;
 import com.thequietcroc.legendary.enums.CardType;
 
@@ -23,30 +24,16 @@ public class MainActivity extends AppCompatActivity {
     public static final String EXTRA_MESSAGE = "com.thequietcroc.legendary.MESSAGE";
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         final LegendaryDatabase db = LegendaryDatabase.getInstance(this);
 
-        populateControls(db);
-
-//        final LegendaryDatabase db = LegendaryDatabase.getInstance(this);
-//
-//        final Observer<Henchmen> nameObserver = h -> dbText.setText(h.name);
-//
-//        db.henchmenDao().findByName("Hand Ninjas").observe(this, nameObserver);
+        initializeControls(db);
     }
 
-//    private void fillCardListDisplay(final List<? extends BaseCard> cards) {
-//        final RecyclerView cardListDisplay = findViewById(R.id.cardListDisplay);
-//        final RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-//
-//        cardListDisplay.setLayoutManager(layoutManager);
-//        cardListDisplay.setAdapter(new CardsAdapter(this, cards));
-//    }
-
-    private void populateControls(final LegendaryDatabase db) {
+    private void initializeControls(final LegendaryDatabase db) {
         populateCardSpinner(db, HERO);
         populateCardSpinner(db, MASTERMIND);
         populateCardSpinner(db, VILLAINS);
@@ -56,51 +43,58 @@ public class MainActivity extends AppCompatActivity {
 
     private void populateCardSpinner(final LegendaryDatabase db, final CardType cardType) {
 
-        switch(cardType) {
+        switch (cardType) {
             case HERO: {
                 db.heroDao().getAllFilteredNames()
-                        .observe(this, generateObserver(R.id.spinnerHeroes1));
+                        .observe(this, generateObserver(R.id.cardControlHeroes1));
                 db.heroDao().getAllFilteredNames()
-                        .observe(this, generateObserver(R.id.spinnerHeroes2));
+                        .observe(this, generateObserver(R.id.cardControlHeroes2));
                 db.heroDao().getAllFilteredNames()
-                        .observe(this, generateObserver(R.id.spinnerHeroes3));
+                        .observe(this, generateObserver(R.id.cardControlHeroes3));
                 db.heroDao().getAllFilteredNames()
-                        .observe(this, generateObserver(R.id.spinnerHeroes4));
+                        .observe(this, generateObserver(R.id.cardControlHeroes4));
                 db.heroDao().getAllFilteredNames()
-                        .observe(this, generateObserver(R.id.spinnerHeroes5));
+                        .observe(this, generateObserver(R.id.cardControlHeroes5));
                 db.heroDao().getAllFilteredNames()
-                        .observe(this, generateObserver(R.id.spinnerHeroes6));
-            } break;
+                        .observe(this, generateObserver(R.id.cardControlHeroes6));
+            }
+            break;
             case MASTERMIND: {
                 db.mastermindDao().getAllFilteredNames()
-                        .observe(this, generateObserver(R.id.spinnerMasterminds));
-            } break;
+                        .observe(this, generateObserver(R.id.cardControlMastermind));
+            }
+            break;
             case VILLAINS: {
                 db.villainsDao().getAllFilteredNames()
-                        .observe(this, generateObserver(R.id.spinnerVillains1));
+                        .observe(this, generateObserver(R.id.cardControlVillains1));
                 db.villainsDao().getAllFilteredNames()
-                        .observe(this, generateObserver(R.id.spinnerVillains2));
+                        .observe(this, generateObserver(R.id.cardControlVillains2));
                 db.villainsDao().getAllFilteredNames()
-                        .observe(this, generateObserver(R.id.spinnerVillains3));
+                        .observe(this, generateObserver(R.id.cardControlVillains3));
                 db.villainsDao().getAllFilteredNames()
-                        .observe(this, generateObserver(R.id.spinnerVillains4));
-            } break;
+                        .observe(this, generateObserver(R.id.cardControlVillains4));
+            }
+            break;
             case HENCHMEN: {
                 db.henchmenDao().getAllFilteredNames()
-                        .observe(this, generateObserver(R.id.spinnerHenchmen1));
+                        .observe(this, generateObserver(R.id.cardControlHenchmen1));
                 db.henchmenDao().getAllFilteredNames()
-                        .observe(this, generateObserver(R.id.spinnerHenchmen2));
-            } break;
+                        .observe(this, generateObserver(R.id.cardControlHenchmen2));
+            }
+            break;
             case SCHEME: {
                 db.schemeDao().getAllFilteredNames()
-                        .observe(this, generateObserver(R.id.spinnerScheme));
-            } break;
+                        .observe(this, generateObserver(R.id.cardControlScheme));
+            }
+            break;
         }
     }
 
     private Observer<List<String>> generateObserver(final int viewId) {
         return list -> {
-            final Spinner spinner = findViewById(viewId);
+            list.add(0, "None");
+
+            final Spinner spinner = ((CardControl) findViewById(viewId)).getSpinner();
             final ArrayAdapter<String> adapter = new ArrayAdapter<>(
                     getApplicationContext(),
                     R.layout.spinner_layout,
@@ -111,3 +105,4 @@ public class MainActivity extends AppCompatActivity {
         };
     }
 }
+
