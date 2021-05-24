@@ -8,22 +8,19 @@ import com.thequietcroc.legendary.database.entities.Mastermind;
 
 import java.util.List;
 @Dao
-public interface MastermindDao extends BaseDao<Mastermind> {
-
-    @Query("SELECT * FROM tblMasterminds ORDER BY name ASC")
-    LiveData<List<Mastermind>> getAll();
+public interface MastermindDao extends CardDao<Mastermind> {
 
     @Query("SELECT * FROM tblMasterminds WHERE name LIKE :name LIMIT 1")
     LiveData<Mastermind> findByName(final String name);
 
-    @Query("SELECT * FROM tblMasterminds WHERE setId = :setId ORDER BY name ASC")
-    LiveData<List<Mastermind>> findAllInSet(final int setId);
+    @Query("SELECT * FROM tblMasterminds WHERE id = :id LIMIT 1")
+    LiveData<Mastermind> findById(final int id);
 
-    @Query("SELECT * FROM tblMasterminds WHERE isCustom = 1 ORDER BY name ASC")
-    LiveData<List<Mastermind>> getAllCustom();
+    @Query("SELECT * FROM tblMasterminds ORDER BY name ASC")
+    LiveData<List<Mastermind>> getAllUnfiltered();
 
-    @Query("SELECT * FROM tblMasterminds WHERE isCustom = 0 ORDER BY name ASC")
-    LiveData<List<Mastermind>> getAllStock();
+    @Query("SELECT * FROM tblMasterminds WHERE isExcluded = 0 ORDER BY name ASC")
+    LiveData<List<Mastermind>> getAllFiltered();
 
     @Query("SELECT name FROM tblMasterminds ORDER BY name ASC")
     LiveData<List<String>> getAllNames();

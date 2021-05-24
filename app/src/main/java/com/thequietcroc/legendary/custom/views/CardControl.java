@@ -1,7 +1,6 @@
 package com.thequietcroc.legendary.custom.views;
 
 import android.content.Context;
-import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +15,7 @@ public class CardControl extends LinearLayout {
 
     private final Spinner spinner;
     private final ToggleButton toggleLock;
+    private boolean isSetByMastermind = false;
 
     public CardControl(final Context context, final AttributeSet attrs) {
         super(context, attrs);
@@ -48,11 +48,6 @@ public class CardControl extends LinearLayout {
         this(context, null);
     }
 
-    @Override
-    public void onDraw(final Canvas canvas) {
-
-    }
-
     public Spinner getSpinner() {
         return spinner;
     }
@@ -61,13 +56,11 @@ public class CardControl extends LinearLayout {
         return toggleLock;
     }
 
-//    @Override
-//    public void onMeasure(final int widthMeasureSpec, final int heightMeasureSpec) {
-//
-//    }
-//
-//    @Override
-//    public boolean onKeyDown(final int keyCode, final KeyEvent event) {
-//
-//    }
+    public boolean isSetBySetup() {
+        return isSetByMastermind;
+    }
+
+    public void setSetBySetup(final boolean isSetByMastermind) {
+        this.isSetByMastermind = isSetByMastermind;
+    }
 }

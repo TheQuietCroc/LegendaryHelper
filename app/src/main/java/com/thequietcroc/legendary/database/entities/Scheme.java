@@ -4,6 +4,9 @@ import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.Index;
 
+import com.thequietcroc.legendary.database.LegendaryDatabase;
+import com.thequietcroc.legendary.database.daos.CardDao;
+
 import static androidx.room.ForeignKey.CASCADE;
 
 @Entity(
@@ -25,4 +28,9 @@ import static androidx.room.ForeignKey.CASCADE;
         }
 )
 public class Scheme extends BaseCard {
+
+    @Override
+    public CardDao<Scheme> getDao(final LegendaryDatabase db) {
+        return db.schemeDao();
+    }
 }

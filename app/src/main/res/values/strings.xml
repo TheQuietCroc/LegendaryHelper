@@ -4,9 +4,12 @@
     <!-- Labels -->
     <string name="labelPlayers">Players</string>
     <string name="labelMastermind">Mastermind</string>
+    <string name="labelMasterminds">Masterminds</string>
     <string name="labelScheme">Scheme</string>
+    <string name="labelSchemes">Schemes</string>
     <string name="labelVillains">Villains</string>
     <string name="labelHenchmen">Henchmen</string>
+    <string name="labelHero">Hero</string>
     <string name="labelHeroes">Heroes</string>
     <string name="labelLock">Lock</string>
 
@@ -16,4 +19,6 @@
     <string name="button3">3</string>
     <string name="button4">4</string>
     <string name="button5">5</string>
+    <string name="activityFilter">Filter</string>
+    <string name="labelGameSets">Game Sets</string>
 </resources>

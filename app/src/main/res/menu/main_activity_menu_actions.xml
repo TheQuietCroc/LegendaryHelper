@@ -6,4 +6,9 @@
         android:icon="@drawable/randomize"
         android:title=""
         app:showAsAction="always" />
+    <item
+        android:id="@+id/menuActionFilter"
+        android:icon="@drawable/filter"
+        android:title=""
+        app:showAsAction="ifRoom" />
 </menu>

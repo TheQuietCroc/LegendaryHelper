@@ -5,6 +5,9 @@ import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.Index;
 
+import com.thequietcroc.legendary.database.LegendaryDatabase;
+import com.thequietcroc.legendary.database.daos.CardDao;
+
 import static androidx.room.ForeignKey.CASCADE;
 
 @Entity(
@@ -47,4 +50,83 @@ public class Hero extends BaseCard {
 
     @ColumnInfo(name = "flavor", defaultValue = "0")
     public boolean hasFlavorText;
+
+    public boolean isHasCovert() {
+        return hasCovert;
+    }
+
+    public void setHasCovert(boolean hasCovert) {
+        this.hasCovert = hasCovert;
+    }
+
+    public boolean isHasInstinct() {
+        return hasInstinct;
+    }
+
+    public void setHasInstinct(boolean hasInstinct) {
+        this.hasInstinct = hasInstinct;
+    }
+
+    public boolean isHasRanged() {
+        return hasRanged;
+    }
+
+    public void setHasRanged(boolean hasRanged) {
+        this.hasRanged = hasRanged;
+    }
+
+    public boolean isHasStrength() {
+        return hasStrength;
+    }
+
+    public void setHasStrength(boolean hasStrength) {
+        this.hasStrength = hasStrength;
+    }
+
+    public boolean isHasTech() {
+        return hasTech;
+    }
+
+    public void setHasTech(boolean hasTech) {
+        this.hasTech = hasTech;
+    }
+
+    public boolean isHasGun() {
+        return hasGun;
+    }
+
+    public void setHasGun(boolean hasGun) {
+        this.hasGun = hasGun;
+    }
+
+    public boolean isHasFlavorText() {
+        return hasFlavorText;
+    }
+
+    public void setHasFlavorText(boolean hasFlavorText) {
+        this.hasFlavorText = hasFlavorText;
+    }
+
+    @Override
+    public CardDao<Hero> getDao(final LegendaryDatabase db) {
+        return db.heroDao();
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (super.equals(o)) {
+
+            final Hero h = (Hero) o;
+
+            return hasCovert == h.hasCovert
+                    && hasInstinct == h.hasInstinct
+                    && hasRanged == h.hasRanged
+                    && hasStrength == h.hasStrength
+                    && hasTech == h.hasTech
+                    && hasGun == h.hasGun
+                    && hasFlavorText == h.hasFlavorText;
+        }
+
+        return false;
+    }
 }
