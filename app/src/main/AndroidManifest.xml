@@ -10,13 +10,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Legendary">
         <activity
-            android:name=".activities.FilterCardsActivity"
-            android:parentActivityName=".activities.FilterMenuActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activities.FilterMenuActivity" />
-        </activity>
-        <activity
             android:name=".activities.FilterMenuActivity"
             android:parentActivityName=".activities.MainActivity">
             <meta-data

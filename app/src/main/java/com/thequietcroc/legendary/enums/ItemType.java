@@ -1,6 +1,7 @@
 package com.thequietcroc.legendary.enums;
 
-public enum CardType {
+public enum ItemType {
+    GAMESET("GameSet", "tblGameSets"),
     HERO("Hero", "tblHeroes"),
     MASTERMIND("Mastermind", "tblMasterminds"),
     VILLAINS("Villains", "tblVillains"),
@@ -10,7 +11,7 @@ public enum CardType {
     public final String name;
     public final String tableName;
 
-    CardType(final String name, final String tableName) {
+    ItemType(final String name, final String tableName) {
         this.name = name;
         this.tableName = tableName;
     }

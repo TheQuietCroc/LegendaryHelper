@@ -14,18 +14,18 @@ import androidx.lifecycle.Observer;
 import com.thequietcroc.legendary.R;
 import com.thequietcroc.legendary.custom.views.CardControl;
 import com.thequietcroc.legendary.database.LegendaryDatabase;
-import com.thequietcroc.legendary.enums.CardType;
+import com.thequietcroc.legendary.enums.ItemType;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
-import static com.thequietcroc.legendary.enums.CardType.HENCHMEN;
-import static com.thequietcroc.legendary.enums.CardType.HERO;
-import static com.thequietcroc.legendary.enums.CardType.MASTERMIND;
-import static com.thequietcroc.legendary.enums.CardType.SCHEME;
-import static com.thequietcroc.legendary.enums.CardType.VILLAINS;
+import static com.thequietcroc.legendary.enums.ItemType.HENCHMEN;
+import static com.thequietcroc.legendary.enums.ItemType.HERO;
+import static com.thequietcroc.legendary.enums.ItemType.MASTERMIND;
+import static com.thequietcroc.legendary.enums.ItemType.SCHEME;
+import static com.thequietcroc.legendary.enums.ItemType.VILLAINS;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -73,9 +73,9 @@ public class MainActivity extends AppCompatActivity {
         populateCardSpinner(SCHEME);
     }
 
-    private void populateCardSpinner(final CardType cardType) {
+    private void populateCardSpinner(final ItemType ItemType) {
 
-        switch (cardType) {
+        switch (ItemType) {
             case HERO: {
                 db.heroDao().getAllFilteredNames()
                         .observe(this, generateObserver(findViewById(R.id.cardControlHeroes1),
