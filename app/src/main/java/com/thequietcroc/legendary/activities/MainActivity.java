@@ -184,6 +184,8 @@ public class MainActivity extends AppCompatActivity {
                 } while (!results.add(selection));
 
                 spinner.setSelection(selection);
+            } else {
+                results.add(cardControl.getSpinner().getSelectedItemPosition());
             }
         }
     }
