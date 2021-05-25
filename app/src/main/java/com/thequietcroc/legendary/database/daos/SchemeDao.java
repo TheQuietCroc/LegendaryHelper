@@ -11,21 +11,35 @@ import java.util.List;
 @Dao
 public interface SchemeDao extends CardDao<Scheme> {
 
+    @Override
     @Query("SELECT * FROM tblSchemes WHERE name LIKE :name LIMIT 1")
-    LiveData<Scheme> findByName(final String name);
+    LiveData<Scheme> findByNameAsync(final String name);
 
+    @Override
     @Query("SELECT * FROM tblSchemes WHERE id = :id LIMIT 1")
-    LiveData<Scheme> findById(final int id);
+    LiveData<Scheme> findByIdAsync(final int id);
 
+    @Override
     @Query("SELECT * FROM tblSchemes ORDER BY name ASC")
-    LiveData<List<Scheme>> getAllUnfiltered();
+    LiveData<List<Scheme>> getAllUnfilteredAsync();
 
-    @Query("SELECT * FROM tblSchemes WHERE isExcluded = 0 ORDER BY name ASC")
-    LiveData<List<Scheme>> getAllFiltered();
+    @Override
+    @Query("SELECT * FROM tblSchemes WHERE isEnabled = 1 ORDER BY name ASC")
+    LiveData<List<Scheme>> getAllFilteredAsync();
 
-    @Query("SELECT name FROM tblSchemes ORDER BY name ASC")
-    LiveData<List<String>> getAllNames();
+    @Override
+    @Query("SELECT * FROM tblSchemes WHERE name LIKE :name LIMIT 1")
+    Scheme findByNameSync(final String name);
 
-    @Query("SELECT name FROM tblSchemes WHERE isExcluded = 0 ORDER BY name ASC")
-    LiveData<List<String>> getAllFilteredNames();
+    @Override
+    @Query("SELECT * FROM tblSchemes WHERE id = :id LIMIT 1")
+    Scheme findByIdSync(final int id);
+
+    @Override
+    @Query("SELECT * FROM tblSchemes ORDER BY name ASC")
+    List<Scheme> getAllUnfilteredSync();
+
+    @Override
+    @Query("SELECT * FROM tblSchemes WHERE isEnabled = 1 ORDER BY name ASC")
+    List<Scheme> getAllFilteredSync();
 }

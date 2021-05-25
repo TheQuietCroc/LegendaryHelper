@@ -11,21 +11,35 @@ import java.util.List;
 @Dao
 public interface HenchmenDao extends CardDao<Henchmen> {
 
+    @Override
     @Query("SELECT * FROM tblHenchmen WHERE name LIKE :name LIMIT 1")
-    LiveData<Henchmen> findByName(final String name);
+    LiveData<Henchmen> findByNameAsync(final String name);
 
+    @Override
     @Query("SELECT * FROM tblHenchmen WHERE id = :id LIMIT 1")
-    LiveData<Henchmen> findById(final int id);
+    LiveData<Henchmen> findByIdAsync(final int id);
 
+    @Override
     @Query("SELECT * FROM tblHenchmen ORDER BY name ASC")
-    LiveData<List<Henchmen>> getAllUnfiltered();
+    LiveData<List<Henchmen>> getAllUnfilteredAsync();
 
-    @Query("SELECT * FROM tblHenchmen WHERE isExcluded = 0 ORDER BY name ASC")
-    LiveData<List<Henchmen>> getAllFiltered();
+    @Override
+    @Query("SELECT * FROM tblHenchmen WHERE isEnabled = 1 ORDER BY name ASC")
+    LiveData<List<Henchmen>> getAllFilteredAsync();
 
-    @Query("SELECT name FROM tblHenchmen ORDER BY name ASC")
-    LiveData<List<String>> getAllNames();
+    @Override
+    @Query("SELECT * FROM tblHenchmen WHERE name LIKE :name LIMIT 1")
+    Henchmen findByNameSync(final String name);
 
-    @Query("SELECT name FROM tblHenchmen WHERE isExcluded = 0 ORDER BY name ASC")
-    LiveData<List<String>> getAllFilteredNames();
+    @Override
+    @Query("SELECT * FROM tblHenchmen WHERE id = :id LIMIT 1")
+    Henchmen findByIdSync(final int id);
+
+    @Override
+    @Query("SELECT * FROM tblHenchmen ORDER BY name ASC")
+    List<Henchmen> getAllUnfilteredSync();
+
+    @Override
+    @Query("SELECT * FROM tblHenchmen WHERE isEnabled = 1 ORDER BY name ASC")
+    List<Henchmen> getAllFilteredSync();
 }

@@ -11,21 +11,35 @@ import java.util.List;
 @Dao
 public interface GameSetDao extends BaseDao<GameSet> {
 
+    @Override
     @Query("SELECT * FROM tblGameSets WHERE name LIKE :name LIMIT 1")
-    LiveData<GameSet> findByName(final String name);
+    LiveData<GameSet> findByNameAsync(final String name);
 
+    @Override
     @Query("SELECT * FROM tblGameSets WHERE id = :id LIMIT 1")
-    LiveData<GameSet> findById(final int id);
+    LiveData<GameSet> findByIdAsync(final int id);
 
+    @Override
     @Query("SELECT * FROM tblGameSets ORDER BY name ASC")
-    LiveData<List<GameSet>> getAllUnfiltered();
+    LiveData<List<GameSet>> getAllUnfilteredAsync();
 
-    @Query("SELECT * FROM tblGameSets WHERE isExcluded = 0")
-    LiveData<List<GameSet>> getAllFiltered();
+    @Override
+    @Query("SELECT * FROM tblGameSets WHERE isEnabled = 1")
+    LiveData<List<GameSet>> getAllFilteredAsync();
 
-    @Query("SELECT name FROM tblGameSets ORDER BY name ASC")
-    LiveData<List<String>> getAllNames();
+    @Override
+    @Query("SELECT * FROM tblGameSets WHERE name LIKE :name LIMIT 1")
+    GameSet findByNameSync(final String name);
 
-    @Query("SELECT name FROM tblGameSets WHERE isExcluded = 0 ORDER BY name ASC")
-    LiveData<List<String>> getAllFilteredNames();
+    @Override
+    @Query("SELECT * FROM tblGameSets WHERE id = :id LIMIT 1")
+    GameSet findByIdSync(final int id);
+
+    @Override
+    @Query("SELECT * FROM tblGameSets ORDER BY name ASC")
+    List<GameSet> getAllUnfilteredSync();
+
+    @Override
+    @Query("SELECT * FROM tblGameSets WHERE isEnabled = 1")
+    List<GameSet> getAllFilteredSync();
 }

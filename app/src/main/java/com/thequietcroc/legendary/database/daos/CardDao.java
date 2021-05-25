@@ -6,15 +6,27 @@ import java.util.List;
 
 public interface CardDao<T> extends BaseDao<T> {
 
-    LiveData<T> findByName(final String name);
+    @Override
+    LiveData<T> findByNameAsync(final String name);
 
-    LiveData<T> findById(final int id);
+    @Override
+    LiveData<T> findByIdAsync(final int id);
 
-    LiveData<List<T>> getAllUnfiltered();
+    @Override
+    LiveData<List<T>> getAllUnfilteredAsync();
 
-    LiveData<List<T>> getAllFiltered();
+    @Override
+    LiveData<List<T>> getAllFilteredAsync();
 
-    LiveData<List<String>> getAllNames();
+    @Override
+    T findByNameSync(final String name);
 
-    LiveData<List<String>> getAllFilteredNames();
+    @Override
+    T findByIdSync(final int id);
+
+    @Override
+    List<T> getAllUnfilteredSync();
+
+    @Override
+    List<T> getAllFilteredSync();
 }

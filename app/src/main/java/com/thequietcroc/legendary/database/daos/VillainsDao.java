@@ -11,21 +11,35 @@ import java.util.List;
 @Dao
 public interface VillainsDao extends CardDao<Villains> {
 
+    @Override
     @Query("SELECT * FROM tblVillains WHERE name LIKE :name LIMIT 1")
-    LiveData<Villains> findByName(final String name);
+    LiveData<Villains> findByNameAsync(final String name);
 
+    @Override
     @Query("SELECT * FROM tblVillains WHERE id = :id LIMIT 1")
-    LiveData<Villains> findById(final int id);
+    LiveData<Villains> findByIdAsync(final int id);
 
+    @Override
     @Query("SELECT * FROM tblVillains ORDER BY name ASC")
-    LiveData<List<Villains>> getAllUnfiltered();
+    LiveData<List<Villains>> getAllUnfilteredAsync();
 
-    @Query("SELECT * FROM tblVillains WHERE isExcluded = 0 ORDER BY name ASC")
-    LiveData<List<Villains>> getAllFiltered();
+    @Override
+    @Query("SELECT * FROM tblVillains WHERE isEnabled = 1 ORDER BY name ASC")
+    LiveData<List<Villains>> getAllFilteredAsync();
 
-    @Query("SELECT name FROM tblVillains ORDER BY name ASC")
-    LiveData<List<String>> getAllNames();
+    @Override
+    @Query("SELECT * FROM tblVillains WHERE name LIKE :name LIMIT 1")
+    Villains findByNameSync(final String name);
 
-    @Query("SELECT name FROM tblVillains WHERE isExcluded = 0 ORDER BY name ASC")
-    LiveData<List<String>> getAllFilteredNames();
+    @Override
+    @Query("SELECT * FROM tblVillains WHERE id = :id LIMIT 1")
+    Villains findByIdSync(final int id);
+
+    @Override
+    @Query("SELECT * FROM tblVillains ORDER BY name ASC")
+    List<Villains> getAllUnfilteredSync();
+
+    @Override
+    @Query("SELECT * FROM tblVillains WHERE isEnabled = 1 ORDER BY name ASC")
+    List<Villains> getAllFilteredSync();
 }

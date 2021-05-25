@@ -1,10 +1,10 @@
 package com.thequietcroc.legendary.database.entities;
 
-import androidx.annotation.NonNull;
-import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Index;
-import androidx.room.PrimaryKey;
+
+import com.thequietcroc.legendary.database.LegendaryDatabase;
+import com.thequietcroc.legendary.database.daos.GameSetDao;
 
 @Entity(
         tableName = "tblGameSets",
@@ -15,17 +15,23 @@ import androidx.room.PrimaryKey;
                 )
         }
 )
-public class GameSet {
+public class GameSet extends BaseItem {
 
-    @PrimaryKey(autoGenerate = true)
-    public int id;
+    @Override
+    public GameSetDao getDao(final LegendaryDatabase db) {
+        return db.gameSetDao();
+    }
 
-    @NonNull
-    public String name;
+    @Override
+    public boolean equals(final Object o) {
+        if (o == this) {
+            return true;
+        }
 
-    @ColumnInfo(defaultValue = "0")
-    public boolean isCustom;
+        if (!(o instanceof GameSet)) {
+            return false;
+        }
 
-    @ColumnInfo(defaultValue = "0")
-    public boolean isExcluded;
+        return super.equals(o);
+    }
 }

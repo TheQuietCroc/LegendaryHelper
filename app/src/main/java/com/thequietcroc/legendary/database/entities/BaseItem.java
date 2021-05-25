@@ -68,14 +68,16 @@ public abstract class BaseItem {
 
         final BaseItem b = (BaseItem) o;
 
-        return id == b.id
-                && name.contentEquals(b.name)
-                && isCustom == isCustom()
-                && isEnabled == isEnabled();
+        return id == b.id;
     }
 
     @Override
     public int hashCode() {
         return id;
+    }
+
+    @Override
+    public String toString() {
+        return name;
     }
 }

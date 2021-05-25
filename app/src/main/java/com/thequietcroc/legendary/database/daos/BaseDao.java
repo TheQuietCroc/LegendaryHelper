@@ -10,17 +10,21 @@ import static androidx.room.OnConflictStrategy.REPLACE;
 
 public interface BaseDao<T> {
 
-    LiveData<T> findByName(final String name);
+    LiveData<T> findByNameAsync(final String name);
 
-    LiveData<T> findById(final int id);
+    LiveData<T> findByIdAsync(final int id);
 
-    LiveData<List<T>> getAllUnfiltered();
+    LiveData<List<T>> getAllUnfilteredAsync();
 
-    LiveData<List<T>> getAllFiltered();
+    LiveData<List<T>> getAllFilteredAsync();
 
-    LiveData<List<String>> getAllNames();
+    T findByNameSync(final String name);
 
-    LiveData<List<String>> getAllFilteredNames();
+    T findByIdSync(final int id);
+
+    List<T> getAllUnfilteredSync();
+
+    List<T> getAllFilteredSync();
 
     @Insert(onConflict = REPLACE)
     void insert(final T entry);

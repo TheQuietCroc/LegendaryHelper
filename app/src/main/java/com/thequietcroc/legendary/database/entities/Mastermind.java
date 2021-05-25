@@ -6,7 +6,7 @@ import androidx.room.ForeignKey;
 import androidx.room.Index;
 
 import com.thequietcroc.legendary.database.LegendaryDatabase;
-import com.thequietcroc.legendary.database.daos.CardDao;
+import com.thequietcroc.legendary.database.daos.MastermindDao;
 
 import static androidx.room.ForeignKey.CASCADE;
 import static androidx.room.ForeignKey.SET_NULL;
@@ -56,8 +56,8 @@ public class Mastermind extends BaseCard {
         return isEpic;
     }
 
-    public void setEpic(boolean epic) {
-        isEpic = epic;
+    public void setEpic(boolean isEpic) {
+        this.isEpic = isEpic;
     }
 
     public Integer getVillainId() {
@@ -77,22 +77,21 @@ public class Mastermind extends BaseCard {
     }
 
     @Override
-    public CardDao<Mastermind> getDao(final LegendaryDatabase db) {
+    public MastermindDao getDao(final LegendaryDatabase db) {
         return db.mastermindDao();
     }
 
     @Override
     public boolean equals(final Object o) {
-        if (super.equals(o)) {
-
-            final Mastermind m = (Mastermind) o;
-
-            return isEpic == m.isEpic
-                    && villainId.intValue() == m.villainId.intValue()
-                    && henchmenId.intValue() == m.henchmenId.intValue()
-                    && isEpic == m.isEpic;
+        if (o == this) {
+            return true;
         }
 
-        return false;
+        if (!(o instanceof Mastermind)) {
+            return false;
+        }
+
+        return super.equals(o);
     }
 }
+

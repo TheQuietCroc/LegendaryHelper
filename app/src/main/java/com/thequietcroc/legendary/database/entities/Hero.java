@@ -6,7 +6,7 @@ import androidx.room.ForeignKey;
 import androidx.room.Index;
 
 import com.thequietcroc.legendary.database.LegendaryDatabase;
-import com.thequietcroc.legendary.database.daos.CardDao;
+import com.thequietcroc.legendary.database.daos.HeroDao;
 
 import static androidx.room.ForeignKey.CASCADE;
 
@@ -108,25 +108,20 @@ public class Hero extends BaseCard {
     }
 
     @Override
-    public CardDao<Hero> getDao(final LegendaryDatabase db) {
+    public HeroDao getDao(final LegendaryDatabase db) {
         return db.heroDao();
     }
 
     @Override
     public boolean equals(final Object o) {
-        if (super.equals(o)) {
-
-            final Hero h = (Hero) o;
-
-            return hasCovert == h.hasCovert
-                    && hasInstinct == h.hasInstinct
-                    && hasRanged == h.hasRanged
-                    && hasStrength == h.hasStrength
-                    && hasTech == h.hasTech
-                    && hasGun == h.hasGun
-                    && hasFlavorText == h.hasFlavorText;
+        if (o == this) {
+            return true;
         }
 
-        return false;
+        if (!(o instanceof Hero)) {
+            return false;
+        }
+
+        return super.equals(o);
     }
 }

@@ -14,12 +14,17 @@ import androidx.lifecycle.Observer;
 import com.thequietcroc.legendary.R;
 import com.thequietcroc.legendary.custom.views.CardControl;
 import com.thequietcroc.legendary.database.LegendaryDatabase;
+import com.thequietcroc.legendary.database.entities.BaseCard;
+import com.thequietcroc.legendary.database.entities.GameSetup;
+import com.thequietcroc.legendary.database.entities.Henchmen;
+import com.thequietcroc.legendary.database.entities.Hero;
+import com.thequietcroc.legendary.database.entities.Mastermind;
+import com.thequietcroc.legendary.database.entities.Scheme;
+import com.thequietcroc.legendary.database.entities.Villains;
 import com.thequietcroc.legendary.enums.ItemType;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
-import java.util.Set;
 
 import static com.thequietcroc.legendary.enums.ItemType.HENCHMEN;
 import static com.thequietcroc.legendary.enums.ItemType.HERO;
@@ -30,6 +35,7 @@ import static com.thequietcroc.legendary.enums.ItemType.VILLAINS;
 public class MainActivity extends AppCompatActivity {
 
     private LegendaryDatabase db;
+    private GameSetup gameSetup;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -39,6 +45,51 @@ public class MainActivity extends AppCompatActivity {
         db = LegendaryDatabase.getInstance(this);
 
         initializeControls();
+
+        final CardControl[] villainsControls = {
+                findViewById(R.id.cardControlVillains1),
+                findViewById(R.id.cardControlVillains2),
+                findViewById(R.id.cardControlVillains3),
+                findViewById(R.id.cardControlVillains4)
+        };
+
+        final CardControl[] henchmenControls = {
+                findViewById(R.id.cardControlHenchmen1),
+                findViewById(R.id.cardControlHenchmen2)
+        };
+
+        final CardControl[] heroControls = {
+                findViewById(R.id.cardControlHeroes1),
+                findViewById(R.id.cardControlHeroes2),
+                findViewById(R.id.cardControlHeroes3),
+                findViewById(R.id.cardControlHeroes4),
+                findViewById(R.id.cardControlHeroes5),
+                findViewById(R.id.cardControlHeroes6)
+        };
+
+        final List<Mastermind> mastermindList = new ArrayList<>();
+        final List<Scheme> schemeList = new ArrayList<>();
+        final List<Villains> villainsList = new ArrayList<>();
+        final List<Henchmen> henchmenList = new ArrayList<>();
+        final List<Hero> heroList = new ArrayList<>();
+
+        db.mastermindDao().getAllFilteredAsync().observe(this, mastermindList::addAll);
+        db.schemeDao().getAllFilteredAsync().observe(this, schemeList::addAll);
+        db.villainsDao().getAllFilteredAsync().observe(this, villainsList::addAll);
+        db.henchmenDao().getAllFilteredAsync().observe(this, henchmenList::addAll);
+        db.heroDao().getAllFilteredAsync().observe(this, heroList::addAll);
+
+        gameSetup = new GameSetup(db,
+                mastermindList,
+                schemeList,
+                villainsList,
+                henchmenList,
+                heroList,
+                findViewById(R.id.cardControlMastermind),
+                findViewById(R.id.cardControlScheme),
+                villainsControls,
+                henchmenControls,
+                heroControls);
     }
 
     @Override
@@ -56,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
                 openFilterActivity();
             } break;
             case R.id.menuActionRandomize: {
-                randomizeSelections();
+                gameSetup.newSetup();
             } break;
             default:
                 return super.onOptionsItemSelected(item);
@@ -77,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
 
         switch (ItemType) {
             case HERO: {
-                db.heroDao().getAllFilteredNames()
+                db.heroDao().getAllFilteredAsync()
                         .observe(this, generateObserver(findViewById(R.id.cardControlHeroes1),
                                 findViewById(R.id.cardControlHeroes2),
                                 findViewById(R.id.cardControlHeroes3),
@@ -87,12 +138,12 @@ public class MainActivity extends AppCompatActivity {
             }
             break;
             case MASTERMIND: {
-                db.mastermindDao().getAllFilteredNames()
+                db.mastermindDao().getAllFilteredAsync()
                         .observe(this, generateObserver(findViewById(R.id.cardControlMastermind)));
             }
             break;
             case VILLAINS: {
-                db.villainsDao().getAllFilteredNames()
+                db.villainsDao().getAllFilteredAsync()
                         .observe(this, generateObserver(findViewById(R.id.cardControlVillains1),
                                 findViewById(R.id.cardControlVillains2),
                                 findViewById(R.id.cardControlVillains3),
@@ -100,26 +151,25 @@ public class MainActivity extends AppCompatActivity {
             }
             break;
             case HENCHMEN: {
-                db.henchmenDao().getAllFilteredNames()
+                db.henchmenDao().getAllFilteredAsync()
                         .observe(this, generateObserver(findViewById(R.id.cardControlHenchmen1),
                                 findViewById(R.id.cardControlHenchmen2)));
             }
             break;
             case SCHEME: {
-                db.schemeDao().getAllFilteredNames()
+                db.schemeDao().getAllFilteredAsync()
                         .observe(this, generateObserver(findViewById(R.id.cardControlScheme)));
             }
             break;
         }
     }
 
-    private Observer<List<String>> generateObserver(final CardControl... cardControls) {
+    private Observer<List<? extends BaseCard>> generateObserver(final CardControl... cardControls) {
         return list -> {
-            list.add(0, "None");
-
             for (final CardControl cardControl : cardControls) {
                 final Spinner spinner = cardControl.getSpinner();
-                final ArrayAdapter<String> adapter = new ArrayAdapter<>(
+
+                final ArrayAdapter<? extends BaseCard> adapter = new ArrayAdapter<>(
                         getApplicationContext(),
                         R.layout.spinner_layout,
                         list);
@@ -128,66 +178,6 @@ public class MainActivity extends AppCompatActivity {
                 spinner.setAdapter(adapter);
             }
         };
-    }
-
-    private void randomizeSelections() {
-
-        final CardControl[] villainsControls = {
-                findViewById(R.id.cardControlVillains1),
-                findViewById(R.id.cardControlVillains2),
-                findViewById(R.id.cardControlVillains3),
-                findViewById(R.id.cardControlVillains4)
-        };
-        final CardControl[] henchmenControls = {
-                findViewById(R.id.cardControlHenchmen1),
-                findViewById(R.id.cardControlHenchmen2)
-        };
-        final CardControl[] heroControls = {
-                findViewById(R.id.cardControlHeroes1),
-                findViewById(R.id.cardControlHeroes2),
-                findViewById(R.id.cardControlHeroes3),
-                findViewById(R.id.cardControlHeroes4),
-                findViewById(R.id.cardControlHeroes5),
-                findViewById(R.id.cardControlHeroes6)
-        };
-
-        setupMastermind(findViewById(R.id.cardControlMastermind), villainsControls[0], henchmenControls[0]);
-        setupScheme(findViewById(R.id.cardControlScheme));
-        selectRandomly(villainsControls);
-        selectRandomly(henchmenControls);
-        selectRandomly(heroControls);
-    }
-
-    private void setupMastermind(final CardControl mastermindControl,
-                                 final CardControl villainsControl,
-                                 final CardControl henchmenControls) {
-        selectRandomly(mastermindControl);
-    }
-
-    private void setupScheme(final CardControl schemeControl) {
-        selectRandomly(schemeControl);
-    }
-
-    private void selectRandomly(final CardControl... cardControls) {
-        final Set<Integer> results = new HashSet<>(cardControls.length);
-
-        for (final CardControl cardControl : cardControls) {
-            if (!cardControl.getToggleLock().isChecked()
-                    && !cardControl.isSetBySetup()) {
-
-                final Spinner spinner = cardControl.getSpinner();
-                final int numCards = spinner.getCount();
-                int selection;
-
-                do {
-                    selection = new Random().nextInt(numCards - 1) + 1;
-                } while (!results.add(selection));
-
-                spinner.setSelection(selection);
-            } else {
-                results.add(cardControl.getSpinner().getSelectedItemPosition());
-            }
-        }
     }
 
     private void openFilterActivity() {
