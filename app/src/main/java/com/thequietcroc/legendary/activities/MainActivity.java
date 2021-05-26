@@ -14,7 +14,6 @@ import androidx.lifecycle.Observer;
 import com.thequietcroc.legendary.R;
 import com.thequietcroc.legendary.custom.views.CardControl;
 import com.thequietcroc.legendary.database.LegendaryDatabase;
-import com.thequietcroc.legendary.database.entities.BaseCard;
 import com.thequietcroc.legendary.database.entities.GameSetup;
 import com.thequietcroc.legendary.database.entities.Henchmen;
 import com.thequietcroc.legendary.database.entities.Hero;
@@ -128,8 +127,11 @@ public class MainActivity extends AppCompatActivity {
 
         switch (ItemType) {
             case HERO: {
+                final Hero noneEntry = db.heroDao().findByIdSync(0);
+                
                 db.heroDao().getAllFilteredAsync()
-                        .observe(this, generateObserver(findViewById(R.id.cardControlHeroes1),
+                        .observe(this, generateObserver(noneEntry,
+                                findViewById(R.id.cardControlHeroes1),
                                 findViewById(R.id.cardControlHeroes2),
                                 findViewById(R.id.cardControlHeroes3),
                                 findViewById(R.id.cardControlHeroes4),
@@ -138,38 +140,54 @@ public class MainActivity extends AppCompatActivity {
             }
             break;
             case MASTERMIND: {
+                final Mastermind noneEntry = db.mastermindDao().findByIdSync(0);
+
                 db.mastermindDao().getAllFilteredAsync()
-                        .observe(this, generateObserver(findViewById(R.id.cardControlMastermind)));
+                        .observe(this, generateObserver(noneEntry,
+                                findViewById(R.id.cardControlMastermind)));
             }
             break;
             case VILLAINS: {
+                final Villains noneEntry = db.villainsDao().findByIdSync(0);
+
                 db.villainsDao().getAllFilteredAsync()
-                        .observe(this, generateObserver(findViewById(R.id.cardControlVillains1),
+                        .observe(this, generateObserver(noneEntry,
+                                findViewById(R.id.cardControlVillains1),
                                 findViewById(R.id.cardControlVillains2),
                                 findViewById(R.id.cardControlVillains3),
                                 findViewById(R.id.cardControlVillains4)));
             }
             break;
             case HENCHMEN: {
+                final Henchmen noneEntry = db.henchmenDao().findByIdSync(0);
+
                 db.henchmenDao().getAllFilteredAsync()
-                        .observe(this, generateObserver(findViewById(R.id.cardControlHenchmen1),
+                        .observe(this, generateObserver(noneEntry,
+                                findViewById(R.id.cardControlHenchmen1),
                                 findViewById(R.id.cardControlHenchmen2)));
             }
             break;
             case SCHEME: {
+                final Scheme noneEntry = db.schemeDao().findByIdSync(0);
+
                 db.schemeDao().getAllFilteredAsync()
-                        .observe(this, generateObserver(findViewById(R.id.cardControlScheme)));
+                        .observe(this, generateObserver(noneEntry,
+                                findViewById(R.id.cardControlScheme)));
             }
             break;
         }
     }
 
-    private Observer<List<? extends BaseCard>> generateObserver(final CardControl... cardControls) {
+    private <T> Observer<List<T>> generateObserver(final T noneEntry,
+                                                   final CardControl... cardControls) {
         return list -> {
+            list.remove(noneEntry);
+            list.add(0, noneEntry);
+
             for (final CardControl cardControl : cardControls) {
                 final Spinner spinner = cardControl.getSpinner();
 
-                final ArrayAdapter<? extends BaseCard> adapter = new ArrayAdapter<>(
+                final ArrayAdapter<T> adapter = new ArrayAdapter<>(
                         getApplicationContext(),
                         R.layout.spinner_layout,
                         list);

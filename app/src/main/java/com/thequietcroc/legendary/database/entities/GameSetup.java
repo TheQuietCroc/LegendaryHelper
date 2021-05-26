@@ -1,5 +1,7 @@
 package com.thequietcroc.legendary.database.entities;
 
+import android.view.View;
+
 import com.thequietcroc.legendary.custom.views.CardControl;
 import com.thequietcroc.legendary.database.LegendaryDatabase;
 
@@ -126,10 +128,13 @@ public class GameSetup {
         schemeControl.getSpinner().setSelection(schemeList.indexOf(scheme));
 
         final Set<Villains> selectedVillains = new LinkedHashSet<>();
+        final boolean leadsVillains = mastermind.getVillainId() > 0;
 
-        if (mastermind.getVillainId() != null && mastermind.getVillainId() > 0) {
+        if (leadsVillains) {
             selectedVillains.add(db.villainsDao().findByIdSync(mastermind.getVillainId()));
         }
+
+        toggleControlLock(leadsVillains, villainsControls[0]);
 
         for (int i = selectedVillains.size(); i < 4; ++i) {
             while (!selectedVillains.add((Villains) selectRandomlyFromList(villainsList)));
@@ -148,10 +153,13 @@ public class GameSetup {
         villainsControls[3].getSpinner().setSelection(villainsList.indexOf(villains4));
 
         final Set<Henchmen> selectedHenchmen = new LinkedHashSet<>();
+        final boolean leadsHenchmen = mastermind.getHenchmenId() > 0;
 
-        if (mastermind.getHenchmenId() != null && mastermind.getHenchmenId() > 0) {
+        if (leadsHenchmen) {
             selectedHenchmen.add(db.henchmenDao().findByIdSync(mastermind.getHenchmenId()));
         }
+
+        toggleControlLock(leadsHenchmen, henchmenControls[0]);
 
         for (int i = selectedHenchmen.size(); i < 2; ++i) {
             while (!selectedHenchmen.add((Henchmen) selectRandomlyFromList(henchmenList)));
@@ -183,6 +191,11 @@ public class GameSetup {
     }
 
     private BaseCard selectRandomlyFromList(final List<? extends BaseCard> cardList) {
-        return cardList.get(new Random().nextInt(cardList.size()));
+        return cardList.get(new Random().nextInt(cardList.size() - 1) + 1);
+    }
+
+    private void toggleControlLock(final boolean isLocked, final CardControl control) {
+        control.getToggleLock().setChecked(isLocked);
+        control.getToggleLock().setVisibility(isLocked ? View.INVISIBLE : View.VISIBLE);
     }
 }

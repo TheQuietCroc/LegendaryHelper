@@ -8,6 +8,7 @@ import com.thequietcroc.legendary.database.LegendaryDatabase;
 import com.thequietcroc.legendary.database.daos.VillainsDao;
 
 import static androidx.room.ForeignKey.CASCADE;
+import static androidx.room.ForeignKey.SET_DEFAULT;
 
 @Entity(
         tableName = "tblVillains",
@@ -17,7 +18,7 @@ import static androidx.room.ForeignKey.CASCADE;
                         parentColumns = "id",
                         childColumns = "setId",
                         onUpdate = CASCADE,
-                        onDelete = CASCADE
+                        onDelete = SET_DEFAULT
                 )
         },
         indices = {

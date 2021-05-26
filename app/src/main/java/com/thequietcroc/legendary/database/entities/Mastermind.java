@@ -9,7 +9,7 @@ import com.thequietcroc.legendary.database.LegendaryDatabase;
 import com.thequietcroc.legendary.database.daos.MastermindDao;
 
 import static androidx.room.ForeignKey.CASCADE;
-import static androidx.room.ForeignKey.SET_NULL;
+import static androidx.room.ForeignKey.SET_DEFAULT;
 
 @Entity(
         tableName = "tblMasterminds",
@@ -19,21 +19,21 @@ import static androidx.room.ForeignKey.SET_NULL;
                         parentColumns = "id",
                         childColumns = "setId",
                         onUpdate = CASCADE,
-                        onDelete = CASCADE
+                        onDelete = SET_DEFAULT
                 ),
                 @ForeignKey(
                         entity = Villains.class,
                         parentColumns = "id",
                         childColumns = "villainId",
                         onUpdate = CASCADE,
-                        onDelete = SET_NULL
+                        onDelete = SET_DEFAULT
                 ),
                 @ForeignKey(
                         entity = Henchmen.class,
                         parentColumns = "id",
                         childColumns = "henchmenId",
                         onUpdate = CASCADE,
-                        onDelete = SET_NULL
+                        onDelete = SET_DEFAULT
                 )
         },
         indices = {
@@ -48,9 +48,11 @@ public class Mastermind extends BaseCard {
     @ColumnInfo(defaultValue = "0")
     public boolean isEpic;
 
-    public Integer villainId;
+    @ColumnInfo(defaultValue = "0")
+    public int villainId;
 
-    public Integer henchmenId;
+    @ColumnInfo(defaultValue = "0")
+    public int henchmenId;
 
     public boolean isEpic() {
         return isEpic;
@@ -60,19 +62,19 @@ public class Mastermind extends BaseCard {
         this.isEpic = isEpic;
     }
 
-    public Integer getVillainId() {
+    public int getVillainId() {
         return villainId;
     }
 
-    public void setVillainId(Integer villainId) {
+    public void setVillainId(int villainId) {
         this.villainId = villainId;
     }
 
-    public Integer getHenchmenId() {
+    public int getHenchmenId() {
         return henchmenId;
     }
 
-    public void setHenchmenId(Integer henchmenId) {
+    public void setHenchmenId(int henchmenId) {
         this.henchmenId = henchmenId;
     }
 

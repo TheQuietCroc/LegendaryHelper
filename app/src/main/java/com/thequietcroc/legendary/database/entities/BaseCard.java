@@ -1,10 +1,13 @@
 package com.thequietcroc.legendary.database.entities;
 
+import androidx.room.ColumnInfo;
+
 import com.thequietcroc.legendary.database.LegendaryDatabase;
 import com.thequietcroc.legendary.database.daos.CardDao;
 
 public abstract class BaseCard extends BaseItem {
 
+    @ColumnInfo(defaultValue = "0")
     public int setId;
 
     public int getSetId() {
