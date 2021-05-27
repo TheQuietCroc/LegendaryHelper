@@ -7,17 +7,15 @@ import com.thequietcroc.legendary.database.LegendaryDatabase;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Random;
-import java.util.Set;
 
 public class GameSetup {
     private Mastermind selectedMastermind;
     private Scheme selectedScheme;
     private List<Villains> selectedVillainsList = new ArrayList<>(Arrays.asList(null, null, null, null));
     private List<Henchmen> selectedHenchmenList = new ArrayList<>(Arrays.asList(null, null));
-    private Set<Hero> selectedHeroSet = new LinkedHashSet<>();
+    private List<Hero> selectedHeroList = new ArrayList<>(Arrays.asList(null, null, null, null, null, null));
 
     private final LegendaryDatabase db;
 
@@ -57,62 +55,58 @@ public class GameSetup {
         this.villainsControlList = villainsControlList;
         this.henchmenControlList = henchmenControlList;
         this.heroControlList = heroControlList;
+
+//        initializeControls();
     }
+
+//    private void setSelectedMastermind(final Mastermind selectedMastermind) {
+//        this.selectedMastermind = selectedMastermind;
+//    }
+
+//    private void initializeControls() {
+//
+//    }
+//
+//    private <T> void setOnItemSelectListener(final CardControl cardControl,
+//                                             final List<T> selectedList,
+//                                             final int selectedIndex) {
+//        cardControl.getSpinner().setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                cardControl.getToggleLock().setEnabled(position > 0);
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> parent) {
+//
+//            }
+//        });
+//    }
 
     public void newSetup() {
 
-        setupMastermind();
-        setupScheme();
+        selectedMastermind = setupHelper(mastermindControl, selectedMastermind, filteredMastermindList);
+        selectedScheme = setupHelper(schemeControl, selectedScheme, filteredSchemeList);
         setupVillains();
         setupHenchmen();
         setupHeroes();
     }
 
-    private void setupMastermind() {
-        if (!mastermindControl.getToggleLock().isChecked()) {
-
-            selectedMastermind = (Mastermind) selectRandomlyFromList(filteredMastermindList);
-            mastermindControl.getSpinner().setSelection(filteredMastermindList.indexOf(selectedMastermind));
-        }
-    }
-
-    private void setupScheme() {
-        if (!schemeControl.getToggleLock().isChecked()) {
-
-            selectedScheme = (Scheme) selectRandomlyFromList(filteredSchemeList);
-            schemeControl.getSpinner().setSelection(filteredSchemeList.indexOf(selectedScheme));
-        }
-    }
-
     private void setupVillains() {
 
-        for (int i = 0; i < villainsControlList.size(); ++i) {
-            final CardControl villainControl = villainsControlList.get(i);
-
-            if (villainControl.getToggleLock().getVisibility() == View.INVISIBLE) {
-                toggleControlLock(false, villainControl);
-            }
-
-            if (!villainControl.getToggleLock().isChecked()) {
-                Villains randomVillain;
-
-                do {
-                    randomVillain = (Villains) selectRandomlyFromList(filteredVillainsList);
-                } while (selectedVillainsList.contains(randomVillain));
-
-                selectedVillainsList.add(i, randomVillain);
-                selectedVillainsList.remove(i + 1);
-            }
-        }
-
-        for (int i = 0; i < villainsControlList.size(); ++i) {
-            final CardControl villainControl = villainsControlList.get(i);
-            final int selectedVillainsIndex = filteredVillainsList.indexOf(selectedVillainsList.get(i));
-
-            villainControl.getSpinner().setSelection(selectedVillainsIndex);
-        }
-
+        setupHelper(villainsControlList, filteredVillainsList, selectedVillainsList);
         selectAlwaysLeadsVillains();
+    }
+
+    private void setupHenchmen() {
+
+        setupHelper(henchmenControlList, filteredHenchmenList, selectedHenchmenList);
+        selectAlwaysLeadsHenchmen();
+    }
+
+    private void setupHeroes() {
+
+        setupHelper(heroControlList, filteredHeroList, selectedHeroList);
     }
 
     private void selectAlwaysLeadsVillains() {
@@ -128,37 +122,6 @@ public class GameSetup {
         }
     }
 
-    private void setupHenchmen() {
-
-        for (int i = 0; i < henchmenControlList.size(); ++i) {
-            final CardControl henchmenControl = henchmenControlList.get(i);
-
-            if (henchmenControl.getToggleLock().getVisibility() == View.INVISIBLE) {
-                toggleControlLock(false, henchmenControl);
-            }
-
-            if (!henchmenControl.getToggleLock().isChecked()) {
-                Henchmen randomHenchmen;
-
-                do {
-                    randomHenchmen = (Henchmen) selectRandomlyFromList(filteredHenchmenList);
-                } while (selectedHenchmenList.contains(randomHenchmen));
-
-                selectedHenchmenList.add(i, randomHenchmen);
-                selectedHenchmenList.remove(i + 1);
-            }
-        }
-
-        for (int i = 0; i < henchmenControlList.size(); ++i) {
-            final CardControl henchmenControl = henchmenControlList.get(i);
-            final int selectedHenchmenIndex = filteredHenchmenList.indexOf(selectedHenchmenList.get(i));
-
-            henchmenControl.getSpinner().setSelection(selectedHenchmenIndex);
-        }
-
-        selectAlwaysLeadsHenchmen();
-    }
-
     private void selectAlwaysLeadsHenchmen() {
 
         final int alwaysLeadsHenchmenId = selectedMastermind.getHenchmenId();
@@ -169,6 +132,53 @@ public class GameSetup {
                     selectedHenchmenList,
                     filteredHenchmenList,
                     henchmenControlList);
+        }
+    }
+
+    private <T extends BaseCard> T setupHelper(final CardControl control,
+                                               final T selectedCard,
+                                               final List<T> filteredList) {
+        final T newSelectedCard;
+
+        if (!control.getToggleLock().isChecked()) {
+
+            newSelectedCard = (T) selectRandomlyFromList(filteredList);
+            control.getSpinner().setSelection(filteredList.indexOf(newSelectedCard));
+        } else {
+            newSelectedCard = selectedCard;
+        }
+
+        return newSelectedCard;
+    }
+
+    private <T extends BaseCard> void setupHelper(final List<CardControl> controlList,
+                                 final List<T> filteredList,
+                                 final List<T> selectedList) {
+
+        for (int i = 0; i < controlList.size(); ++i) {
+            final CardControl control = controlList.get(i);
+
+            if (control.getToggleLock().getVisibility() == View.INVISIBLE) {
+                toggleControlLock(false, control);
+            }
+
+            if (!control.getToggleLock().isChecked()) {
+                T randomSelection;
+
+                do {
+                    randomSelection = (T) selectRandomlyFromList(filteredList);
+                } while (selectedList.contains(randomSelection));
+
+                selectedList.add(i, randomSelection);
+                selectedList.remove(i + 1);
+            }
+        }
+
+        for (int i = 0; i < controlList.size(); ++i) {
+            final CardControl control = controlList.get(i);
+            final int selectedIndex = filteredList.indexOf(selectedList.get(i));
+
+            control.getSpinner().setSelection(selectedIndex);
         }
     }
 
@@ -210,25 +220,6 @@ public class GameSetup {
 
         control.getSpinner().setSelection(filteredIndex);
         toggleControlLock(true, control);
-    }
-
-    private void setupHeroes() {
-        selectedHeroSet.clear();
-
-        for (final CardControl heroControl : heroControlList) {
-            if (heroControl.getToggleLock().isChecked()) {
-                selectedHeroSet.add((Hero) heroControl.getSpinner().getSelectedItem());
-            } else {
-                while (!selectedHeroSet.add((Hero) selectRandomlyFromList(filteredHeroList))) ;
-            }
-        }
-
-        for (int i = 0; i < heroControlList.size(); ++i) {
-            final CardControl heroControl = heroControlList.get(i);
-            final Hero hero = (Hero) selectedHeroSet.toArray()[i];
-
-            heroControl.getSpinner().setSelection(filteredHeroList.indexOf(hero));
-        }
     }
 
     private BaseCard selectRandomlyFromList(final List<? extends BaseCard> cardList) {

@@ -15,7 +15,6 @@ public class CardControl extends LinearLayout {
 
     private final Spinner spinner;
     private final ToggleButton toggleLock;
-    private boolean isSetByMastermind = false;
 
     public CardControl(final Context context, final AttributeSet attrs) {
         super(context, attrs);
@@ -54,13 +53,5 @@ public class CardControl extends LinearLayout {
 
     public ToggleButton getToggleLock() {
         return toggleLock;
-    }
-
-    public boolean isSetBySetup() {
-        return isSetByMastermind;
-    }
-
-    public void setSetBySetup(final boolean isSetByMastermind) {
-        this.isSetByMastermind = isSetByMastermind;
     }
 }
