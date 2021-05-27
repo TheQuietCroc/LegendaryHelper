@@ -1,21 +1,22 @@
 package com.thequietcroc.legendary.database.entities;
 
 import android.view.View;
+import android.widget.AdapterView;
 
 import com.thequietcroc.legendary.custom.views.CardControl;
 import com.thequietcroc.legendary.database.LegendaryDatabase;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
 public class GameSetup {
     private Mastermind selectedMastermind;
     private Scheme selectedScheme;
-    private List<Villains> selectedVillainsList = new ArrayList<>(Arrays.asList(null, null, null, null));
-    private List<Henchmen> selectedHenchmenList = new ArrayList<>(Arrays.asList(null, null));
-    private List<Hero> selectedHeroList = new ArrayList<>(Arrays.asList(null, null, null, null, null, null));
+    private final List<Villains> selectedVillainsList;
+    private final List<Henchmen> selectedHenchmenList;
+    private final List<Hero> selectedHeroList;
 
     private final LegendaryDatabase db;
 
@@ -34,7 +35,7 @@ public class GameSetup {
     public GameSetup(final LegendaryDatabase db,
                      final List<Mastermind> filteredMastermindList,
                      final List<Scheme> filteredSchemeList,
-                     final List<Villains> filteredVillainList,
+                     final List<Villains> filteredVillainsList,
                      final List<Henchmen> filteredHenchmenList,
                      final List<Hero> filteredHeroList,
                      final CardControl mastermindControl,
@@ -46,7 +47,7 @@ public class GameSetup {
 
         this.filteredMastermindList = filteredMastermindList;
         this.filteredSchemeList = filteredSchemeList;
-        this.filteredVillainsList = filteredVillainList;
+        this.filteredVillainsList = filteredVillainsList;
         this.filteredHenchmenList = filteredHenchmenList;
         this.filteredHeroList = filteredHeroList;
 
@@ -56,32 +57,114 @@ public class GameSetup {
         this.henchmenControlList = henchmenControlList;
         this.heroControlList = heroControlList;
 
-//        initializeControls();
+        selectedMastermind = filteredMastermindList.get(0);
+        selectedScheme = filteredSchemeList.get(0);
+        selectedVillainsList = new ArrayList<>(Collections.nCopies(villainsControlList.size(), filteredVillainsList.get(0)));
+        selectedHenchmenList = new ArrayList<>(Collections.nCopies(henchmenControlList.size(), filteredHenchmenList.get(0)));
+        selectedHeroList = new ArrayList<>(Collections.nCopies(heroControlList.size(), filteredHeroList.get(0)));
+
+        initializeControls();
     }
 
-//    private void setSelectedMastermind(final Mastermind selectedMastermind) {
-//        this.selectedMastermind = selectedMastermind;
-//    }
+    private void setSelectedMastermind(final Mastermind selectedMastermind) {
+        this.selectedMastermind = selectedMastermind;
+    }
 
-//    private void initializeControls() {
-//
-//    }
-//
-//    private <T> void setOnItemSelectListener(final CardControl cardControl,
-//                                             final List<T> selectedList,
-//                                             final int selectedIndex) {
-//        cardControl.getSpinner().setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                cardControl.getToggleLock().setEnabled(position > 0);
-//            }
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> parent) {
-//
-//            }
-//        });
-//    }
+    private void setSelectedScheme(final Scheme selectedScheme) {
+        this.selectedScheme = selectedScheme;
+    }
+
+    private <T> void setSelectedCard(final T selectedCard) {
+        if (selectedCard instanceof Mastermind) {
+            setSelectedMastermind((Mastermind) selectedCard);
+        } else if (selectedCard instanceof Scheme) {
+            setSelectedScheme((Scheme) selectedCard);
+        }
+    }
+
+    private void initializeControls() {
+
+        setOnItemSelectedListener(mastermindControl);
+        setOnItemSelectedListener(schemeControl);
+
+        for (int i = 0; i < villainsControlList.size(); ++i) {
+            setOnItemSelectedListener(villainsControlList.get(i), selectedVillainsList, i);
+        }
+
+        for (int i = 0; i < henchmenControlList.size(); ++i) {
+            setOnItemSelectedListener(henchmenControlList.get(i), selectedHenchmenList, i);
+        }
+
+        for (int i = 0; i < heroControlList.size(); ++i) {
+            setOnItemSelectedListener(heroControlList.get(i), selectedHeroList, i);
+        }
+    }
+
+    private void setOnItemSelectedListener(final CardControl control) {
+
+        control.getSpinner().setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                final int prevPosition = (Integer) parent.getTag();
+
+                if (prevPosition != position) {
+
+                    setSelectedCard(parent.getSelectedItem());
+
+                    ((CardControl) parent.getParent()).getToggleLock().setEnabled(position > 0);
+                }
+
+                parent.setTag(position);
+                // TODO: add always leads cards
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+    }
+
+    private <T> void setOnItemSelectedListener(final CardControl cardControl,
+                                               final List<T> selectedList,
+                                               final int selectedIndex) {
+
+        cardControl.getSpinner().setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                final int prevPosition = (Integer) parent.getTag();
+
+                if (prevPosition != position) {
+
+                    final T selectedCard = (T) parent.getSelectedItem();
+
+                    if (position > 0
+                            && selectedList.contains(selectedCard)) {
+
+                        parent.setSelection(prevPosition);
+                    } else {
+
+                        selectedList.add(selectedIndex, (T) parent.getSelectedItem());
+                        selectedList.remove(selectedIndex + 1);
+                    }
+                }
+
+                final int selectedItemPosition = parent.getSelectedItemPosition();
+
+                ((CardControl) parent.getParent()).getToggleLock().setEnabled(selectedItemPosition > 0);
+                parent.setTag(selectedItemPosition);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+    }
 
     public void newSetup() {
 
@@ -143,7 +226,11 @@ public class GameSetup {
         if (!control.getToggleLock().isChecked()) {
 
             newSelectedCard = (T) selectRandomlyFromList(filteredList);
-            control.getSpinner().setSelection(filteredList.indexOf(newSelectedCard));
+
+            final int filteredIndex = filteredList.indexOf(newSelectedCard);
+
+            control.getSpinner().setTag(filteredIndex);
+            control.getSpinner().setSelection(filteredIndex);
         } else {
             newSelectedCard = selectedCard;
         }
@@ -178,6 +265,7 @@ public class GameSetup {
             final CardControl control = controlList.get(i);
             final int selectedIndex = filteredList.indexOf(selectedList.get(i));
 
+            control.getSpinner().setTag(selectedIndex);
             control.getSpinner().setSelection(selectedIndex);
         }
     }
@@ -218,6 +306,7 @@ public class GameSetup {
 
         final CardControl control = cardControlList.get(alwaysLeadsIndex);
 
+        control.getSpinner().setTag(filteredIndex);
         control.getSpinner().setSelection(filteredIndex);
         toggleControlLock(true, control);
     }

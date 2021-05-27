@@ -3,8 +3,6 @@ package com.thequietcroc.legendary.custom.views;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.ToggleButton;
@@ -24,20 +22,9 @@ public class CardControl extends LinearLayout {
         inflater.inflate(R.layout.card_control, this, true);
 
         spinner = (Spinner) getChildAt(0);
+        spinner.setTag(0);
+
         toggleLock = (ToggleButton) getChildAt(1);
-
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                toggleLock.setEnabled(position > 0);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
         toggleLock.setOnCheckedChangeListener((buttonView, isChecked) ->
                 spinner.setEnabled(!isChecked));
 

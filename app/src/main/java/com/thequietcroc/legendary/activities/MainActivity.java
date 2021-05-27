@@ -67,57 +67,30 @@ public class MainActivity extends AppCompatActivity {
                 findViewById(R.id.cardControlHeroes6)
         ));
 
-        final List<Mastermind> mastermindList = new ArrayList<>();
-        final List<Scheme> schemeList = new ArrayList<>();
-        final List<Villains> villainsList = new ArrayList<>();
-        final List<Henchmen> henchmenList = new ArrayList<>();
-        final List<Hero> heroList = new ArrayList<>();
+        final Mastermind noneMastermind = db.mastermindDao().findByIdSync(0);
+        final List<Mastermind> mastermindList = db.mastermindDao().getAllFilteredSync();
+        mastermindList.remove(noneMastermind);
+        mastermindList.add(0, noneMastermind);
+        
+        final Scheme noneScheme = db.schemeDao().findByIdSync(0);
+        final List<Scheme> schemeList = db.schemeDao().getAllFilteredSync();
+        schemeList.remove(noneScheme);
+        schemeList.add(0, noneScheme);
 
-        db.mastermindDao().getAllFilteredAsync().observe(this, list -> {
-            final Mastermind noneEntry = db.mastermindDao().findByIdSync(0);
+        final Villains noneVillain = db.villainsDao().findByIdSync(0);
+        final List<Villains> villainsList = db.villainsDao().getAllFilteredSync();
+        villainsList.remove(noneVillain);
+        villainsList.add(0, noneVillain);
 
-            list.remove(noneEntry);
-            list.add(0, noneEntry);
+        final Henchmen noneHenchmen = db.henchmenDao().findByIdSync(0);
+        final List<Henchmen> henchmenList = db.henchmenDao().getAllFilteredSync();
+        henchmenList.remove(noneHenchmen);
+        henchmenList.add(0, noneHenchmen);
 
-            mastermindList.addAll(list);
-
-        });
-        db.schemeDao().getAllFilteredAsync().observe(this, list -> {
-            final Scheme noneEntry = db.schemeDao().findByIdSync(0);
-
-            list.remove(noneEntry);
-            list.add(0, noneEntry);
-
-            schemeList.addAll(list);
-
-        });
-        db.villainsDao().getAllFilteredAsync().observe(this, list -> {
-            final Villains noneEntry = db.villainsDao().findByIdSync(0);
-
-            list.remove(noneEntry);
-            list.add(0, noneEntry);
-
-            villainsList.addAll(list);
-
-        });
-        db.henchmenDao().getAllFilteredAsync().observe(this, list -> {
-            final Henchmen noneEntry = db.henchmenDao().findByIdSync(0);
-
-            list.remove(noneEntry);
-            list.add(0, noneEntry);
-
-            henchmenList.addAll(list);
-
-        });
-        db.heroDao().getAllFilteredAsync().observe(this, list -> {
-            final Hero noneEntry = db.heroDao().findByIdSync(0);
-
-            list.remove(noneEntry);
-            list.add(0, noneEntry);
-
-            heroList.addAll(list);
-
-        });
+        final Hero noneHero = db.heroDao().findByIdSync(0);
+        final List<Hero> heroList = db.heroDao().getAllFilteredSync();
+        heroList.remove(noneHero);
+        heroList.add(0, noneHero);
 
         gameSetup = new GameSetup(db,
                 mastermindList,
