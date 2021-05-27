@@ -23,6 +23,7 @@ import com.thequietcroc.legendary.database.entities.Villains;
 import com.thequietcroc.legendary.enums.ItemType;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static com.thequietcroc.legendary.enums.ItemType.HENCHMEN;
@@ -45,26 +46,26 @@ public class MainActivity extends AppCompatActivity {
 
         initializeControls();
 
-        final CardControl[] villainsControls = {
+        final List<CardControl> villainsControls = new ArrayList<>(Arrays.asList(
                 findViewById(R.id.cardControlVillains1),
                 findViewById(R.id.cardControlVillains2),
                 findViewById(R.id.cardControlVillains3),
                 findViewById(R.id.cardControlVillains4)
-        };
+        ));
 
-        final CardControl[] henchmenControls = {
+        final List<CardControl> henchmenControls = new ArrayList<>(Arrays.asList(
                 findViewById(R.id.cardControlHenchmen1),
                 findViewById(R.id.cardControlHenchmen2)
-        };
+        ));
 
-        final CardControl[] heroControls = {
+        final List<CardControl> heroControls = new ArrayList<>(Arrays.asList(
                 findViewById(R.id.cardControlHeroes1),
                 findViewById(R.id.cardControlHeroes2),
                 findViewById(R.id.cardControlHeroes3),
                 findViewById(R.id.cardControlHeroes4),
                 findViewById(R.id.cardControlHeroes5),
                 findViewById(R.id.cardControlHeroes6)
-        };
+        ));
 
         final List<Mastermind> mastermindList = new ArrayList<>();
         final List<Scheme> schemeList = new ArrayList<>();
@@ -72,11 +73,51 @@ public class MainActivity extends AppCompatActivity {
         final List<Henchmen> henchmenList = new ArrayList<>();
         final List<Hero> heroList = new ArrayList<>();
 
-        db.mastermindDao().getAllFilteredAsync().observe(this, mastermindList::addAll);
-        db.schemeDao().getAllFilteredAsync().observe(this, schemeList::addAll);
-        db.villainsDao().getAllFilteredAsync().observe(this, villainsList::addAll);
-        db.henchmenDao().getAllFilteredAsync().observe(this, henchmenList::addAll);
-        db.heroDao().getAllFilteredAsync().observe(this, heroList::addAll);
+        db.mastermindDao().getAllFilteredAsync().observe(this, list -> {
+            final Mastermind noneEntry = db.mastermindDao().findByIdSync(0);
+
+            list.remove(noneEntry);
+            list.add(0, noneEntry);
+
+            mastermindList.addAll(list);
+
+        });
+        db.schemeDao().getAllFilteredAsync().observe(this, list -> {
+            final Scheme noneEntry = db.schemeDao().findByIdSync(0);
+
+            list.remove(noneEntry);
+            list.add(0, noneEntry);
+
+            schemeList.addAll(list);
+
+        });
+        db.villainsDao().getAllFilteredAsync().observe(this, list -> {
+            final Villains noneEntry = db.villainsDao().findByIdSync(0);
+
+            list.remove(noneEntry);
+            list.add(0, noneEntry);
+
+            villainsList.addAll(list);
+
+        });
+        db.henchmenDao().getAllFilteredAsync().observe(this, list -> {
+            final Henchmen noneEntry = db.henchmenDao().findByIdSync(0);
+
+            list.remove(noneEntry);
+            list.add(0, noneEntry);
+
+            henchmenList.addAll(list);
+
+        });
+        db.heroDao().getAllFilteredAsync().observe(this, list -> {
+            final Hero noneEntry = db.heroDao().findByIdSync(0);
+
+            list.remove(noneEntry);
+            list.add(0, noneEntry);
+
+            heroList.addAll(list);
+
+        });
 
         gameSetup = new GameSetup(db,
                 mastermindList,
@@ -128,7 +169,7 @@ public class MainActivity extends AppCompatActivity {
         switch (ItemType) {
             case HERO: {
                 final Hero noneEntry = db.heroDao().findByIdSync(0);
-                
+
                 db.heroDao().getAllFilteredAsync()
                         .observe(this, generateObserver(noneEntry,
                                 findViewById(R.id.cardControlHeroes1),
