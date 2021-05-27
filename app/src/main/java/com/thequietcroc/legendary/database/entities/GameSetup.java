@@ -117,7 +117,11 @@ public class GameSetup {
                 }
 
                 parent.setTag(position);
-                // TODO: add always leads cards
+
+                if (parent.getSelectedItem() instanceof Mastermind) {
+                    selectAlwaysLeadsVillains();
+                    selectAlwaysLeadsHenchmen();
+                }
             }
 
             @Override
@@ -274,6 +278,12 @@ public class GameSetup {
                                              final List<T> selectedList,
                                              final List<T> filteredList,
                                              final List<CardControl> cardControlList) {
+        for (final CardControl control : cardControlList) {
+            if (control.getToggleLock().getVisibility() == View.INVISIBLE) {
+                toggleControlLock(false, control);
+            }
+        }
+
         final int filteredIndex = filteredList.indexOf(alwaysLeads);
         int alwaysLeadsIndex = selectedList.indexOf(alwaysLeads);
 
