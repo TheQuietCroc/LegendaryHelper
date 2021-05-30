@@ -5,14 +5,13 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.button.MaterialButtonToggleGroup;
 import com.thequietcroc.legendary.R;
-import com.thequietcroc.legendary.custom.views.CardControl;
 import com.thequietcroc.legendary.database.LegendaryDatabase;
 import com.thequietcroc.legendary.database.entities.GameSetup;
 import com.thequietcroc.legendary.database.entities.Henchmen;
@@ -20,17 +19,8 @@ import com.thequietcroc.legendary.database.entities.Hero;
 import com.thequietcroc.legendary.database.entities.Mastermind;
 import com.thequietcroc.legendary.database.entities.Scheme;
 import com.thequietcroc.legendary.database.entities.Villains;
-import com.thequietcroc.legendary.enums.ItemType;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-
-import static com.thequietcroc.legendary.enums.ItemType.HENCHMEN;
-import static com.thequietcroc.legendary.enums.ItemType.HERO;
-import static com.thequietcroc.legendary.enums.ItemType.MASTERMIND;
-import static com.thequietcroc.legendary.enums.ItemType.SCHEME;
-import static com.thequietcroc.legendary.enums.ItemType.VILLAINS;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -44,34 +34,15 @@ public class MainActivity extends AppCompatActivity {
 
         db = LegendaryDatabase.getInstance(this);
 
-        initializeControls();
-
-        final List<CardControl> villainsControls = new ArrayList<>(Arrays.asList(
-                findViewById(R.id.cardControlVillains1),
-                findViewById(R.id.cardControlVillains2),
-                findViewById(R.id.cardControlVillains3),
-                findViewById(R.id.cardControlVillains4)
-        ));
-
-        final List<CardControl> henchmenControls = new ArrayList<>(Arrays.asList(
-                findViewById(R.id.cardControlHenchmen1),
-                findViewById(R.id.cardControlHenchmen2)
-        ));
-
-        final List<CardControl> heroControls = new ArrayList<>(Arrays.asList(
-                findViewById(R.id.cardControlHeroes1),
-                findViewById(R.id.cardControlHeroes2),
-                findViewById(R.id.cardControlHeroes3),
-                findViewById(R.id.cardControlHeroes4),
-                findViewById(R.id.cardControlHeroes5),
-                findViewById(R.id.cardControlHeroes6)
-        ));
+        final ConstraintLayout villainsContainer = findViewById(R.id.containerVillains);
+        final ConstraintLayout henchmenContainer = findViewById(R.id.containerHenchmen);
+        final ConstraintLayout heroesContainer = findViewById(R.id.containerHeroes);
 
         final Mastermind noneMastermind = db.mastermindDao().findByIdSync(0);
         final List<Mastermind> mastermindList = db.mastermindDao().getAllFilteredSync();
         mastermindList.remove(noneMastermind);
         mastermindList.add(0, noneMastermind);
-        
+
         final Scheme noneScheme = db.schemeDao().findByIdSync(0);
         final List<Scheme> schemeList = db.schemeDao().getAllFilteredSync();
         schemeList.remove(noneScheme);
@@ -92,7 +63,12 @@ public class MainActivity extends AppCompatActivity {
         heroList.remove(noneHero);
         heroList.add(0, noneHero);
 
-        gameSetup = new GameSetup(db,
+        final MaterialButtonToggleGroup buttonGroupPlayers = findViewById(R.id.buttonGroupPlayers);
+
+        gameSetup = new GameSetup(
+                Integer.parseInt((String) ((MaterialButton) findViewById(buttonGroupPlayers.getCheckedButtonId())).getText()),
+                buttonGroupPlayers,
+                db,
                 mastermindList,
                 schemeList,
                 villainsList,
@@ -100,9 +76,9 @@ public class MainActivity extends AppCompatActivity {
                 heroList,
                 findViewById(R.id.cardControlMastermind),
                 findViewById(R.id.cardControlScheme),
-                villainsControls,
-                henchmenControls,
-                heroControls);
+                villainsContainer,
+                henchmenContainer,
+                heroesContainer);
     }
 
     @Override
@@ -118,98 +94,17 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.menuActionFilter: {
                 openFilterActivity();
-            } break;
+            }
+            break;
             case R.id.menuActionRandomize: {
                 gameSetup.newSetup();
-            } break;
+            }
+            break;
             default:
                 return super.onOptionsItemSelected(item);
         }
 
         return true;
-    }
-
-    private void initializeControls() {
-        populateCardSpinner(HERO);
-        populateCardSpinner(MASTERMIND);
-        populateCardSpinner(VILLAINS);
-        populateCardSpinner(HENCHMEN);
-        populateCardSpinner(SCHEME);
-    }
-
-    private void populateCardSpinner(final ItemType ItemType) {
-
-        switch (ItemType) {
-            case HERO: {
-                final Hero noneEntry = db.heroDao().findByIdSync(0);
-
-                db.heroDao().getAllFilteredAsync()
-                        .observe(this, generateObserver(noneEntry,
-                                findViewById(R.id.cardControlHeroes1),
-                                findViewById(R.id.cardControlHeroes2),
-                                findViewById(R.id.cardControlHeroes3),
-                                findViewById(R.id.cardControlHeroes4),
-                                findViewById(R.id.cardControlHeroes5),
-                                findViewById(R.id.cardControlHeroes6)));
-            }
-            break;
-            case MASTERMIND: {
-                final Mastermind noneEntry = db.mastermindDao().findByIdSync(0);
-
-                db.mastermindDao().getAllFilteredAsync()
-                        .observe(this, generateObserver(noneEntry,
-                                findViewById(R.id.cardControlMastermind)));
-            }
-            break;
-            case VILLAINS: {
-                final Villains noneEntry = db.villainsDao().findByIdSync(0);
-
-                db.villainsDao().getAllFilteredAsync()
-                        .observe(this, generateObserver(noneEntry,
-                                findViewById(R.id.cardControlVillains1),
-                                findViewById(R.id.cardControlVillains2),
-                                findViewById(R.id.cardControlVillains3),
-                                findViewById(R.id.cardControlVillains4)));
-            }
-            break;
-            case HENCHMEN: {
-                final Henchmen noneEntry = db.henchmenDao().findByIdSync(0);
-
-                db.henchmenDao().getAllFilteredAsync()
-                        .observe(this, generateObserver(noneEntry,
-                                findViewById(R.id.cardControlHenchmen1),
-                                findViewById(R.id.cardControlHenchmen2)));
-            }
-            break;
-            case SCHEME: {
-                final Scheme noneEntry = db.schemeDao().findByIdSync(0);
-
-                db.schemeDao().getAllFilteredAsync()
-                        .observe(this, generateObserver(noneEntry,
-                                findViewById(R.id.cardControlScheme)));
-            }
-            break;
-        }
-    }
-
-    private <T> Observer<List<T>> generateObserver(final T noneEntry,
-                                                   final CardControl... cardControls) {
-        return list -> {
-            list.remove(noneEntry);
-            list.add(0, noneEntry);
-
-            for (final CardControl cardControl : cardControls) {
-                final Spinner spinner = cardControl.getSpinner();
-
-                final ArrayAdapter<T> adapter = new ArrayAdapter<>(
-                        getApplicationContext(),
-                        R.layout.spinner_layout,
-                        list);
-
-                adapter.setDropDownViewResource(R.layout.spinner_layout);
-                spinner.setAdapter(adapter);
-            }
-        };
     }
 
     private void openFilterActivity() {

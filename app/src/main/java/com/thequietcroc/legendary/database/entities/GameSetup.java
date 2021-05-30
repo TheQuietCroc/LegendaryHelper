@@ -1,17 +1,32 @@
 package com.thequietcroc.legendary.database.entities;
 
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.view.ViewCompat;
+
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.button.MaterialButtonToggleGroup;
+import com.thequietcroc.legendary.R;
 import com.thequietcroc.legendary.custom.views.CardControl;
 import com.thequietcroc.legendary.database.LegendaryDatabase;
+import com.thequietcroc.legendary.enums.ItemType;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+import static com.thequietcroc.legendary.enums.ItemType.HENCHMEN;
+import static com.thequietcroc.legendary.enums.ItemType.HERO;
+import static com.thequietcroc.legendary.enums.ItemType.VILLAINS;
+
 public class GameSetup {
+    private int numPlayers;
     private Mastermind selectedMastermind;
     private Scheme selectedScheme;
     private final List<Villains> selectedVillainsList;
@@ -26,13 +41,21 @@ public class GameSetup {
     private final List<Henchmen> filteredHenchmenList;
     private final List<Hero> filteredHeroList;
 
+    final ConstraintLayout containerVillains;
+    final ConstraintLayout containerHenchmen;
+    final ConstraintLayout containerHero;
+
     private final CardControl mastermindControl;
     private final CardControl schemeControl;
-    private final List<CardControl> villainsControlList;
-    private final List<CardControl> henchmenControlList;
-    private final List<CardControl> heroControlList;
+    private final List<CardControl> villainsControlList = new ArrayList<>();
+    private final List<CardControl> henchmenControlList = new ArrayList<>();
+    private final List<CardControl> heroControlList = new ArrayList<>();
 
-    public GameSetup(final LegendaryDatabase db,
+    private final MaterialButtonToggleGroup buttonGroupPlayers;
+
+    public GameSetup(final int numPlayers,
+                     final MaterialButtonToggleGroup buttonGroupPlayers,
+                     final LegendaryDatabase db,
                      final List<Mastermind> filteredMastermindList,
                      final List<Scheme> filteredSchemeList,
                      final List<Villains> filteredVillainsList,
@@ -40,9 +63,13 @@ public class GameSetup {
                      final List<Hero> filteredHeroList,
                      final CardControl mastermindControl,
                      final CardControl schemeControl,
-                     final List<CardControl> villainsControlList,
-                     final List<CardControl> henchmenControlList,
-                     final List<CardControl> heroControlList) {
+                     final ConstraintLayout containerVillains,
+                     final ConstraintLayout containerHenchmen,
+                     final ConstraintLayout containerHero) {
+        this.numPlayers = numPlayers;
+
+        this.buttonGroupPlayers = buttonGroupPlayers;
+
         this.db = db;
 
         this.filteredMastermindList = filteredMastermindList;
@@ -53,9 +80,10 @@ public class GameSetup {
 
         this.mastermindControl = mastermindControl;
         this.schemeControl = schemeControl;
-        this.villainsControlList = villainsControlList;
-        this.henchmenControlList = henchmenControlList;
-        this.heroControlList = heroControlList;
+
+        this.containerVillains = containerVillains;
+        this.containerHenchmen = containerHenchmen;
+        this.containerHero = containerHero;
 
         selectedMastermind = filteredMastermindList.get(0);
         selectedScheme = filteredSchemeList.get(0);
@@ -64,6 +92,10 @@ public class GameSetup {
         selectedHeroList = new ArrayList<>(Collections.nCopies(heroControlList.size(), filteredHeroList.get(0)));
 
         initializeControls();
+    }
+
+    private void setNumPlayers(final int numPlayers) {
+        this.numPlayers = numPlayers;
     }
 
     private void setSelectedMastermind(final Mastermind selectedMastermind) {
@@ -84,25 +116,27 @@ public class GameSetup {
 
     private void initializeControls() {
 
-        setOnItemSelectedListener(mastermindControl);
-        setOnItemSelectedListener(schemeControl);
+        for (int i = 0; i < buttonGroupPlayers.getChildCount(); ++i) {
 
-        for (int i = 0; i < villainsControlList.size(); ++i) {
-            setOnItemSelectedListener(villainsControlList.get(i), selectedVillainsList, i);
+            final MaterialButton button = (MaterialButton) buttonGroupPlayers.getChildAt(i);
+
+            button.setOnClickListener(v -> {
+
+                setNumPlayers(Integer.parseInt((String) ((MaterialButton) v).getText()));
+
+                adjustContainedControls();
+            });
         }
 
-        for (int i = 0; i < henchmenControlList.size(); ++i) {
-            setOnItemSelectedListener(henchmenControlList.get(i), selectedHenchmenList, i);
-        }
+        initializeSpinner(mastermindControl.getSpinner(), filteredMastermindList);
+        initializeSpinner(schemeControl.getSpinner(), filteredSchemeList);
 
-        for (int i = 0; i < heroControlList.size(); ++i) {
-            setOnItemSelectedListener(heroControlList.get(i), selectedHeroList, i);
-        }
+        adjustContainedControls();
     }
 
-    private void setOnItemSelectedListener(final CardControl control) {
+    private void setOnItemSelectedListener(final Spinner spinner) {
 
-        control.getSpinner().setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -131,11 +165,11 @@ public class GameSetup {
         });
     }
 
-    private <T> void setOnItemSelectedListener(final CardControl cardControl,
+    private <T> void setOnItemSelectedListener(final Spinner spinner,
                                                final List<T> selectedList,
                                                final int selectedIndex) {
 
-        cardControl.getSpinner().setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -243,8 +277,8 @@ public class GameSetup {
     }
 
     private <T extends BaseCard> void setupHelper(final List<CardControl> controlList,
-                                 final List<T> filteredList,
-                                 final List<T> selectedList) {
+                                                  final List<T> filteredList,
+                                                  final List<T> selectedList) {
 
         for (int i = 0; i < controlList.size(); ++i) {
             final CardControl control = controlList.get(i);
@@ -305,7 +339,6 @@ public class GameSetup {
             }
 
             if (alwaysLeadsIndex == -1) {
-                final CardControl control = cardControlList.get(0);
 
                 selectedList.add(0, alwaysLeads);
                 selectedList.remove(1);
@@ -333,5 +366,182 @@ public class GameSetup {
             control.getToggleLock().setChecked(false);
             control.getToggleLock().setVisibility(View.VISIBLE);
         }
+    }
+
+    private void adjustContainedControls() {
+
+        switch (numPlayers) {
+            case 5: {
+                // 4 villain groups
+                // 2 henchmen groups
+                // 6 hero groups
+                adjustContainedControls(4, VILLAINS);
+                adjustContainedControls(2, HENCHMEN);
+                adjustContainedControls(6, HERO);
+            }
+            break;
+            case 4: {
+                // 3 villain groups
+                // 2 henchmen groups
+                // 5 heroes
+                adjustContainedControls(3, VILLAINS);
+                adjustContainedControls(2, HENCHMEN);
+                adjustContainedControls(5, HERO);
+            }
+            break;
+            case 3: {
+                // 3 villain groups
+                // 1 henchmen group
+                // 5 heroes
+                adjustContainedControls(3, VILLAINS);
+                adjustContainedControls(1, HENCHMEN);
+                adjustContainedControls(5, HERO);
+            }
+            break;
+            case 2: {
+                // 2 villain groups
+                // 1 henchmen group
+                // 5 heroes
+                adjustContainedControls(2, VILLAINS);
+                adjustContainedControls(1, HENCHMEN);
+                adjustContainedControls(5, HERO);
+            }
+            break;
+            case 1: {
+                // 1 villain group
+                // 1 henchmen group
+                // 3 heroes
+                adjustContainedControls(1, VILLAINS);
+                adjustContainedControls(1, HENCHMEN);
+                adjustContainedControls(3, HERO);
+            }
+            break;
+            default:
+                break;
+        }
+    }
+
+    private void adjustContainedControls(final int numVisible,
+                                         final ItemType type) {
+        switch (type) {
+            case HERO: {
+                adjustContainedControlsHelper(numVisible,
+                        heroControlList,
+                        containerHero,
+                        filteredHeroList,
+                        selectedHeroList);
+
+            }
+            break;
+            case VILLAINS: {
+                adjustContainedControlsHelper(numVisible,
+                        villainsControlList,
+                        containerVillains,
+                        filteredVillainsList,
+                        selectedVillainsList);
+            }
+            break;
+            case HENCHMEN: {
+                adjustContainedControlsHelper(numVisible,
+                        henchmenControlList,
+                        containerHenchmen,
+                        filteredHenchmenList,
+                        selectedHenchmenList);
+            }
+            break;
+        }
+    }
+
+    private <T> void adjustContainedControlsHelper(final int numVisible,
+                                                   final List<CardControl> controlList,
+                                                   final ConstraintLayout container,
+                                                   final List<T> filteredList,
+                                                   final List<T> selectedList) {
+
+        if (controlList.size() < numVisible) {
+            final int numToAdd = numVisible - controlList.size();
+
+            for (int i = 0; i < numToAdd; ++i) {
+                final CardControl control = createCardControl(container);
+                initializeSpinner(control.getSpinner(),
+                        filteredList,
+                        selectedList,
+                        i + controlList.size());
+
+                container.addView(control);
+                controlList.add(control);
+
+                if (selectedList.size() < controlList.size()) {
+                    selectedList.add((T) control.getSpinner().getSelectedItem());
+                }
+            }
+        } else if (controlList.size() > numVisible) {
+            final int numToRemove = controlList.size() - numVisible;
+
+            container.removeViews(numVisible, numToRemove);
+            controlList.removeAll(controlList.subList(numVisible, controlList.size()));
+        }
+
+        for (int i = 0; i < controlList.size(); ++i) {
+            final T selected = selectedList.get(i);
+            final Spinner spinner = controlList.get(i).getSpinner();
+            final int selectedIndex = filteredList.indexOf(selected);
+
+            spinner.setTag(selectedIndex);
+            spinner.setSelection(selectedIndex);
+        }
+    }
+
+    private CardControl createCardControl(final ConstraintLayout parent) {
+
+        final CardControl currentBottomControl = (CardControl) parent.getChildAt(parent.getChildCount() - 1);
+        final CardControl cardControl = new CardControl(parent.getContext());
+
+        cardControl.setId(ViewCompat.generateViewId());
+
+        final ConstraintLayout.LayoutParams layoutParams = new ConstraintLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+        layoutParams.topMargin = 16;
+
+        layoutParams.endToEnd = parent.getId();
+        layoutParams.startToStart = parent.getId();
+
+        if (null == currentBottomControl) {
+            layoutParams.topToTop = parent.getId();
+        } else {
+            layoutParams.topToBottom = currentBottomControl.getId();
+        }
+
+        cardControl.setLayoutParams(layoutParams);
+
+        return cardControl;
+    }
+
+    private <T> void initializeSpinner(final Spinner spinner,
+                                       final List<T> filteredCardList) {
+        final ArrayAdapter<T> adapter = new ArrayAdapter<T>(
+                spinner.getContext(),
+                R.layout.spinner_layout,
+                filteredCardList);
+
+        adapter.setDropDownViewResource(R.layout.spinner_layout);
+        spinner.setAdapter(adapter);
+
+        setOnItemSelectedListener(spinner);
+    }
+
+    private <T> void initializeSpinner(final Spinner spinner,
+                                       final List<T> filteredCardList,
+                                       final List<T> selectedList,
+                                       final int selectedIndex) {
+        final ArrayAdapter<T> adapter = new ArrayAdapter<T>(
+                spinner.getContext(),
+                R.layout.spinner_layout,
+                filteredCardList);
+
+        adapter.setDropDownViewResource(R.layout.spinner_layout);
+        spinner.setAdapter(adapter);
+
+        setOnItemSelectedListener(spinner, selectedList, selectedIndex);
     }
 }
