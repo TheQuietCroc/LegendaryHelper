@@ -3,6 +3,8 @@ package com.thequietcroc.legendary.database.entities;
 import android.view.View;
 import android.widget.AdapterView;
 
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.button.MaterialButtonToggleGroup;
 import com.thequietcroc.legendary.custom.views.CardControl;
 import com.thequietcroc.legendary.database.LegendaryDatabase;
 
@@ -12,6 +14,7 @@ import java.util.List;
 import java.util.Random;
 
 public class GameSetup {
+    private int numPlayers;
     private Mastermind selectedMastermind;
     private Scheme selectedScheme;
     private final List<Villains> selectedVillainsList;
@@ -32,7 +35,11 @@ public class GameSetup {
     private final List<CardControl> henchmenControlList;
     private final List<CardControl> heroControlList;
 
-    public GameSetup(final LegendaryDatabase db,
+    private final MaterialButtonToggleGroup buttonGroupPlayers;
+
+    public GameSetup(final int numPlayers,
+                     final MaterialButtonToggleGroup buttonGroupPlayers,
+                     final LegendaryDatabase db,
                      final List<Mastermind> filteredMastermindList,
                      final List<Scheme> filteredSchemeList,
                      final List<Villains> filteredVillainsList,
@@ -43,6 +50,10 @@ public class GameSetup {
                      final List<CardControl> villainsControlList,
                      final List<CardControl> henchmenControlList,
                      final List<CardControl> heroControlList) {
+        this.numPlayers = numPlayers;
+
+        this.buttonGroupPlayers = buttonGroupPlayers;
+
         this.db = db;
 
         this.filteredMastermindList = filteredMastermindList;
@@ -66,6 +77,10 @@ public class GameSetup {
         initializeControls();
     }
 
+    private void setNumPlayers(final int numPlayers) {
+        this.numPlayers = numPlayers;
+    }
+
     private void setSelectedMastermind(final Mastermind selectedMastermind) {
         this.selectedMastermind = selectedMastermind;
     }
@@ -83,6 +98,17 @@ public class GameSetup {
     }
 
     private void initializeControls() {
+
+        for (int i = 0; i < buttonGroupPlayers.getChildCount(); ++i) {
+            final MaterialButton button = (MaterialButton) buttonGroupPlayers.getChildAt(i);
+
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    setNumPlayers(Integer.parseInt((String) ((MaterialButton) v).getText()));
+                }
+            });
+        }
 
         setOnItemSelectedListener(mastermindControl);
         setOnItemSelectedListener(schemeControl);

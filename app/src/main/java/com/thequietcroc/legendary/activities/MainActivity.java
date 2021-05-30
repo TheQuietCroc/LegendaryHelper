@@ -11,6 +11,8 @@ import android.widget.Spinner;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.button.MaterialButtonToggleGroup;
 import com.thequietcroc.legendary.R;
 import com.thequietcroc.legendary.custom.views.CardControl;
 import com.thequietcroc.legendary.database.LegendaryDatabase;
@@ -92,7 +94,12 @@ public class MainActivity extends AppCompatActivity {
         heroList.remove(noneHero);
         heroList.add(0, noneHero);
 
-        gameSetup = new GameSetup(db,
+        final MaterialButtonToggleGroup buttonGroupPlayers = findViewById(R.id.buttonGroupPlayers);
+
+        gameSetup = new GameSetup(
+                Integer.parseInt((String) ((MaterialButton) findViewById(buttonGroupPlayers.getCheckedButtonId())).getText()),
+                buttonGroupPlayers,
+                db,
                 mastermindList,
                 schemeList,
                 villainsList,
