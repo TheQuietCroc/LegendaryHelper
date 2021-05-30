@@ -231,28 +231,30 @@ public class GameSetup {
     }
 
     private void selectAlwaysLeadsVillains() {
+        if (numPlayers > 1) {
+            final int alwaysLeadsVillainsId = selectedMastermind.getVillainId();
 
-        final int alwaysLeadsVillainsId = selectedMastermind.getVillainId();
+            if (alwaysLeadsVillainsId > 0) {
 
-        if (alwaysLeadsVillainsId > 0) {
-
-            selectAlwaysLeadsHelper(db.villainsDao().findByIdSync(alwaysLeadsVillainsId),
-                    selectedVillainsList,
-                    filteredVillainsList,
-                    villainsControlList);
+                selectAlwaysLeadsHelper(db.villainsDao().findByIdSync(alwaysLeadsVillainsId),
+                        selectedVillainsList,
+                        filteredVillainsList,
+                        villainsControlList);
+            }
         }
     }
 
     private void selectAlwaysLeadsHenchmen() {
+        if (numPlayers > 1) {
+            final int alwaysLeadsHenchmenId = selectedMastermind.getHenchmenId();
 
-        final int alwaysLeadsHenchmenId = selectedMastermind.getHenchmenId();
+            if (alwaysLeadsHenchmenId > 0) {
 
-        if (alwaysLeadsHenchmenId > 0) {
-
-            selectAlwaysLeadsHelper(db.henchmenDao().findByIdSync(alwaysLeadsHenchmenId),
-                    selectedHenchmenList,
-                    filteredHenchmenList,
-                    henchmenControlList);
+                selectAlwaysLeadsHelper(db.henchmenDao().findByIdSync(alwaysLeadsHenchmenId),
+                        selectedHenchmenList,
+                        filteredHenchmenList,
+                        henchmenControlList);
+            }
         }
     }
 
