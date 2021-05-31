@@ -3,9 +3,6 @@ package com.thequietcroc.legendary.database.entities;
 import androidx.room.Entity;
 import androidx.room.Index;
 
-import com.thequietcroc.legendary.database.LegendaryDatabase;
-import com.thequietcroc.legendary.database.daos.GameSetDao;
-
 @Entity(
         tableName = "tblGameSets",
         indices = {
@@ -16,11 +13,6 @@ import com.thequietcroc.legendary.database.daos.GameSetDao;
         }
 )
 public class GameSet extends BaseItem {
-
-    @Override
-    public GameSetDao getDao(final LegendaryDatabase db) {
-        return db.gameSetDao();
-    }
 
     @Override
     public boolean equals(final Object o) {

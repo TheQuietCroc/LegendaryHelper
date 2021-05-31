@@ -13,12 +13,12 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.button.MaterialButtonToggleGroup;
 import com.thequietcroc.legendary.R;
 import com.thequietcroc.legendary.database.LegendaryDatabase;
-import com.thequietcroc.legendary.database.entities.GameSetup;
 import com.thequietcroc.legendary.database.entities.Henchmen;
 import com.thequietcroc.legendary.database.entities.Hero;
 import com.thequietcroc.legendary.database.entities.Mastermind;
 import com.thequietcroc.legendary.database.entities.Scheme;
 import com.thequietcroc.legendary.database.entities.Villains;
+import com.thequietcroc.legendary.utilities.GameSetup;
 
 import java.util.List;
 
@@ -38,28 +38,38 @@ public class MainActivity extends AppCompatActivity {
         final ConstraintLayout henchmenContainer = findViewById(R.id.containerHenchmen);
         final ConstraintLayout heroesContainer = findViewById(R.id.containerHeroes);
 
-        final Mastermind noneMastermind = db.mastermindDao().findByIdSync(0);
-        final List<Mastermind> mastermindList = db.mastermindDao().getAllFilteredSync();
+        final Mastermind noneMastermind = new Mastermind();
+        noneMastermind.setId(0);
+        noneMastermind.setName("None");
+        final List<Mastermind> mastermindList = db.mastermindDao().getAllEnabledSync();
         mastermindList.remove(noneMastermind);
         mastermindList.add(0, noneMastermind);
 
-        final Scheme noneScheme = db.schemeDao().findByIdSync(0);
-        final List<Scheme> schemeList = db.schemeDao().getAllFilteredSync();
+        final Scheme noneScheme = new Scheme();
+        noneScheme.setId(0);
+        noneScheme.setName("None");
+        final List<Scheme> schemeList = db.schemeDao().getAllEnabledSync();
         schemeList.remove(noneScheme);
         schemeList.add(0, noneScheme);
 
-        final Villains noneVillain = db.villainsDao().findByIdSync(0);
-        final List<Villains> villainsList = db.villainsDao().getAllFilteredSync();
-        villainsList.remove(noneVillain);
-        villainsList.add(0, noneVillain);
+        final Villains noneVillains = new Villains();
+        noneVillains.setId(0);
+        noneVillains.setName("None");
+        final List<Villains> villainsList = db.villainsDao().getAllEnabledSync();
+        villainsList.remove(noneVillains);
+        villainsList.add(0, noneVillains);
 
-        final Henchmen noneHenchmen = db.henchmenDao().findByIdSync(0);
-        final List<Henchmen> henchmenList = db.henchmenDao().getAllFilteredSync();
+        final Henchmen noneHenchmen = new Henchmen();
+        noneHenchmen.setId(0);
+        noneHenchmen.setName("None");
+        final List<Henchmen> henchmenList = db.henchmenDao().getAllEnabledSync();
         henchmenList.remove(noneHenchmen);
         henchmenList.add(0, noneHenchmen);
 
-        final Hero noneHero = db.heroDao().findByIdSync(0);
-        final List<Hero> heroList = db.heroDao().getAllFilteredSync();
+        final Hero noneHero = new Hero();
+        noneHero.setId(0);
+        noneHero.setName("None");
+        final List<Hero> heroList = db.heroDao().getAllEnabledSync();
         heroList.remove(noneHero);
         heroList.add(0, noneHero);
 

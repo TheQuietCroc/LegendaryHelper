@@ -5,9 +5,6 @@ import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.Index;
 
-import com.thequietcroc.legendary.database.LegendaryDatabase;
-import com.thequietcroc.legendary.database.daos.MastermindDao;
-
 import static androidx.room.ForeignKey.CASCADE;
 import static androidx.room.ForeignKey.SET_DEFAULT;
 
@@ -76,11 +73,6 @@ public class Mastermind extends BaseCard {
 
     public void setHenchmenId(int henchmenId) {
         this.henchmenId = henchmenId;
-    }
-
-    @Override
-    public MastermindDao getDao(final LegendaryDatabase db) {
-        return db.mastermindDao();
     }
 
     @Override

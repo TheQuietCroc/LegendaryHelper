@@ -4,29 +4,38 @@ import androidx.lifecycle.LiveData;
 
 import java.util.List;
 
-public interface CardDao<T> extends BaseDao<T> {
+public interface CardDao<T> extends GameItemDao<T> {
 
+    // findByName
     @Override
     LiveData<T> findByNameAsync(final String name);
 
     @Override
-    LiveData<T> findByIdAsync(final int id);
-
-    @Override
-    LiveData<List<T>> getAllUnfilteredAsync();
-
-    @Override
-    LiveData<List<T>> getAllFilteredAsync();
-
-    @Override
     T findByNameSync(final String name);
+
+    // findById
+    @Override
+    LiveData<T> findByIdAsync(final int id);
 
     @Override
     T findByIdSync(final int id);
 
+    // getAll
     @Override
-    List<T> getAllUnfilteredSync();
+    LiveData<List<T>> getAllAsync();
 
     @Override
-    List<T> getAllFilteredSync();
+    List<T> getAllSync();
+
+    // getAllEnabled
+    @Override
+    LiveData<List<T>> getAllEnabledAsync();
+
+    @Override
+    List<T> getAllEnabledSync();
+
+    // getAllBySetId
+    LiveData<List<T>> getAllBySetIdAsync(final int setId);
+
+    List<T> getAllBySetIdSync(final int setId);
 }
