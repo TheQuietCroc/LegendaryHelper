@@ -62,18 +62,18 @@ public class GameSetup {
     private final MaterialButtonToggleGroup buttonGroupPlayers;
 
     public GameSetup(final int numPlayers,
-                           final MaterialButtonToggleGroup buttonGroupPlayers,
-                           final LegendaryDatabase db,
-                           final List<Mastermind> filteredMastermindList,
-                           final List<Scheme> filteredSchemeList,
-                           final List<Villains> filteredVillainsList,
-                           final List<Henchmen> filteredHenchmenList,
-                           final List<Hero> filteredHeroList,
-                           final CardControl mastermindControl,
-                           final CardControl schemeControl,
-                           final ConstraintLayout containerVillains,
-                           final ConstraintLayout containerHenchmen,
-                           final ConstraintLayout containerHero) {
+                     final MaterialButtonToggleGroup buttonGroupPlayers,
+                     final LegendaryDatabase db,
+                     final List<Mastermind> filteredMastermindList,
+                     final List<Scheme> filteredSchemeList,
+                     final List<Villains> filteredVillainsList,
+                     final List<Henchmen> filteredHenchmenList,
+                     final List<Hero> filteredHeroList,
+                     final CardControl mastermindControl,
+                     final CardControl schemeControl,
+                     final ConstraintLayout containerVillains,
+                     final ConstraintLayout containerHenchmen,
+                     final ConstraintLayout containerHero) {
         this.numPlayers = numPlayers;
 
         this.buttonGroupPlayers = buttonGroupPlayers;
