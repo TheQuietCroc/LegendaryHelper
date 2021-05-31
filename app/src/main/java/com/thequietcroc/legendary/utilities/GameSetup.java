@@ -1,4 +1,4 @@
-package com.thequietcroc.legendary.database.entities;
+package com.thequietcroc.legendary.utilities;
 
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +14,12 @@ import com.google.android.material.button.MaterialButtonToggleGroup;
 import com.thequietcroc.legendary.R;
 import com.thequietcroc.legendary.custom.views.CardControl;
 import com.thequietcroc.legendary.database.LegendaryDatabase;
+import com.thequietcroc.legendary.database.entities.BaseCard;
+import com.thequietcroc.legendary.database.entities.Henchmen;
+import com.thequietcroc.legendary.database.entities.Hero;
+import com.thequietcroc.legendary.database.entities.Mastermind;
+import com.thequietcroc.legendary.database.entities.Scheme;
+import com.thequietcroc.legendary.database.entities.Villains;
 import com.thequietcroc.legendary.enums.ItemType;
 
 import java.util.ArrayList;
@@ -26,7 +32,9 @@ import static com.thequietcroc.legendary.enums.ItemType.HERO;
 import static com.thequietcroc.legendary.enums.ItemType.VILLAINS;
 
 public class GameSetup {
+
     private int numPlayers;
+
     private Mastermind selectedMastermind;
     private Scheme selectedScheme;
     private final List<Villains> selectedVillainsList;
@@ -54,18 +62,18 @@ public class GameSetup {
     private final MaterialButtonToggleGroup buttonGroupPlayers;
 
     public GameSetup(final int numPlayers,
-                     final MaterialButtonToggleGroup buttonGroupPlayers,
-                     final LegendaryDatabase db,
-                     final List<Mastermind> filteredMastermindList,
-                     final List<Scheme> filteredSchemeList,
-                     final List<Villains> filteredVillainsList,
-                     final List<Henchmen> filteredHenchmenList,
-                     final List<Hero> filteredHeroList,
-                     final CardControl mastermindControl,
-                     final CardControl schemeControl,
-                     final ConstraintLayout containerVillains,
-                     final ConstraintLayout containerHenchmen,
-                     final ConstraintLayout containerHero) {
+                           final MaterialButtonToggleGroup buttonGroupPlayers,
+                           final LegendaryDatabase db,
+                           final List<Mastermind> filteredMastermindList,
+                           final List<Scheme> filteredSchemeList,
+                           final List<Villains> filteredVillainsList,
+                           final List<Henchmen> filteredHenchmenList,
+                           final List<Hero> filteredHeroList,
+                           final CardControl mastermindControl,
+                           final CardControl schemeControl,
+                           final ConstraintLayout containerVillains,
+                           final ConstraintLayout containerHenchmen,
+                           final ConstraintLayout containerHero) {
         this.numPlayers = numPlayers;
 
         this.buttonGroupPlayers = buttonGroupPlayers;

@@ -4,22 +4,19 @@ import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.PrimaryKey;
 
-import com.thequietcroc.legendary.database.LegendaryDatabase;
-import com.thequietcroc.legendary.database.daos.BaseDao;
-
 public abstract class BaseItem {
 
     @PrimaryKey(autoGenerate = true)
-    public int id;
+    private int id;
 
     @NonNull
-    public String name;
+    private String name;
 
     @ColumnInfo(defaultValue = "0")
-    public boolean isCustom;
+    private boolean isCustom;
 
     @ColumnInfo(defaultValue = "1")
-    public boolean isEnabled;
+    private boolean isEnabled;
 
     public int getId() {
         return id;
@@ -53,8 +50,6 @@ public abstract class BaseItem {
     public void setEnabled(boolean enabled) {
         isEnabled = enabled;
     }
-
-    public abstract BaseDao<? extends BaseItem> getDao(final LegendaryDatabase db);
 
     @Override
     public boolean equals(final Object o) {

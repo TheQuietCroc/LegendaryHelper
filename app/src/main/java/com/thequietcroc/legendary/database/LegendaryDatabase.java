@@ -5,6 +5,7 @@ import android.content.Context;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.room.TypeConverters;
 
 import com.thequietcroc.legendary.database.daos.GameSetDao;
 import com.thequietcroc.legendary.database.daos.HenchmenDao;
@@ -13,6 +14,7 @@ import com.thequietcroc.legendary.database.daos.MastermindDao;
 import com.thequietcroc.legendary.database.daos.SchemeDao;
 import com.thequietcroc.legendary.database.daos.VillainsDao;
 import com.thequietcroc.legendary.database.entities.GameSet;
+import com.thequietcroc.legendary.database.entities.GameSetupEntity;
 import com.thequietcroc.legendary.database.entities.Henchmen;
 import com.thequietcroc.legendary.database.entities.Hero;
 import com.thequietcroc.legendary.database.entities.Mastermind;
@@ -21,6 +23,7 @@ import com.thequietcroc.legendary.database.entities.Villains;
 
 @Database(
         entities = {
+                GameSetupEntity.class,
                 GameSet.class,
                 Henchmen.class,
                 Hero.class,
@@ -30,6 +33,7 @@ import com.thequietcroc.legendary.database.entities.Villains;
         },
         version = 1
 )
+@TypeConverters({Converters.class})
 public abstract class LegendaryDatabase extends RoomDatabase {
 
     private final static String DB_NAME = "legendary.db";

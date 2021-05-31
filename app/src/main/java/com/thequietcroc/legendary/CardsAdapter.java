@@ -41,7 +41,7 @@ public class CardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder holder, final int position) {
         final CardViewHolder cardVH = (CardViewHolder) holder;
 
-        cardVH.cardName.setText(cardList.get(position).name);
+        cardVH.cardName.setText(cardList.get(position).getName());
     }
 
     @Override

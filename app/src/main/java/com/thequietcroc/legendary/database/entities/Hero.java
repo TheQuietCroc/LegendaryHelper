@@ -5,9 +5,6 @@ import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.Index;
 
-import com.thequietcroc.legendary.database.LegendaryDatabase;
-import com.thequietcroc.legendary.database.daos.HeroDao;
-
 import static androidx.room.ForeignKey.CASCADE;
 import static androidx.room.ForeignKey.SET_DEFAULT;
 
@@ -106,11 +103,6 @@ public class Hero extends BaseCard {
 
     public void setHasFlavorText(boolean hasFlavorText) {
         this.hasFlavorText = hasFlavorText;
-    }
-
-    @Override
-    public HeroDao getDao(final LegendaryDatabase db) {
-        return db.heroDao();
     }
 
     @Override

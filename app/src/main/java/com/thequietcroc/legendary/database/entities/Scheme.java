@@ -4,9 +4,6 @@ import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.Index;
 
-import com.thequietcroc.legendary.database.LegendaryDatabase;
-import com.thequietcroc.legendary.database.daos.SchemeDao;
-
 import static androidx.room.ForeignKey.CASCADE;
 import static androidx.room.ForeignKey.SET_DEFAULT;
 
@@ -29,11 +26,6 @@ import static androidx.room.ForeignKey.SET_DEFAULT;
         }
 )
 public class Scheme extends BaseCard {
-
-    @Override
-    public SchemeDao getDao(final LegendaryDatabase db) {
-        return db.schemeDao();
-    }
 
     @Override
     public boolean equals(final Object o) {

@@ -11,35 +11,48 @@ import java.util.List;
 @Dao
 public interface VillainsDao extends CardDao<Villains> {
 
+    // findByName
     @Override
     @Query("SELECT * FROM tblVillains WHERE name LIKE :name LIMIT 1")
     LiveData<Villains> findByNameAsync(final String name);
 
     @Override
-    @Query("SELECT * FROM tblVillains WHERE id = :id LIMIT 1")
-    LiveData<Villains> findByIdAsync(final int id);
-
-    @Override
-    @Query("SELECT * FROM tblVillains ORDER BY name ASC")
-    LiveData<List<Villains>> getAllUnfilteredAsync();
-
-    @Override
-    @Query("SELECT * FROM tblVillains WHERE isEnabled = 1 ORDER BY name ASC")
-    LiveData<List<Villains>> getAllFilteredAsync();
-
-    @Override
     @Query("SELECT * FROM tblVillains WHERE name LIKE :name LIMIT 1")
     Villains findByNameSync(final String name);
+
+    // findById
+    @Override
+    @Query("SELECT * FROM tblVillains WHERE id = :id LIMIT 1")
+    LiveData<Villains> findByIdAsync(final int id);
 
     @Override
     @Query("SELECT * FROM tblVillains WHERE id = :id LIMIT 1")
     Villains findByIdSync(final int id);
 
+    // getAll
     @Override
-    @Query("SELECT * FROM tblVillains ORDER BY name ASC")
-    List<Villains> getAllUnfilteredSync();
+    @Query("SELECT * FROM tblVillains ORDER BY id ASC")
+    LiveData<List<Villains>> getAllAsync();
 
     @Override
-    @Query("SELECT * FROM tblVillains WHERE isEnabled = 1 ORDER BY name ASC")
-    List<Villains> getAllFilteredSync();
+    @Query("SELECT * FROM tblVillains ORDER BY id ASC")
+    List<Villains> getAllSync();
+
+    // getAllEnabled
+    @Override
+    @Query("SELECT * FROM tblVillains WHERE isEnabled = 1 ORDER BY id ASC")
+    LiveData<List<Villains>> getAllEnabledAsync();
+
+    @Override
+    @Query("SELECT * FROM tblVillains WHERE isEnabled = 1 ORDER BY id ASC")
+    List<Villains> getAllEnabledSync();
+
+    // getAllBySetId
+    @Override
+    @Query("SELECT * FROM tblVillains WHERE setId = :setId ORDER BY id ASC")
+    LiveData<List<Villains>> getAllBySetIdAsync(final int setId);
+
+    @Override
+    @Query("SELECT * FROM tblVillains WHERE setId = :setId ORDER BY id ASC")
+    List<Villains> getAllBySetIdSync(final int setId);
 }
