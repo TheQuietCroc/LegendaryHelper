@@ -1,9 +1,11 @@
-package com.thequietcroc.legendary.database.entities;
+package com.thequietcroc.legendary.database.entities.gamecomponents.cards;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.Index;
+
+import com.thequietcroc.legendary.database.entities.gamecomponents.GameSetEntity;
 
 import static androidx.room.ForeignKey.CASCADE;
 import static androidx.room.ForeignKey.SET_DEFAULT;

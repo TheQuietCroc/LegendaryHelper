@@ -1,6 +1,8 @@
-package com.thequietcroc.legendary.database.entities;
+package com.thequietcroc.legendary.database.entities.gamecomponents.cards;
 
 import androidx.room.ColumnInfo;
+
+import com.thequietcroc.legendary.database.entities.gamecomponents.BaseGameComponentEntity;
 
 public abstract class BaseCardEntity extends BaseGameComponentEntity {
 

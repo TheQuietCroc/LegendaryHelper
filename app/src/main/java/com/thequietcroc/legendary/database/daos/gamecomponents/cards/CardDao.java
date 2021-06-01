@@ -1,10 +1,12 @@
-package com.thequietcroc.legendary.database.daos;
+package com.thequietcroc.legendary.database.daos.gamecomponents.cards;
 
 import androidx.lifecycle.LiveData;
 
+import com.thequietcroc.legendary.database.daos.gamecomponents.GameComponentDao;
+
 import java.util.List;
 
-public interface CardDao<T> extends GameItemDao<T> {
+public interface CardDao<T> extends GameComponentDao<T> {
 
     // findByName
     @Override
