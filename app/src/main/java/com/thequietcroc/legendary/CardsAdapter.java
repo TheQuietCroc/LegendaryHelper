@@ -9,16 +9,16 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.thequietcroc.legendary.database.entities.BaseCard;
+import com.thequietcroc.legendary.database.entities.gamecomponents.cards.BaseCardEntity;
 
 import java.util.List;
 
 public class CardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     final private Context context;
-    final private List<? extends BaseCard> cardList;
+    final private List<? extends BaseCardEntity> cardList;
 
-    public CardsAdapter(final Context context, final List<? extends BaseCard> cardList) {
+    public CardsAdapter(final Context context, final List<? extends BaseCardEntity> cardList) {
         this.context = context;
         this.cardList = cardList;
     }

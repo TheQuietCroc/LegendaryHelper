@@ -7,29 +7,29 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 
-import com.thequietcroc.legendary.database.daos.GameSetDao;
-import com.thequietcroc.legendary.database.daos.HenchmenDao;
-import com.thequietcroc.legendary.database.daos.HeroDao;
-import com.thequietcroc.legendary.database.daos.MastermindDao;
-import com.thequietcroc.legendary.database.daos.SchemeDao;
-import com.thequietcroc.legendary.database.daos.VillainsDao;
-import com.thequietcroc.legendary.database.entities.GameSet;
+import com.thequietcroc.legendary.database.daos.gamecomponents.GameSetDao;
+import com.thequietcroc.legendary.database.daos.gamecomponents.cards.HenchmenDao;
+import com.thequietcroc.legendary.database.daos.gamecomponents.cards.HeroDao;
+import com.thequietcroc.legendary.database.daos.gamecomponents.cards.MastermindDao;
+import com.thequietcroc.legendary.database.daos.gamecomponents.cards.SchemeDao;
+import com.thequietcroc.legendary.database.daos.gamecomponents.cards.VillainsDao;
+import com.thequietcroc.legendary.database.entities.gamecomponents.GameSetEntity;
 import com.thequietcroc.legendary.database.entities.GameSetupEntity;
-import com.thequietcroc.legendary.database.entities.Henchmen;
-import com.thequietcroc.legendary.database.entities.Hero;
-import com.thequietcroc.legendary.database.entities.Mastermind;
-import com.thequietcroc.legendary.database.entities.Scheme;
-import com.thequietcroc.legendary.database.entities.Villains;
+import com.thequietcroc.legendary.database.entities.gamecomponents.cards.HenchmenEntity;
+import com.thequietcroc.legendary.database.entities.gamecomponents.cards.HeroEntity;
+import com.thequietcroc.legendary.database.entities.gamecomponents.cards.MastermindEntity;
+import com.thequietcroc.legendary.database.entities.gamecomponents.cards.SchemeEntity;
+import com.thequietcroc.legendary.database.entities.gamecomponents.cards.VillainsEntity;
 
 @Database(
         entities = {
                 GameSetupEntity.class,
-                GameSet.class,
-                Henchmen.class,
-                Hero.class,
-                Mastermind.class,
-                Scheme.class,
-                Villains.class
+                GameSetEntity.class,
+                HenchmenEntity.class,
+                HeroEntity.class,
+                MastermindEntity.class,
+                SchemeEntity.class,
+                VillainsEntity.class
         },
         version = 1
 )

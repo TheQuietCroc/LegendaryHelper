@@ -1,49 +1,49 @@
-package com.thequietcroc.legendary.database.daos;
+package com.thequietcroc.legendary.database.daos.gamecomponents;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Query;
 
-import com.thequietcroc.legendary.database.entities.GameSet;
+import com.thequietcroc.legendary.database.entities.gamecomponents.GameSetEntity;
 
 import java.util.List;
 
 @Dao
-public interface GameSetDao extends GameItemDao<GameSet> {
+public interface GameSetDao extends GameComponentDao<GameSetEntity> {
 
     // findByName
     @Override
     @Query("SELECT * FROM tblGameSets WHERE name LIKE :name LIMIT 1")
-    LiveData<GameSet> findByNameAsync(final String name);
+    LiveData<GameSetEntity> findByNameAsync(final String name);
 
     @Override
     @Query("SELECT * FROM tblGameSets WHERE name LIKE :name LIMIT 1")
-    GameSet findByNameSync(final String name);
+    GameSetEntity findByNameSync(final String name);
 
     // findById
     @Override
     @Query("SELECT * FROM tblGameSets WHERE id = :id LIMIT 1")
-    LiveData<GameSet> findByIdAsync(final int id);
+    LiveData<GameSetEntity> findByIdAsync(final int id);
 
     @Override
     @Query("SELECT * FROM tblGameSets WHERE id = :id LIMIT 1")
-    GameSet findByIdSync(final int id);
+    GameSetEntity findByIdSync(final int id);
 
     // getAll
     @Override
     @Query("SELECT * FROM tblGameSets ORDER BY id ASC")
-    LiveData<List<GameSet>> getAllAsync();
+    LiveData<List<GameSetEntity>> getAllAsync();
 
     @Override
     @Query("SELECT * FROM tblGameSets ORDER BY id ASC")
-    List<GameSet> getAllSync();
+    List<GameSetEntity> getAllSync();
 
     // getAllEnabled
     @Override
     @Query("SELECT * FROM tblGameSets WHERE isEnabled = 1 ORDER BY id ASC")
-    LiveData<List<GameSet>> getAllEnabledAsync();
+    LiveData<List<GameSetEntity>> getAllEnabledAsync();
 
     @Override
     @Query("SELECT * FROM tblGameSets WHERE isEnabled = 1 ORDER BY id ASC")
-    List<GameSet> getAllEnabledSync();
+    List<GameSetEntity> getAllEnabledSync();
 }

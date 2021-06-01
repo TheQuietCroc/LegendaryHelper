@@ -12,21 +12,21 @@ import static androidx.room.ForeignKey.SET_DEFAULT;
         tableName = "tblMasterminds",
         foreignKeys = {
                 @ForeignKey(
-                        entity = GameSet.class,
+                        entity = GameSetEntity.class,
                         parentColumns = "id",
                         childColumns = "setId",
                         onUpdate = CASCADE,
                         onDelete = SET_DEFAULT
                 ),
                 @ForeignKey(
-                        entity = Villains.class,
+                        entity = VillainsEntity.class,
                         parentColumns = "id",
                         childColumns = "villainId",
                         onUpdate = CASCADE,
                         onDelete = SET_DEFAULT
                 ),
                 @ForeignKey(
-                        entity = Henchmen.class,
+                        entity = HenchmenEntity.class,
                         parentColumns = "id",
                         childColumns = "henchmenId",
                         onUpdate = CASCADE,
@@ -40,7 +40,7 @@ import static androidx.room.ForeignKey.SET_DEFAULT;
                 )
         }
 )
-public class Mastermind extends BaseCard {
+public class MastermindEntity extends BaseCardEntity {
 
     @ColumnInfo(defaultValue = "0")
     public boolean isEpic;
@@ -81,7 +81,7 @@ public class Mastermind extends BaseCard {
             return true;
         }
 
-        if (!(o instanceof Mastermind)) {
+        if (!(o instanceof MastermindEntity)) {
             return false;
         }
 

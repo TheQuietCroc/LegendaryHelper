@@ -12,7 +12,7 @@ import static androidx.room.ForeignKey.SET_DEFAULT;
         tableName = "tblHeroes",
         foreignKeys = {
                 @ForeignKey(
-                        entity = GameSet.class,
+                        entity = GameSetEntity.class,
                         parentColumns = "id",
                         childColumns = "setId",
                         onUpdate = CASCADE,
@@ -26,7 +26,7 @@ import static androidx.room.ForeignKey.SET_DEFAULT;
                 )
         }
 )
-public class Hero extends BaseCard {
+public class HeroEntity extends BaseCardEntity {
 
     @ColumnInfo(name = "covert", defaultValue = "0")
     public boolean hasCovert;
@@ -111,7 +111,7 @@ public class Hero extends BaseCard {
             return true;
         }
 
-        if (!(o instanceof Hero)) {
+        if (!(o instanceof HeroEntity)) {
             return false;
         }
 

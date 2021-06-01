@@ -1,22 +1,15 @@
 package com.thequietcroc.legendary.database.entities;
 
 import androidx.annotation.NonNull;
-import androidx.room.ColumnInfo;
 import androidx.room.PrimaryKey;
 
-public abstract class BaseItem {
+public abstract class BaseEntity {
 
     @PrimaryKey(autoGenerate = true)
     private int id;
 
     @NonNull
     private String name;
-
-    @ColumnInfo(defaultValue = "0")
-    private boolean isCustom;
-
-    @ColumnInfo(defaultValue = "1")
-    private boolean isEnabled;
 
     public int getId() {
         return id;
@@ -35,33 +28,17 @@ public abstract class BaseItem {
         this.name = name;
     }
 
-    public boolean isCustom() {
-        return isCustom;
-    }
-
-    public void setCustom(boolean custom) {
-        isCustom = custom;
-    }
-
-    public boolean isEnabled() {
-        return isEnabled;
-    }
-
-    public void setEnabled(boolean enabled) {
-        isEnabled = enabled;
-    }
-
     @Override
     public boolean equals(final Object o) {
         if (o == this) {
             return true;
         }
 
-        if (!(o instanceof BaseItem)) {
+        if (!(o instanceof BaseEntity)) {
             return false;
         }
 
-        final BaseItem b = (BaseItem) o;
+        final BaseEntity b = (BaseEntity) o;
 
         return id == b.id;
     }

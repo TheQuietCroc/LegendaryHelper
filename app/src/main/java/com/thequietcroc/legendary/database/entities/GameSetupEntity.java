@@ -6,6 +6,9 @@ import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
+import com.thequietcroc.legendary.database.entities.gamecomponents.cards.MastermindEntity;
+import com.thequietcroc.legendary.database.entities.gamecomponents.cards.SchemeEntity;
+
 import java.util.Date;
 
 import static androidx.room.ForeignKey.CASCADE;
@@ -15,14 +18,14 @@ import static androidx.room.ForeignKey.SET_DEFAULT;
         tableName = "tblGameSetups",
         foreignKeys = {
                 @ForeignKey(
-                        entity = Mastermind.class,
+                        entity = MastermindEntity.class,
                         parentColumns = "id",
                         childColumns = "mastermindId",
                         onUpdate = CASCADE,
                         onDelete = SET_DEFAULT
                 ),
                 @ForeignKey(
-                        entity = Scheme.class,
+                        entity = SchemeEntity.class,
                         parentColumns = "id",
                         childColumns = "schemeId",
                         onUpdate = CASCADE,
@@ -30,7 +33,7 @@ import static androidx.room.ForeignKey.SET_DEFAULT;
                 )
         }
 )
-public class GameSetupEntity {
+public class GameSetupEntity extends BaseEntity {
 
     @PrimaryKey(autoGenerate = true)
     private int id;

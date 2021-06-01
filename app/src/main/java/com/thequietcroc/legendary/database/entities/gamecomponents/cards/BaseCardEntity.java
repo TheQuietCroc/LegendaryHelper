@@ -2,7 +2,7 @@ package com.thequietcroc.legendary.database.entities;
 
 import androidx.room.ColumnInfo;
 
-public abstract class BaseCard extends BaseItem {
+public abstract class BaseCardEntity extends BaseGameComponentEntity {
 
     @ColumnInfo(name = "setId", defaultValue = "0")
     private int gameSetId;
@@ -21,7 +21,7 @@ public abstract class BaseCard extends BaseItem {
             return true;
         }
 
-        if (!(o instanceof BaseCard)) {
+        if (!(o instanceof BaseCardEntity)) {
             return false;
         }
 

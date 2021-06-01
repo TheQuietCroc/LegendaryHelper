@@ -11,7 +11,7 @@ import static androidx.room.ForeignKey.SET_DEFAULT;
         tableName = "tblHenchmen",
         foreignKeys = {
                 @ForeignKey(
-                        entity = GameSet.class,
+                        entity = GameSetEntity.class,
                         parentColumns = "id",
                         childColumns = "setId",
                         onUpdate = CASCADE,
@@ -25,7 +25,7 @@ import static androidx.room.ForeignKey.SET_DEFAULT;
                 )
         }
 )
-public class Henchmen extends BaseCard {
+public class HenchmenEntity extends BaseCardEntity {
 
     @Override
     public boolean equals(final Object o) {
@@ -33,7 +33,7 @@ public class Henchmen extends BaseCard {
             return true;
         }
 
-        if (!(o instanceof Henchmen)) {
+        if (!(o instanceof HenchmenEntity)) {
             return false;
         }
 

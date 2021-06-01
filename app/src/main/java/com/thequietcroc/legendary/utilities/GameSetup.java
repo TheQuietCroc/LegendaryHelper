@@ -14,12 +14,12 @@ import com.google.android.material.button.MaterialButtonToggleGroup;
 import com.thequietcroc.legendary.R;
 import com.thequietcroc.legendary.custom.views.CardControl;
 import com.thequietcroc.legendary.database.LegendaryDatabase;
-import com.thequietcroc.legendary.database.entities.BaseCard;
-import com.thequietcroc.legendary.database.entities.Henchmen;
-import com.thequietcroc.legendary.database.entities.Hero;
-import com.thequietcroc.legendary.database.entities.Mastermind;
-import com.thequietcroc.legendary.database.entities.Scheme;
-import com.thequietcroc.legendary.database.entities.Villains;
+import com.thequietcroc.legendary.database.entities.gamecomponents.cards.BaseCardEntity;
+import com.thequietcroc.legendary.database.entities.gamecomponents.cards.HenchmenEntity;
+import com.thequietcroc.legendary.database.entities.gamecomponents.cards.HeroEntity;
+import com.thequietcroc.legendary.database.entities.gamecomponents.cards.MastermindEntity;
+import com.thequietcroc.legendary.database.entities.gamecomponents.cards.SchemeEntity;
+import com.thequietcroc.legendary.database.entities.gamecomponents.cards.VillainsEntity;
 import com.thequietcroc.legendary.enums.ItemType;
 
 import java.util.ArrayList;
@@ -35,19 +35,19 @@ public class GameSetup {
 
     private int numPlayers;
 
-    private Mastermind selectedMastermind;
-    private Scheme selectedScheme;
-    private final List<Villains> selectedVillainsList;
-    private final List<Henchmen> selectedHenchmenList;
-    private final List<Hero> selectedHeroList;
+    private MastermindEntity selectedMastermind;
+    private SchemeEntity selectedScheme;
+    private final List<VillainsEntity> selectedVillainsList;
+    private final List<HenchmenEntity> selectedHenchmenList;
+    private final List<HeroEntity> selectedHeroList;
 
     private final LegendaryDatabase db;
 
-    private final List<Mastermind> filteredMastermindList;
-    private final List<Scheme> filteredSchemeList;
-    private final List<Villains> filteredVillainsList;
-    private final List<Henchmen> filteredHenchmenList;
-    private final List<Hero> filteredHeroList;
+    private final List<MastermindEntity> filteredMastermindList;
+    private final List<SchemeEntity> filteredSchemeList;
+    private final List<VillainsEntity> filteredVillainsList;
+    private final List<HenchmenEntity> filteredHenchmenList;
+    private final List<HeroEntity> filteredHeroList;
 
     final ConstraintLayout containerVillains;
     final ConstraintLayout containerHenchmen;
@@ -64,11 +64,11 @@ public class GameSetup {
     public GameSetup(final int numPlayers,
                      final MaterialButtonToggleGroup buttonGroupPlayers,
                      final LegendaryDatabase db,
-                     final List<Mastermind> filteredMastermindList,
-                     final List<Scheme> filteredSchemeList,
-                     final List<Villains> filteredVillainsList,
-                     final List<Henchmen> filteredHenchmenList,
-                     final List<Hero> filteredHeroList,
+                     final List<MastermindEntity> filteredMastermindList,
+                     final List<SchemeEntity> filteredSchemeList,
+                     final List<VillainsEntity> filteredVillainsList,
+                     final List<HenchmenEntity> filteredHenchmenList,
+                     final List<HeroEntity> filteredHeroList,
                      final CardControl mastermindControl,
                      final CardControl schemeControl,
                      final ConstraintLayout containerVillains,
@@ -106,19 +106,19 @@ public class GameSetup {
         this.numPlayers = numPlayers;
     }
 
-    private void setSelectedMastermind(final Mastermind selectedMastermind) {
+    private void setSelectedMastermind(final MastermindEntity selectedMastermind) {
         this.selectedMastermind = selectedMastermind;
     }
 
-    private void setSelectedScheme(final Scheme selectedScheme) {
+    private void setSelectedScheme(final SchemeEntity selectedScheme) {
         this.selectedScheme = selectedScheme;
     }
 
     private <T> void setSelectedCard(final T selectedCard) {
-        if (selectedCard instanceof Mastermind) {
-            setSelectedMastermind((Mastermind) selectedCard);
-        } else if (selectedCard instanceof Scheme) {
-            setSelectedScheme((Scheme) selectedCard);
+        if (selectedCard instanceof MastermindEntity) {
+            setSelectedMastermind((MastermindEntity) selectedCard);
+        } else if (selectedCard instanceof SchemeEntity) {
+            setSelectedScheme((SchemeEntity) selectedCard);
         }
     }
 
@@ -160,7 +160,7 @@ public class GameSetup {
 
                 parent.setTag(position);
 
-                if (parent.getSelectedItem() instanceof Mastermind) {
+                if (parent.getSelectedItem() instanceof MastermindEntity) {
                     selectAlwaysLeadsVillains();
                     selectAlwaysLeadsHenchmen();
                 }
@@ -266,9 +266,9 @@ public class GameSetup {
         }
     }
 
-    private <T extends BaseCard> T setupHelper(final CardControl control,
-                                               final T selectedCard,
-                                               final List<T> filteredList) {
+    private <T extends BaseCardEntity> T setupHelper(final CardControl control,
+                                                     final T selectedCard,
+                                                     final List<T> filteredList) {
         final T newSelectedCard;
 
         if (!control.getToggleLock().isChecked()) {
@@ -286,9 +286,9 @@ public class GameSetup {
         return newSelectedCard;
     }
 
-    private <T extends BaseCard> void setupHelper(final List<CardControl> controlList,
-                                                  final List<T> filteredList,
-                                                  final List<T> selectedList) {
+    private <T extends BaseCardEntity> void setupHelper(final List<CardControl> controlList,
+                                                        final List<T> filteredList,
+                                                        final List<T> selectedList) {
 
         for (int i = 0; i < controlList.size(); ++i) {
             final CardControl control = controlList.get(i);
@@ -364,7 +364,7 @@ public class GameSetup {
         toggleControlLock(true, control);
     }
 
-    private BaseCard selectRandomlyFromList(final List<? extends BaseCard> cardList) {
+    private BaseCardEntity selectRandomlyFromList(final List<? extends BaseCardEntity> cardList) {
         return cardList.get(new Random().nextInt(cardList.size() - 1) + 1);
     }
 

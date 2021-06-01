@@ -1,4 +1,4 @@
-package com.thequietcroc.legendary.database.entities;
+package com.thequietcroc.legendary.database.entities.gamecomponents;
 
 import androidx.room.Entity;
 import androidx.room.Index;
@@ -12,7 +12,7 @@ import androidx.room.Index;
                 )
         }
 )
-public class GameSet extends BaseItem {
+public class GameSetEntity extends BaseGameComponentEntity {
 
     @Override
     public boolean equals(final Object o) {
@@ -20,7 +20,7 @@ public class GameSet extends BaseItem {
             return true;
         }
 
-        if (!(o instanceof GameSet)) {
+        if (!(o instanceof GameSetEntity)) {
             return false;
         }
 

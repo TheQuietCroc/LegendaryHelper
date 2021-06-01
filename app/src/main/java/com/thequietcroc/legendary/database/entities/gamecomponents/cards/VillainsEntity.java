@@ -8,10 +8,10 @@ import static androidx.room.ForeignKey.CASCADE;
 import static androidx.room.ForeignKey.SET_DEFAULT;
 
 @Entity(
-        tableName = "tblSchemes",
+        tableName = "tblVillains",
         foreignKeys = {
                 @ForeignKey(
-                        entity = GameSet.class,
+                        entity = GameSetEntity.class,
                         parentColumns = "id",
                         childColumns = "setId",
                         onUpdate = CASCADE,
@@ -20,12 +20,12 @@ import static androidx.room.ForeignKey.SET_DEFAULT;
         },
         indices = {
                 @Index(
-                        name = "schemeIndex",
+                        name = "villainsIndex",
                         value = "name"
                 )
         }
 )
-public class Scheme extends BaseCard {
+public class VillainsEntity extends BaseCardEntity {
 
     @Override
     public boolean equals(final Object o) {
@@ -33,7 +33,7 @@ public class Scheme extends BaseCard {
             return true;
         }
 
-        if (!(o instanceof Scheme)) {
+        if (!(o instanceof VillainsEntity)) {
             return false;
         }
 

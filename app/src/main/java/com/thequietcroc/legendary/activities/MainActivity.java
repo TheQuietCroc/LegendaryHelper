@@ -13,11 +13,11 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.button.MaterialButtonToggleGroup;
 import com.thequietcroc.legendary.R;
 import com.thequietcroc.legendary.database.LegendaryDatabase;
-import com.thequietcroc.legendary.database.entities.Henchmen;
-import com.thequietcroc.legendary.database.entities.Hero;
-import com.thequietcroc.legendary.database.entities.Mastermind;
-import com.thequietcroc.legendary.database.entities.Scheme;
-import com.thequietcroc.legendary.database.entities.Villains;
+import com.thequietcroc.legendary.database.entities.gamecomponents.cards.HenchmenEntity;
+import com.thequietcroc.legendary.database.entities.gamecomponents.cards.HeroEntity;
+import com.thequietcroc.legendary.database.entities.gamecomponents.cards.MastermindEntity;
+import com.thequietcroc.legendary.database.entities.gamecomponents.cards.SchemeEntity;
+import com.thequietcroc.legendary.database.entities.gamecomponents.cards.VillainsEntity;
 import com.thequietcroc.legendary.utilities.GameSetup;
 
 import java.util.List;
@@ -38,38 +38,38 @@ public class MainActivity extends AppCompatActivity {
         final ConstraintLayout henchmenContainer = findViewById(R.id.containerHenchmen);
         final ConstraintLayout heroesContainer = findViewById(R.id.containerHeroes);
 
-        final Mastermind noneMastermind = new Mastermind();
+        final MastermindEntity noneMastermind = new MastermindEntity();
         noneMastermind.setId(0);
         noneMastermind.setName("None");
-        final List<Mastermind> mastermindList = db.mastermindDao().getAllEnabledSync();
+        final List<MastermindEntity> mastermindList = db.mastermindDao().getAllEnabledSync();
         mastermindList.remove(noneMastermind);
         mastermindList.add(0, noneMastermind);
 
-        final Scheme noneScheme = new Scheme();
+        final SchemeEntity noneScheme = new SchemeEntity();
         noneScheme.setId(0);
         noneScheme.setName("None");
-        final List<Scheme> schemeList = db.schemeDao().getAllEnabledSync();
+        final List<SchemeEntity> schemeList = db.schemeDao().getAllEnabledSync();
         schemeList.remove(noneScheme);
         schemeList.add(0, noneScheme);
 
-        final Villains noneVillains = new Villains();
+        final VillainsEntity noneVillains = new VillainsEntity();
         noneVillains.setId(0);
         noneVillains.setName("None");
-        final List<Villains> villainsList = db.villainsDao().getAllEnabledSync();
+        final List<VillainsEntity> villainsList = db.villainsDao().getAllEnabledSync();
         villainsList.remove(noneVillains);
         villainsList.add(0, noneVillains);
 
-        final Henchmen noneHenchmen = new Henchmen();
+        final HenchmenEntity noneHenchmen = new HenchmenEntity();
         noneHenchmen.setId(0);
         noneHenchmen.setName("None");
-        final List<Henchmen> henchmenList = db.henchmenDao().getAllEnabledSync();
+        final List<HenchmenEntity> henchmenList = db.henchmenDao().getAllEnabledSync();
         henchmenList.remove(noneHenchmen);
         henchmenList.add(0, noneHenchmen);
 
-        final Hero noneHero = new Hero();
+        final HeroEntity noneHero = new HeroEntity();
         noneHero.setId(0);
         noneHero.setName("None");
-        final List<Hero> heroList = db.heroDao().getAllEnabledSync();
+        final List<HeroEntity> heroList = db.heroDao().getAllEnabledSync();
         heroList.remove(noneHero);
         heroList.add(0, noneHero);
 
