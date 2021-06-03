@@ -9,7 +9,7 @@ import com.thequietcroc.legendary.database.entities.gamecomponents.cards.Henchme
 import java.util.List;
 
 @Dao
-public interface HenchmenDao extends CardDao<HenchmenEntity> {
+public interface HenchmenDao extends BaseCardDao<HenchmenEntity, HenchmenEntity.Minimal> {
 
     // findByName
     @Override
@@ -20,6 +20,14 @@ public interface HenchmenDao extends CardDao<HenchmenEntity> {
     @Query("SELECT * FROM tblHenchmen WHERE name LIKE :name LIMIT 1")
     HenchmenEntity findByNameSync(final String name);
 
+    @Override
+    @Query("SELECT id, name FROM tblHenchmen WHERE name LIKE :name LIMIT 1")
+    LiveData<HenchmenEntity.Minimal> findByNameAsyncMinimal(final String name);
+
+    @Override
+    @Query("SELECT id, name FROM tblHenchmen WHERE name LIKE :name LIMIT 1")
+    HenchmenEntity.Minimal findByNameSyncMinimal(final String name);
+
     // findById
     @Override
     @Query("SELECT * FROM tblHenchmen WHERE id = :id LIMIT 1")
@@ -28,6 +36,14 @@ public interface HenchmenDao extends CardDao<HenchmenEntity> {
     @Override
     @Query("SELECT * FROM tblHenchmen WHERE id = :id LIMIT 1")
     HenchmenEntity findByIdSync(final int id);
+
+    @Override
+    @Query("SELECT id, name FROM tblHenchmen WHERE id = :id LIMIT 1")
+    LiveData<HenchmenEntity.Minimal> findByIdAsyncMinimal(final int id);
+
+    @Override
+    @Query("SELECT id, name FROM tblHenchmen WHERE id = :id LIMIT 1")
+    HenchmenEntity.Minimal findByIdSyncMinimal(final int id);
 
     // getAll
     @Override
@@ -38,6 +54,14 @@ public interface HenchmenDao extends CardDao<HenchmenEntity> {
     @Query("SELECT * FROM tblHenchmen ORDER BY id ASC")
     List<HenchmenEntity> getAllSync();
 
+    @Override
+    @Query("SELECT id, name FROM tblHenchmen ORDER BY id ASC")
+    LiveData<List<HenchmenEntity.Minimal>> getAllAsyncMinimal();
+
+    @Override
+    @Query("SELECT id, name FROM tblHenchmen ORDER BY id ASC")
+    List<HenchmenEntity.Minimal> getAllSyncMinimal();
+
     // getAllEnabled
     @Override
     @Query("SELECT * FROM tblHenchmen WHERE isEnabled = 1 ORDER BY id ASC")
@@ -47,6 +71,14 @@ public interface HenchmenDao extends CardDao<HenchmenEntity> {
     @Query("SELECT * FROM tblHenchmen WHERE isEnabled = 1 ORDER BY id ASC")
     List<HenchmenEntity> getAllEnabledSync();
 
+    @Override
+    @Query("SELECT id, name FROM tblHenchmen WHERE isEnabled = 1 ORDER BY id ASC")
+    LiveData<List<HenchmenEntity.Minimal>> getAllEnabledAsyncMinimal();
+
+    @Override
+    @Query("SELECT id, name FROM tblHenchmen WHERE isEnabled = 1 ORDER BY id ASC")
+    List<HenchmenEntity.Minimal> getAllEnabledSyncMinimal();
+
     // getAllBySetId
     @Override
     @Query("SELECT * FROM tblHenchmen WHERE setId = :setId ORDER BY id ASC")
@@ -55,4 +87,12 @@ public interface HenchmenDao extends CardDao<HenchmenEntity> {
     @Override
     @Query("SELECT * FROM tblHenchmen WHERE setId = :setId ORDER BY id ASC")
     List<HenchmenEntity> getAllBySetIdSync(final int setId);
+
+    @Override
+    @Query("SELECT id, name FROM tblHenchmen WHERE setId = :setId ORDER BY id ASC")
+    LiveData<List<HenchmenEntity.Minimal>> getAllBySetIdAsyncMinimal(final int setId);
+
+    @Override
+    @Query("SELECT id, name FROM tblHenchmen WHERE setId = :setId ORDER BY id ASC")
+    List<HenchmenEntity.Minimal> getAllBySetIdSyncMinimal(final int setId);
 }

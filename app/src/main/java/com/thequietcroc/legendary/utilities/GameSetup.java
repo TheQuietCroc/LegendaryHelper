@@ -35,19 +35,19 @@ public class GameSetup {
 
     private int numPlayers;
 
-    private MastermindEntity selectedMastermind;
-    private SchemeEntity selectedScheme;
-    private final List<VillainsEntity> selectedVillainsList;
-    private final List<HenchmenEntity> selectedHenchmenList;
-    private final List<HeroEntity> selectedHeroList;
+    private MastermindEntity.Minimal selectedMastermind;
+    private SchemeEntity.Minimal selectedScheme;
+    private final List<VillainsEntity.Minimal> selectedVillainsList;
+    private final List<HenchmenEntity.Minimal> selectedHenchmenList;
+    private final List<HeroEntity.Minimal> selectedHeroList;
 
     private final LegendaryDatabase db;
 
-    private final List<MastermindEntity> filteredMastermindList;
-    private final List<SchemeEntity> filteredSchemeList;
-    private final List<VillainsEntity> filteredVillainsList;
-    private final List<HenchmenEntity> filteredHenchmenList;
-    private final List<HeroEntity> filteredHeroList;
+    private final List<MastermindEntity.Minimal> filteredMastermindList;
+    private final List<SchemeEntity.Minimal> filteredSchemeList;
+    private final List<VillainsEntity.Minimal> filteredVillainsList;
+    private final List<HenchmenEntity.Minimal> filteredHenchmenList;
+    private final List<HeroEntity.Minimal> filteredHeroList;
 
     final ConstraintLayout containerVillains;
     final ConstraintLayout containerHenchmen;
@@ -61,22 +61,23 @@ public class GameSetup {
 
     private final MaterialButtonToggleGroup buttonGroupPlayers;
 
-    public GameSetup(final int numPlayers,
-                     final MaterialButtonToggleGroup buttonGroupPlayers,
+    public GameSetup(final MaterialButtonToggleGroup buttonGroupPlayers,
                      final LegendaryDatabase db,
-                     final List<MastermindEntity> filteredMastermindList,
-                     final List<SchemeEntity> filteredSchemeList,
-                     final List<VillainsEntity> filteredVillainsList,
-                     final List<HenchmenEntity> filteredHenchmenList,
-                     final List<HeroEntity> filteredHeroList,
+                     final List<MastermindEntity.Minimal> filteredMastermindList,
+                     final List<SchemeEntity.Minimal> filteredSchemeList,
+                     final List<VillainsEntity.Minimal> filteredVillainsList,
+                     final List<HenchmenEntity.Minimal> filteredHenchmenList,
+                     final List<HeroEntity.Minimal> filteredHeroList,
                      final CardControl mastermindControl,
                      final CardControl schemeControl,
                      final ConstraintLayout containerVillains,
                      final ConstraintLayout containerHenchmen,
                      final ConstraintLayout containerHero) {
-        this.numPlayers = numPlayers;
 
         this.buttonGroupPlayers = buttonGroupPlayers;
+
+        this.buttonGroupPlayers.check(this.buttonGroupPlayers.getChildAt(0).getId());
+        this.numPlayers = 1;
 
         this.db = db;
 
@@ -106,19 +107,19 @@ public class GameSetup {
         this.numPlayers = numPlayers;
     }
 
-    private void setSelectedMastermind(final MastermindEntity selectedMastermind) {
+    private void setSelectedMastermind(final MastermindEntity.Minimal selectedMastermind) {
         this.selectedMastermind = selectedMastermind;
     }
 
-    private void setSelectedScheme(final SchemeEntity selectedScheme) {
+    private void setSelectedScheme(final SchemeEntity.Minimal selectedScheme) {
         this.selectedScheme = selectedScheme;
     }
 
     private <T> void setSelectedCard(final T selectedCard) {
-        if (selectedCard instanceof MastermindEntity) {
-            setSelectedMastermind((MastermindEntity) selectedCard);
-        } else if (selectedCard instanceof SchemeEntity) {
-            setSelectedScheme((SchemeEntity) selectedCard);
+        if (selectedCard instanceof MastermindEntity.Minimal) {
+            setSelectedMastermind((MastermindEntity.Minimal) selectedCard);
+        } else if (selectedCard instanceof SchemeEntity.Minimal) {
+            setSelectedScheme((SchemeEntity.Minimal) selectedCard);
         }
     }
 
@@ -160,7 +161,7 @@ public class GameSetup {
 
                 parent.setTag(position);
 
-                if (parent.getSelectedItem() instanceof MastermindEntity) {
+                if (parent.getSelectedItem() instanceof MastermindEntity.Minimal) {
                     selectAlwaysLeadsVillains();
                     selectAlwaysLeadsHenchmen();
                 }
@@ -244,7 +245,7 @@ public class GameSetup {
 
             if (alwaysLeadsVillainsId > 0) {
 
-                selectAlwaysLeadsHelper(db.villainsDao().findByIdSync(alwaysLeadsVillainsId),
+                selectAlwaysLeadsHelper(db.villainsDao().findByIdSyncMinimal(alwaysLeadsVillainsId),
                         selectedVillainsList,
                         filteredVillainsList,
                         villainsControlList);
@@ -258,7 +259,7 @@ public class GameSetup {
 
             if (alwaysLeadsHenchmenId > 0) {
 
-                selectAlwaysLeadsHelper(db.henchmenDao().findByIdSync(alwaysLeadsHenchmenId),
+                selectAlwaysLeadsHelper(db.henchmenDao().findByIdSyncMinimal(alwaysLeadsHenchmenId),
                         selectedHenchmenList,
                         filteredHenchmenList,
                         henchmenControlList);
@@ -266,9 +267,9 @@ public class GameSetup {
         }
     }
 
-    private <T extends BaseCardEntity> T setupHelper(final CardControl control,
-                                                     final T selectedCard,
-                                                     final List<T> filteredList) {
+    private <T extends BaseCardEntity.Minimal> T setupHelper(final CardControl control,
+                                                             final T selectedCard,
+                                                             final List<T> filteredList) {
         final T newSelectedCard;
 
         if (!control.getToggleLock().isChecked()) {
@@ -286,7 +287,7 @@ public class GameSetup {
         return newSelectedCard;
     }
 
-    private <T extends BaseCardEntity> void setupHelper(final List<CardControl> controlList,
+    private <T extends BaseCardEntity.Minimal> void setupHelper(final List<CardControl> controlList,
                                                         final List<T> filteredList,
                                                         final List<T> selectedList) {
 
@@ -364,7 +365,7 @@ public class GameSetup {
         toggleControlLock(true, control);
     }
 
-    private BaseCardEntity selectRandomlyFromList(final List<? extends BaseCardEntity> cardList) {
+    private BaseCardEntity.Minimal selectRandomlyFromList(final List<? extends BaseCardEntity.Minimal> cardList) {
         return cardList.get(new Random().nextInt(cardList.size() - 1) + 1);
     }
 

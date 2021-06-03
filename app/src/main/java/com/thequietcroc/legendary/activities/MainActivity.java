@@ -9,7 +9,6 @@ import android.view.MenuItem;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
-import com.google.android.material.button.MaterialButton;
 import com.google.android.material.button.MaterialButtonToggleGroup;
 import com.thequietcroc.legendary.R;
 import com.thequietcroc.legendary.database.LegendaryDatabase;
@@ -38,45 +37,44 @@ public class MainActivity extends AppCompatActivity {
         final ConstraintLayout henchmenContainer = findViewById(R.id.containerHenchmen);
         final ConstraintLayout heroesContainer = findViewById(R.id.containerHeroes);
 
-        final MastermindEntity noneMastermind = new MastermindEntity();
+        final MastermindEntity.Minimal noneMastermind = new MastermindEntity.Minimal();
         noneMastermind.setId(0);
         noneMastermind.setName("None");
-        final List<MastermindEntity> mastermindList = db.mastermindDao().getAllEnabledSync();
+        final List<MastermindEntity.Minimal> mastermindList = db.mastermindDao().getAllEnabledSyncMinimal();
         mastermindList.remove(noneMastermind);
         mastermindList.add(0, noneMastermind);
 
-        final SchemeEntity noneScheme = new SchemeEntity();
+        final SchemeEntity.Minimal noneScheme = new SchemeEntity.Minimal();
         noneScheme.setId(0);
         noneScheme.setName("None");
-        final List<SchemeEntity> schemeList = db.schemeDao().getAllEnabledSync();
+        final List<SchemeEntity.Minimal> schemeList = db.schemeDao().getAllEnabledSyncMinimal();
         schemeList.remove(noneScheme);
         schemeList.add(0, noneScheme);
 
-        final VillainsEntity noneVillains = new VillainsEntity();
+        final VillainsEntity.Minimal noneVillains = new VillainsEntity.Minimal();
         noneVillains.setId(0);
         noneVillains.setName("None");
-        final List<VillainsEntity> villainsList = db.villainsDao().getAllEnabledSync();
+        final List<VillainsEntity.Minimal> villainsList = db.villainsDao().getAllEnabledSyncMinimal();
         villainsList.remove(noneVillains);
         villainsList.add(0, noneVillains);
 
-        final HenchmenEntity noneHenchmen = new HenchmenEntity();
+        final HenchmenEntity.Minimal noneHenchmen = new HenchmenEntity.Minimal();
         noneHenchmen.setId(0);
         noneHenchmen.setName("None");
-        final List<HenchmenEntity> henchmenList = db.henchmenDao().getAllEnabledSync();
+        final List<HenchmenEntity.Minimal> henchmenList = db.henchmenDao().getAllEnabledSyncMinimal();
         henchmenList.remove(noneHenchmen);
         henchmenList.add(0, noneHenchmen);
 
-        final HeroEntity noneHero = new HeroEntity();
+        final HeroEntity.Minimal noneHero = new HeroEntity.Minimal();
         noneHero.setId(0);
         noneHero.setName("None");
-        final List<HeroEntity> heroList = db.heroDao().getAllEnabledSync();
+        final List<HeroEntity.Minimal> heroList = db.heroDao().getAllEnabledSyncMinimal();
         heroList.remove(noneHero);
         heroList.add(0, noneHero);
 
         final MaterialButtonToggleGroup buttonGroupPlayers = findViewById(R.id.buttonGroupPlayers);
 
         gameSetup = new GameSetup(
-                Integer.parseInt((String) ((MaterialButton) findViewById(buttonGroupPlayers.getCheckedButtonId())).getText()),
                 buttonGroupPlayers,
                 db,
                 mastermindList,

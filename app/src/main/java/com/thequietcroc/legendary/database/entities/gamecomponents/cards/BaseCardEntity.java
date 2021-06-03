@@ -29,4 +29,6 @@ public abstract class BaseCardEntity extends BaseGameComponentEntity {
 
         return super.equals(o);
     }
+
+    public static class Minimal extends BaseGameComponentEntity.Minimal {}
 }

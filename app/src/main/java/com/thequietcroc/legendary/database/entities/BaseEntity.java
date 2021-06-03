@@ -52,4 +52,54 @@ public abstract class BaseEntity {
     public String toString() {
         return name;
     }
+
+    public static class Minimal {
+
+        private int id;
+
+        @NonNull
+        private String name;
+
+        public int getId() {
+            return id;
+        }
+
+        public void setId(int id) {
+            this.id = id;
+        }
+
+        @NonNull
+        public String getName() {
+            return name;
+        }
+
+        public void setName(@NonNull String name) {
+            this.name = name;
+        }
+
+        @Override
+        public boolean equals(final Object o) {
+            if (o == this) {
+                return true;
+            }
+
+            if (!(o instanceof Minimal)) {
+                return false;
+            }
+
+            final Minimal m = (Minimal) o;
+
+            return id == m.id;
+        }
+
+        @Override
+        public int hashCode() {
+            return id;
+        }
+
+        @Override
+        public String toString() {
+            return name;
+        }
+    }
 }
