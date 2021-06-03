@@ -37,7 +37,6 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
                 android:orientation="horizontal"
-                app:checkedButton="@id/buttonPlayers1"
                 app:layout_constraintBottom_toBottomOf="@+id/labelPlayers"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/labelPlayers"

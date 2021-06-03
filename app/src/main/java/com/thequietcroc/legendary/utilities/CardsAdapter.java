@@ -1,4 +1,4 @@
-package com.thequietcroc.legendary;
+package com.thequietcroc.legendary.utilities;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -9,6 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.thequietcroc.legendary.R;
 import com.thequietcroc.legendary.database.entities.gamecomponents.cards.BaseCardEntity;
 
 import java.util.List;

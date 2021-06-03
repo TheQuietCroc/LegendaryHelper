@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
-import androidx.room.PrimaryKey;
 
 import com.thequietcroc.legendary.database.entities.gamecomponents.cards.MastermindEntity;
 import com.thequietcroc.legendary.database.entities.gamecomponents.cards.SchemeEntity;
@@ -35,12 +34,6 @@ import static androidx.room.ForeignKey.SET_DEFAULT;
 )
 public class GameSetupEntity extends BaseEntity {
 
-    @PrimaryKey(autoGenerate = true)
-    private int id;
-
-    @NonNull
-    private String name;
-
     @ColumnInfo(defaultValue = "1")
     private int numPlayers;
 
@@ -52,23 +45,6 @@ public class GameSetupEntity extends BaseEntity {
 
     @NonNull
     private Date dateLastPlayed;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(final int id) {
-        this.id = id;
-    }
-
-    @NonNull
-    public String getName() {
-        return name;
-    }
-
-    public void setName(@NonNull final  String name) {
-        this.name = name;
-    }
 
     public int getNumPlayers() {
         return numPlayers;
@@ -100,5 +76,34 @@ public class GameSetupEntity extends BaseEntity {
 
     public void setDateLastPlayed(final Date dateLastPlayed) {
         this.dateLastPlayed = dateLastPlayed;
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (o == this) {
+            return true;
+        }
+
+        if (!(o instanceof GameSetupEntity)) {
+            return false;
+        }
+
+        return super.equals(o);
+    }
+
+    public static class Minimal extends BaseEntity.Minimal {
+
+        @Override
+        public boolean equals(final Object o) {
+            if (o == this) {
+                return true;
+            }
+
+            if (!(o instanceof Minimal)) {
+                return false;
+            }
+
+            return super.equals(o);
+        }
     }
 }
