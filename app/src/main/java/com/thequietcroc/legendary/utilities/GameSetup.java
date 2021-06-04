@@ -54,9 +54,9 @@ public class GameSetup {
     private final Map<Integer, HenchmenEntity.Minimal> filteredHenchmenMap = new HashMap<>();
     private final Map<Integer, HeroEntity.Minimal> filteredHeroMap = new HashMap<>();
 
-    final ConstraintLayout containerVillains;
-    final ConstraintLayout containerHenchmen;
-    final ConstraintLayout containerHero;
+    private final ConstraintLayout containerVillains;
+    private final ConstraintLayout containerHenchmen;
+    private final ConstraintLayout containerHero;
 
     private final CardControl mastermindControl;
     private final CardControl schemeControl;
