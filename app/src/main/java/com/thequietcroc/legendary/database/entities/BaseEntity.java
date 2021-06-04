@@ -55,10 +55,12 @@ public abstract class BaseEntity {
 
     public static class Minimal {
 
-        private int id;
+        public static Minimal NONE = new Minimal();
+
+        private int id = 0;
 
         @NonNull
-        private String name;
+        private String name = "None";
 
         public int getId() {
             return id;

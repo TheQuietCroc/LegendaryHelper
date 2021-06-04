@@ -47,52 +47,52 @@ public interface HeroDao extends BaseCardDao<HeroEntity, HeroEntity.Minimal> {
 
     // getAll
     @Override
-    @Query("SELECT * FROM tblHeroes ORDER BY id ASC")
+    @Query("SELECT * FROM tblHeroes WHERE id > 0 ORDER BY id ASC")
     LiveData<List<HeroEntity>> getAllAsync();
 
     @Override
-    @Query("SELECT * FROM tblHeroes ORDER BY id ASC")
+    @Query("SELECT * FROM tblHeroes WHERE id > 0 ORDER BY id ASC")
     List<HeroEntity> getAllSync();
 
     @Override
-    @Query("SELECT id, name FROM tblHeroes ORDER BY id ASC")
+    @Query("SELECT id, name FROM tblHeroes WHERE id > 0 ORDER BY id ASC")
     LiveData<List<HeroEntity.Minimal>> getAllAsyncMinimal();
 
     @Override
-    @Query("SELECT id, name FROM tblHeroes ORDER BY id ASC")
+    @Query("SELECT id, name FROM tblHeroes WHERE id > 0 ORDER BY id ASC")
     List<HeroEntity.Minimal> getAllSyncMinimal();
 
     // getAllEnabled
     @Override
-    @Query("SELECT * FROM tblHeroes WHERE isEnabled = 1 ORDER BY id ASC")
+    @Query("SELECT * FROM tblHeroes WHERE isEnabled = 1 AND id > 0 ORDER BY id ASC")
     LiveData<List<HeroEntity>> getAllEnabledAsync();
 
     @Override
-    @Query("SELECT * FROM tblHeroes WHERE isEnabled = 1 ORDER BY id ASC")
+    @Query("SELECT * FROM tblHeroes WHERE isEnabled = 1 AND id > 0 ORDER BY id ASC")
     List<HeroEntity> getAllEnabledSync();
 
     @Override
-    @Query("SELECT id, name FROM tblHeroes WHERE isEnabled = 1 ORDER BY id ASC")
+    @Query("SELECT id, name FROM tblHeroes WHERE isEnabled = 1 AND id > 0 ORDER BY id ASC")
     LiveData<List<HeroEntity.Minimal>> getAllEnabledAsyncMinimal();
 
     @Override
-    @Query("SELECT id, name FROM tblHeroes WHERE isEnabled = 1 ORDER BY id ASC")
+    @Query("SELECT id, name FROM tblHeroes WHERE isEnabled = 1 AND id > 0 ORDER BY id ASC")
     List<HeroEntity.Minimal> getAllEnabledSyncMinimal();
 
     // getAllBySetId
     @Override
-    @Query("SELECT * FROM tblHeroes WHERE setId = :setId ORDER BY id ASC")
+    @Query("SELECT * FROM tblHeroes WHERE setId = :setId AND id > 0 ORDER BY id ASC")
     LiveData<List<HeroEntity>> getAllBySetIdAsync(final int setId);
 
     @Override
-    @Query("SELECT * FROM tblHeroes WHERE setId = :setId ORDER BY id ASC")
+    @Query("SELECT * FROM tblHeroes WHERE setId = :setId AND id > 0 ORDER BY id ASC")
     List<HeroEntity> getAllBySetIdSync(final int setId);
 
     @Override
-    @Query("SELECT id, name FROM tblHeroes WHERE setId = :setId ORDER BY id ASC")
+    @Query("SELECT id, name FROM tblHeroes WHERE setId = :setId AND id > 0 ORDER BY id ASC")
     LiveData<List<HeroEntity.Minimal>> getAllBySetIdAsyncMinimal(final int setId);
 
     @Override
-    @Query("SELECT id, name FROM tblHeroes WHERE setId = :setId ORDER BY id ASC")
+    @Query("SELECT id, name FROM tblHeroes WHERE setId = :setId AND id > 0 ORDER BY id ASC")
     List<HeroEntity.Minimal> getAllBySetIdSyncMinimal(final int setId);
 }

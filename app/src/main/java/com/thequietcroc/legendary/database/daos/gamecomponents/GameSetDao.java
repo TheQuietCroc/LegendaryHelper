@@ -47,35 +47,35 @@ public interface GameSetDao extends BaseGameComponentDao<GameSetEntity, GameSetE
 
     // getAll
     @Override
-    @Query("SELECT * FROM tblGameSets ORDER BY id ASC")
+    @Query("SELECT * FROM tblGameSets WHERE id > 0 ORDER BY id ASC")
     LiveData<List<GameSetEntity>> getAllAsync();
 
     @Override
-    @Query("SELECT * FROM tblGameSets ORDER BY id ASC")
+    @Query("SELECT * FROM tblGameSets WHERE id > 0 ORDER BY id ASC")
     List<GameSetEntity> getAllSync();
 
     @Override
-    @Query("SELECT id, name FROM tblGameSets ORDER BY id DESC")
+    @Query("SELECT id, name FROM tblGameSets WHERE id > 0 ORDER BY id DESC")
     LiveData<List<GameSetEntity.Minimal>> getAllAsyncMinimal();
 
     @Override
-    @Query("SELECT id, name FROM tblGameSets ORDER BY id DESC")
+    @Query("SELECT id, name FROM tblGameSets WHERE id > 0 ORDER BY id DESC")
     List<GameSetEntity.Minimal> getAllSyncMinimal();
 
     // getAllEnabled
     @Override
-    @Query("SELECT * FROM tblGameSets WHERE isEnabled = 1 ORDER BY id ASC")
+    @Query("SELECT * FROM tblGameSets WHERE isEnabled = 1 AND id > 0 ORDER BY id ASC")
     LiveData<List<GameSetEntity>> getAllEnabledAsync();
 
     @Override
-    @Query("SELECT * FROM tblGameSets WHERE isEnabled = 1 ORDER BY id ASC")
+    @Query("SELECT * FROM tblGameSets WHERE isEnabled = 1 AND id > 0 ORDER BY id ASC")
     List<GameSetEntity> getAllEnabledSync();
 
     @Override
-    @Query("SELECT id, name FROM tblGameSets WHERE isEnabled = 1 ORDER BY id ASC")
+    @Query("SELECT id, name FROM tblGameSets WHERE isEnabled = 1 AND id > 0 ORDER BY id ASC")
     LiveData<List<GameSetEntity.Minimal>> getAllEnabledAsyncMinimal();
 
     @Override
-    @Query("SELECT id, name FROM tblGameSets WHERE isEnabled = 1 ORDER BY id ASC")
+    @Query("SELECT id, name FROM tblGameSets WHERE isEnabled = 1 AND id > 0 ORDER BY id ASC")
     List<GameSetEntity.Minimal> getAllEnabledSyncMinimal();
 }

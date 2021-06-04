@@ -47,18 +47,18 @@ public interface GameSetupDao extends BaseDao<GameSetupEntity, GameSetupEntity.M
 
     // getAll
     @Override
-    @Query("SELECT * FROM tblGameSetups ORDER BY dateLastPlayed DESC")
+    @Query("SELECT * FROM tblGameSetups WHERE id > 0 ORDER BY dateLastPlayed DESC")
     LiveData<List<GameSetupEntity>> getAllAsync();
 
     @Override
-    @Query("SELECT * FROM tblGameSetups ORDER BY dateLastPlayed DESC")
+    @Query("SELECT * FROM tblGameSetups WHERE id > 0 ORDER BY dateLastPlayed DESC")
     List<GameSetupEntity> getAllSync();
 
     @Override
-    @Query("SELECT id, name FROM tblGameSetups ORDER BY dateLastPlayed DESC")
+    @Query("SELECT id, name FROM tblGameSetups WHERE id > 0 ORDER BY dateLastPlayed DESC")
     LiveData<List<GameSetupEntity.Minimal>> getAllAsyncMinimal();
 
     @Override
-    @Query("SELECT id, name FROM tblGameSetups ORDER BY dateLastPlayed DESC")
+    @Query("SELECT id, name FROM tblGameSetups WHERE id > 0 ORDER BY dateLastPlayed DESC")
     List<GameSetupEntity.Minimal> getAllSyncMinimal();
 }
