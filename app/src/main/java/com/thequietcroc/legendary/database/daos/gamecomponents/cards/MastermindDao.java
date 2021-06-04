@@ -7,6 +7,7 @@ import androidx.room.Query;
 import com.thequietcroc.legendary.database.entities.gamecomponents.cards.MastermindEntity;
 
 import java.util.List;
+
 @Dao
 public interface MastermindDao extends BaseCardDao<MastermindEntity, MastermindEntity.Minimal> {
 
@@ -20,11 +21,13 @@ public interface MastermindDao extends BaseCardDao<MastermindEntity, MastermindE
     MastermindEntity findByNameSync(final String name);
 
     @Override
-    @Query("SELECT id, name, villainId, henchmenId FROM tblMasterminds WHERE name LIKE :name LIMIT 1")
+    @Query("SELECT id, name, villainId, henchmenId FROM tblMasterminds WHERE name LIKE :name "
+            + "LIMIT 1")
     LiveData<MastermindEntity.Minimal> findByNameAsyncMinimal(final String name);
 
     @Override
-    @Query("SELECT id, name, villainId, henchmenId FROM tblMasterminds WHERE name LIKE :name LIMIT 1")
+    @Query("SELECT id, name, villainId, henchmenId FROM tblMasterminds WHERE name LIKE :name "
+            + "LIMIT 1")
     MastermindEntity.Minimal findByNameSyncMinimal(final String name);
 
     // findById
@@ -54,11 +57,13 @@ public interface MastermindDao extends BaseCardDao<MastermindEntity, MastermindE
     List<MastermindEntity> getAllSync();
 
     @Override
-    @Query("SELECT id, name, villainId, henchmenId FROM tblMasterminds WHERE id > 0 ORDER BY id ASC")
+    @Query("SELECT id, name, villainId, henchmenId FROM tblMasterminds WHERE id > 0 ORDER BY id "
+            + "ASC")
     LiveData<List<MastermindEntity.Minimal>> getAllAsyncMinimal();
 
     @Override
-    @Query("SELECT id, name, villainId, henchmenId FROM tblMasterminds WHERE id > 0 ORDER BY id ASC")
+    @Query("SELECT id, name, villainId, henchmenId FROM tblMasterminds WHERE id > 0 ORDER BY id "
+            + "ASC")
     List<MastermindEntity.Minimal> getAllSyncMinimal();
 
     // getAllEnabled
@@ -71,11 +76,13 @@ public interface MastermindDao extends BaseCardDao<MastermindEntity, MastermindE
     List<MastermindEntity> getAllEnabledSync();
 
     @Override
-    @Query("SELECT id, name, villainId, henchmenId FROM tblMasterminds WHERE isEnabled = 1 AND id > 0 ORDER BY id ASC")
+    @Query("SELECT id, name, villainId, henchmenId FROM tblMasterminds WHERE isEnabled = 1 AND id"
+            + " > 0 ORDER BY id ASC")
     LiveData<List<MastermindEntity.Minimal>> getAllEnabledAsyncMinimal();
 
     @Override
-    @Query("SELECT id, name, villainId, henchmenId FROM tblMasterminds WHERE isEnabled = 1 AND id > 0 ORDER BY id ASC")
+    @Query("SELECT id, name, villainId, henchmenId FROM tblMasterminds WHERE isEnabled = 1 AND id"
+            + " > 0 ORDER BY id ASC")
     List<MastermindEntity.Minimal> getAllEnabledSyncMinimal();
 
     // getAllBySetId
@@ -88,10 +95,12 @@ public interface MastermindDao extends BaseCardDao<MastermindEntity, MastermindE
     List<MastermindEntity> getAllBySetIdSync(final int setId);
 
     @Override
-    @Query("SELECT id, name, villainId, henchmenId FROM tblMasterminds WHERE setId = :setId AND id > 0 ORDER BY id ASC")
+    @Query("SELECT id, name, villainId, henchmenId FROM tblMasterminds WHERE setId = :setId AND "
+            + "id > 0 ORDER BY id ASC")
     LiveData<List<MastermindEntity.Minimal>> getAllBySetIdAsyncMinimal(final int setId);
 
     @Override
-    @Query("SELECT id, name, villainId, henchmenId FROM tblMasterminds WHERE setId = :setId AND id > 0 ORDER BY id ASC")
+    @Query("SELECT id, name, villainId, henchmenId FROM tblMasterminds WHERE setId = :setId AND "
+            + "id > 0 ORDER BY id ASC")
     List<MastermindEntity.Minimal> getAllBySetIdSyncMinimal(final int setId);
 }

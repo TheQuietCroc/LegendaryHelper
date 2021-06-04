@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.thequietcroc.legendary">
+        package="com.thequietcroc.legendary">
 
     <application
-        android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
-        android:supportsRtl="true"
-        android:theme="@style/Theme.Legendary">
+            android:allowBackup="true"
+            android:icon="@mipmap/ic_launcher"
+            android:label="@string/app_name"
+            android:roundIcon="@mipmap/ic_launcher_round"
+            android:supportsRtl="true"
+            android:theme="@style/Theme.Legendary">
         <activity
-            android:name=".activities.FilterMenuActivity"
-            android:parentActivityName=".activities.MainActivity">
+                android:name=".activities.FilterMenuActivity"
+                android:parentActivityName=".activities.MainActivity">
             <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activities.MainActivity" />
+                    android:name="android.support.PARENT_ACTIVITY"
+                    android:value=".activities.MainActivity" />
         </activity>
         <activity android:name=".activities.MainActivity">
             <intent-filter>

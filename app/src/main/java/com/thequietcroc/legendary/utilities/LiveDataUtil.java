@@ -7,8 +7,8 @@ import androidx.lifecycle.Observer;
 public class LiveDataUtil {
 
     public static <T> void observeOnce(final LifecycleOwner owner,
-                                       final LiveData<T> liveData,
-                                       final Observer<T> observer) {
+            final LiveData<T> liveData,
+            final Observer<T> observer) {
         liveData.observe(owner, new Observer<T>() {
             @Override
             public void onChanged(T t) {

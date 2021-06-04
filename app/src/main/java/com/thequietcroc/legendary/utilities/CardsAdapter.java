@@ -26,20 +26,23 @@ public class CardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull final ViewGroup parent, final int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull final ViewGroup parent,
+            final int viewType) {
         final LayoutInflater inflater = LayoutInflater.from(parent.getContext());
 
         return getViewHolder(parent, inflater);
     }
 
-    private RecyclerView.ViewHolder getViewHolder(final ViewGroup parent, final LayoutInflater inflater) {
+    private RecyclerView.ViewHolder getViewHolder(final ViewGroup parent,
+            final LayoutInflater inflater) {
         final View view = inflater.inflate(R.layout.card, parent, false);
 
         return new CardViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder holder,
+            final int position) {
         final CardViewHolder cardVH = (CardViewHolder) holder;
 
         cardVH.cardName.setText(cardList.get(position).getName());

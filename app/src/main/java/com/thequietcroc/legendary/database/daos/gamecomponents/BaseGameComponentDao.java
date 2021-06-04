@@ -9,7 +9,8 @@ import com.thequietcroc.legendary.database.entities.gamecomponents.BaseGameCompo
 import java.util.List;
 
 @Dao
-public interface BaseGameComponentDao<T extends BaseGameComponentEntity, M extends BaseGameComponentEntity.Minimal> extends BaseDao<T, M> {
+public interface BaseGameComponentDao<T extends BaseGameComponentEntity,
+        M extends BaseGameComponentEntity.Minimal> extends BaseDao<T, M> {
 
     // findByName
     @Override

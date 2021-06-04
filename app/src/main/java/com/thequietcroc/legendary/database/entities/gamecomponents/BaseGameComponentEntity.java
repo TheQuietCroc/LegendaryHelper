@@ -28,5 +28,6 @@ public class BaseGameComponentEntity extends BaseEntity {
         isEnabled = enabled;
     }
 
-    public static class Minimal extends BaseEntity.Minimal {}
+    public static class Minimal extends BaseEntity.Minimal {
+    }
 }
