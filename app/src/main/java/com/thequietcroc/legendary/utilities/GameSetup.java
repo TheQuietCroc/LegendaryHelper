@@ -8,6 +8,7 @@ import android.widget.Spinner;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.view.ViewCompat;
+import androidx.lifecycle.LifecycleOwner;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.button.MaterialButtonToggleGroup;
@@ -26,10 +27,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.thequietcroc.legendary.enums.ItemType.HENCHMEN;
 import static com.thequietcroc.legendary.enums.ItemType.HERO;
 import static com.thequietcroc.legendary.enums.ItemType.VILLAINS;
+import static com.thequietcroc.legendary.utilities.LiveDataUtil.observeOnce;
 
 public class GameSetup {
 
@@ -37,17 +40,17 @@ public class GameSetup {
 
     private MastermindEntity.Minimal selectedMastermind;
     private SchemeEntity.Minimal selectedScheme;
-    private final List<VillainsEntity.Minimal> selectedVillainsList;
-    private final List<HenchmenEntity.Minimal> selectedHenchmenList;
-    private final List<HeroEntity.Minimal> selectedHeroList;
+    private List<VillainsEntity.Minimal> selectedVillainsList;
+    private List<HenchmenEntity.Minimal> selectedHenchmenList;
+    private List<HeroEntity.Minimal> selectedHeroList;
 
     private final LegendaryDatabase db;
 
-    private final List<MastermindEntity.Minimal> filteredMastermindList;
-    private final List<SchemeEntity.Minimal> filteredSchemeList;
-    private final List<VillainsEntity.Minimal> filteredVillainsList;
-    private final List<HenchmenEntity.Minimal> filteredHenchmenList;
-    private final List<HeroEntity.Minimal> filteredHeroList;
+    private final List<MastermindEntity.Minimal> filteredMastermindList = new ArrayList<>();
+    private final List<SchemeEntity.Minimal> filteredSchemeList = new ArrayList<>();
+    private final List<VillainsEntity.Minimal> filteredVillainsList = new ArrayList<>();
+    private final List<HenchmenEntity.Minimal> filteredHenchmenList = new ArrayList<>();
+    private final List<HeroEntity.Minimal> filteredHeroList = new ArrayList<>();
 
     final ConstraintLayout containerVillains;
     final ConstraintLayout containerHenchmen;
@@ -61,13 +64,11 @@ public class GameSetup {
 
     private final MaterialButtonToggleGroup buttonGroupPlayers;
 
-    public GameSetup(final MaterialButtonToggleGroup buttonGroupPlayers,
+    private AtomicInteger numQueriesCompleted = new AtomicInteger(0);
+
+    public GameSetup(final LifecycleOwner owner,
                      final LegendaryDatabase db,
-                     final List<MastermindEntity.Minimal> filteredMastermindList,
-                     final List<SchemeEntity.Minimal> filteredSchemeList,
-                     final List<VillainsEntity.Minimal> filteredVillainsList,
-                     final List<HenchmenEntity.Minimal> filteredHenchmenList,
-                     final List<HeroEntity.Minimal> filteredHeroList,
+                     final MaterialButtonToggleGroup buttonGroupPlayers,
                      final CardControl mastermindControl,
                      final CardControl schemeControl,
                      final ConstraintLayout containerVillains,
@@ -81,12 +82,6 @@ public class GameSetup {
 
         this.db = db;
 
-        this.filteredMastermindList = filteredMastermindList;
-        this.filteredSchemeList = filteredSchemeList;
-        this.filteredVillainsList = filteredVillainsList;
-        this.filteredHenchmenList = filteredHenchmenList;
-        this.filteredHeroList = filteredHeroList;
-
         this.mastermindControl = mastermindControl;
         this.schemeControl = schemeControl;
 
@@ -94,13 +89,32 @@ public class GameSetup {
         this.containerHenchmen = containerHenchmen;
         this.containerHero = containerHero;
 
-        selectedMastermind = filteredMastermindList.get(0);
-        selectedScheme = filteredSchemeList.get(0);
-        selectedVillainsList = new ArrayList<>(Collections.nCopies(villainsControlList.size(), filteredVillainsList.get(0)));
-        selectedHenchmenList = new ArrayList<>(Collections.nCopies(henchmenControlList.size(), filteredHenchmenList.get(0)));
-        selectedHeroList = new ArrayList<>(Collections.nCopies(heroControlList.size(), filteredHeroList.get(0)));
+        this.selectedMastermind = new MastermindEntity.Minimal();
+        this.selectedScheme = new SchemeEntity.Minimal();
+        this.selectedVillainsList = new ArrayList<>(Collections.nCopies(containerVillains.getChildCount(), new VillainsEntity.Minimal()));
+        this.selectedHenchmenList = new ArrayList<>(Collections.nCopies(containerHenchmen.getChildCount(), new HenchmenEntity.Minimal()));
+        this.selectedHeroList = new ArrayList<>(Collections.nCopies(containerHero.getChildCount(), new HeroEntity.Minimal()));
 
-        initializeControls();
+        observeOnce(owner, db.mastermindDao().getAllEnabledAsyncMinimal(), filteredResults -> populateFilteredList(new MastermindEntity.Minimal(), filteredResults, filteredMastermindList));
+        observeOnce(owner, db.schemeDao().getAllEnabledAsyncMinimal(), filteredResults -> populateFilteredList(new SchemeEntity.Minimal(), filteredResults, filteredSchemeList));
+        observeOnce(owner, db.villainsDao().getAllEnabledAsyncMinimal(), filteredResults -> populateFilteredList(new VillainsEntity.Minimal(), filteredResults, filteredVillainsList));
+        observeOnce(owner, db.henchmenDao().getAllEnabledAsyncMinimal(), filteredResults -> populateFilteredList(new HenchmenEntity.Minimal(), filteredResults, filteredHenchmenList));
+        observeOnce(owner, db.heroDao().getAllEnabledAsyncMinimal(), filteredResults -> populateFilteredList(new HeroEntity.Minimal(), filteredResults, filteredHeroList));
+
+
+    }
+
+    private <T extends BaseCardEntity.Minimal> void populateFilteredList(final T noneCard,
+                                                                         final List<T> cardList,
+                                                                         final List<T> filteredList) {
+
+        Collections.sort(cardList, new MinimalComparator<>());
+        filteredList.add(noneCard);
+        filteredList.addAll(cardList);
+
+        if (numQueriesCompleted.incrementAndGet() == 5) {
+            initializeControls();
+        }
     }
 
     private void setNumPlayers(final int numPlayers) {
@@ -244,11 +258,20 @@ public class GameSetup {
             final int alwaysLeadsVillainsId = selectedMastermind.getVillainId();
 
             if (alwaysLeadsVillainsId > 0) {
-
-                selectAlwaysLeadsHelper(db.villainsDao().findByIdSyncMinimal(alwaysLeadsVillainsId),
-                        selectedVillainsList,
-                        filteredVillainsList,
-                        villainsControlList);
+//                db.villainsDao().findByIdAsyncMinimal(alwaysLeadsVillainsId).subscribeOn(Schedulers.io()).observeOn(Schedulers.computation()).subscribeWith(new DisposableSingleObserver<VillainsEntity.Minimal>() {
+//                    @Override
+//                    public void onSuccess(@NonNull VillainsEntity.Minimal villains) {
+//                        selectAlwaysLeadsHelper(villains,
+//                                selectedVillainsList,
+//                                filteredVillainsList,
+//                                villainsControlList);
+//                    }
+//
+//                    @Override
+//                    public void onError(@NonNull Throwable e) {
+//
+//                    }
+//                });
             }
         }
     }
@@ -258,11 +281,20 @@ public class GameSetup {
             final int alwaysLeadsHenchmenId = selectedMastermind.getHenchmenId();
 
             if (alwaysLeadsHenchmenId > 0) {
-
-                selectAlwaysLeadsHelper(db.henchmenDao().findByIdSyncMinimal(alwaysLeadsHenchmenId),
-                        selectedHenchmenList,
-                        filteredHenchmenList,
-                        henchmenControlList);
+//                db.henchmenDao().findByIdAsyncMinimal(alwaysLeadsHenchmenId).subscribeOn(Schedulers.io()).observeOn(Schedulers.computation()).subscribeWith(new DisposableSingleObserver<HenchmenEntity.Minimal>() {
+//                    @Override
+//                    public void onSuccess(@NonNull HenchmenEntity.Minimal henchmen) {
+//                        selectAlwaysLeadsHelper(henchmen,
+//                                selectedHenchmenList,
+//                                filteredHenchmenList,
+//                                henchmenControlList);
+//                    }
+//
+//                    @Override
+//                    public void onError(@NonNull Throwable e) {
+//
+//                    }
+//                });
             }
         }
     }

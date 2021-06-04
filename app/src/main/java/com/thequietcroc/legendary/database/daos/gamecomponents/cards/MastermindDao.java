@@ -46,52 +46,52 @@ public interface MastermindDao extends BaseCardDao<MastermindEntity, MastermindE
 
     // getAll
     @Override
-    @Query("SELECT * FROM tblMasterminds ORDER BY id ASC")
+    @Query("SELECT * FROM tblMasterminds WHERE id > 0 ORDER BY id ASC")
     LiveData<List<MastermindEntity>> getAllAsync();
 
     @Override
-    @Query("SELECT * FROM tblMasterminds ORDER BY id ASC")
+    @Query("SELECT * FROM tblMasterminds WHERE id > 0 ORDER BY id ASC")
     List<MastermindEntity> getAllSync();
 
     @Override
-    @Query("SELECT id, name, villainId, henchmenId FROM tblMasterminds ORDER BY id ASC")
+    @Query("SELECT id, name, villainId, henchmenId FROM tblMasterminds WHERE id > 0 ORDER BY id ASC")
     LiveData<List<MastermindEntity.Minimal>> getAllAsyncMinimal();
 
     @Override
-    @Query("SELECT id, name, villainId, henchmenId FROM tblMasterminds ORDER BY id ASC")
+    @Query("SELECT id, name, villainId, henchmenId FROM tblMasterminds WHERE id > 0 ORDER BY id ASC")
     List<MastermindEntity.Minimal> getAllSyncMinimal();
 
     // getAllEnabled
     @Override
-    @Query("SELECT * FROM tblMasterminds WHERE isEnabled = 1 ORDER BY id ASC")
+    @Query("SELECT * FROM tblMasterminds WHERE isEnabled = 1 AND id > 0 ORDER BY id ASC")
     LiveData<List<MastermindEntity>> getAllEnabledAsync();
 
     @Override
-    @Query("SELECT * FROM tblMasterminds WHERE isEnabled = 1 ORDER BY id ASC")
+    @Query("SELECT * FROM tblMasterminds WHERE isEnabled = 1 AND id > 0 ORDER BY id ASC")
     List<MastermindEntity> getAllEnabledSync();
 
     @Override
-    @Query("SELECT id, name, villainId, henchmenId FROM tblMasterminds WHERE isEnabled = 1 ORDER BY id ASC")
+    @Query("SELECT id, name, villainId, henchmenId FROM tblMasterminds WHERE isEnabled = 1 AND id > 0 ORDER BY id ASC")
     LiveData<List<MastermindEntity.Minimal>> getAllEnabledAsyncMinimal();
 
     @Override
-    @Query("SELECT id, name, villainId, henchmenId FROM tblMasterminds WHERE isEnabled = 1 ORDER BY id ASC")
+    @Query("SELECT id, name, villainId, henchmenId FROM tblMasterminds WHERE isEnabled = 1 AND id > 0 ORDER BY id ASC")
     List<MastermindEntity.Minimal> getAllEnabledSyncMinimal();
 
     // getAllBySetId
     @Override
-    @Query("SELECT * FROM tblMasterminds WHERE setId = :setId ORDER BY id ASC")
+    @Query("SELECT * FROM tblMasterminds WHERE setId = :setId AND id > 0 ORDER BY id ASC")
     LiveData<List<MastermindEntity>> getAllBySetIdAsync(final int setId);
 
     @Override
-    @Query("SELECT * FROM tblMasterminds WHERE setId = :setId ORDER BY id ASC")
+    @Query("SELECT * FROM tblMasterminds WHERE setId = :setId AND id > 0 ORDER BY id ASC")
     List<MastermindEntity> getAllBySetIdSync(final int setId);
 
     @Override
-    @Query("SELECT id, name, villainId, henchmenId FROM tblMasterminds WHERE setId = :setId ORDER BY id ASC")
+    @Query("SELECT id, name, villainId, henchmenId FROM tblMasterminds WHERE setId = :setId AND id > 0 ORDER BY id ASC")
     LiveData<List<MastermindEntity.Minimal>> getAllBySetIdAsyncMinimal(final int setId);
 
     @Override
-    @Query("SELECT id, name, villainId, henchmenId FROM tblMasterminds WHERE setId = :setId ORDER BY id ASC")
+    @Query("SELECT id, name, villainId, henchmenId FROM tblMasterminds WHERE setId = :setId AND id > 0 ORDER BY id ASC")
     List<MastermindEntity.Minimal> getAllBySetIdSyncMinimal(final int setId);
 }

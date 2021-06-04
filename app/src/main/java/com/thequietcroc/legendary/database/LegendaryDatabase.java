@@ -48,7 +48,6 @@ public abstract class LegendaryDatabase extends RoomDatabase {
                             context.getApplicationContext(),
                             LegendaryDatabase.class,
                             DB_NAME)
-                            .allowMainThreadQueries()
                             .createFromAsset(String.format("database/%s", DB_NAME))
                             .build();
                 }
