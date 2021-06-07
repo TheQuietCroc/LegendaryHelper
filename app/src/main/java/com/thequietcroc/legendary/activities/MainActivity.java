@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(final MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menuActionFilter: {
-                openFilterActivity();
+                openFilterSelectMenuActivity();
             }
             break;
             case R.id.menuActionRandomize: {
@@ -68,8 +68,8 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    private void openFilterActivity() {
-        final Intent intent = new Intent(this, FilterMenuActivity.class);
+    private void openFilterSelectMenuActivity() {
+        final Intent intent = new Intent(this, FilterSelectMenuActivity.class);
         startActivity(intent);
     }
 }

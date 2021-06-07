@@ -10,16 +10,16 @@
             android:supportsRtl="true"
             android:theme="@style/Theme.Legendary">
         <activity
-                android:name=".activities.FilterMenuActivity"
+                android:name=".activities.FilterActivity"
+                android:parentActivityName=".activities.FilterSelectMenuActivity">
+        </activity>
+        <activity
+                android:name=".activities.FilterSelectMenuActivity"
                 android:parentActivityName=".activities.MainActivity">
-            <meta-data
-                    android:name="android.support.PARENT_ACTIVITY"
-                    android:value=".activities.MainActivity" />
         </activity>
         <activity android:name=".activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
