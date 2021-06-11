@@ -45,9 +45,15 @@ public interface BaseDao<T extends BaseEntity, M extends BaseEntity.Minimal> {
     @Insert(onConflict = REPLACE)
     void insert(final T[] entries);
 
+    @Insert(onConflict = REPLACE)
+    void insert(final List<T> entries);
+
     @Delete
     void delete(final T entry);
 
     @Delete
-    void delete(final T[] entry);
+    void delete(final T[] entries);
+
+    @Delete
+    void delete(final List<T> entries);
 }

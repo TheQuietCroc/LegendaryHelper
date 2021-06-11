@@ -5,7 +5,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -14,11 +13,21 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.thequietcroc.legendary.R;
 import com.thequietcroc.legendary.database.entities.gamecomponents.BaseGameComponentEntity;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class GameComponentRecyclerAdapter extends RecyclerView.Adapter<GameComponentRecyclerAdapter.ViewHolder> {
+public class GameComponentRecyclerAdapter<T extends BaseGameComponentEntity> extends RecyclerView.Adapter<GameComponentRecyclerAdapter.ViewHolder> {
 
-    private final List<? extends BaseGameComponentEntity> componentEntityList;
+    private final List<T> componentEntityList;
+    private final List<T> componentsToDeleteList = new ArrayList<>();
+
+    public List<T> getComponentEntityList() {
+        return componentEntityList;
+    }
+
+    public List<T> getComponentsToDeleteList() {
+        return componentsToDeleteList;
+    }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView gameComponentName;
@@ -46,37 +55,39 @@ public class GameComponentRecyclerAdapter extends RecyclerView.Adapter<GameCompo
         }
     }
 
-    public GameComponentRecyclerAdapter(final List<? extends BaseGameComponentEntity> componentEntityList) {
+    public GameComponentRecyclerAdapter(final List<T> componentEntityList) {
         this.componentEntityList = componentEntityList;
     }
 
     // Create new views (invoked by the layout manager)
     @Override
     @NonNull
-    public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
+    public ViewHolder onCreateViewHolder(final ViewGroup viewGroup, final int viewType) {
         // Create a new view, which defines the UI of the list item
         final View view = LayoutInflater.from(viewGroup.getContext())
                 .inflate(R.layout.game_component_list_item, viewGroup, false);
+        final ViewHolder viewHolder = new ViewHolder(view);
 
-        return new ViewHolder(view);
+        viewHolder.getGameComponentEnabledCheckbox().setOnCheckedChangeListener((buttonView,
+                isChecked) -> componentEntityList.get(viewHolder.getAdapterPosition()).setEnabled(isChecked));
+
+        viewHolder.getGameComponentDeleteButton().setOnClickListener(v -> {
+            componentsToDeleteList.add(componentEntityList.remove(viewHolder.getAdapterPosition()));
+            notifyItemRemoved(viewHolder.getAdapterPosition());
+        });
+
+        return viewHolder;
     }
 
     // Replace the contents of a view (invoked by the layout manager)
     @Override
-    public void onBindViewHolder(ViewHolder viewHolder, final int position) {
+    public void onBindViewHolder(final ViewHolder viewHolder, final int position) {
 
         // Get element from your dataset at this position and replace the
         // contents of the view with that element
         viewHolder.getGameComponentName().setText(componentEntityList.get(position).getName());
         viewHolder.getGameComponentEnabledCheckbox().setChecked(componentEntityList.get(position).isEnabled());
         viewHolder.getGameComponentDeleteButton().setEnabled(componentEntityList.get(position).isCustom());
-
-        viewHolder.getGameComponentEnabledCheckbox().setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                componentEntityList.get(position).setEnabled(isChecked);
-            }
-        });
     }
 
     // Return the size of your dataset (invoked by the layout manager)
