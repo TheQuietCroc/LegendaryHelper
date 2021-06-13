@@ -11,10 +11,8 @@ import com.thequietcroc.legendary.enums.ItemType;
 
 public class FilterSelectMenuActivity extends AppCompatActivity {
 
-    public static final String EXTRA_TYPE = "com.thequietcroc.legendary.activities.TYPE";
-
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_filter_select_menu);
 
@@ -38,9 +36,30 @@ public class FilterSelectMenuActivity extends AppCompatActivity {
     }
 
     private void openFilterActivity(final ItemType type) {
-        final Intent intent = new Intent(this, FilterActivity.class);
+        final Intent intent;
 
-        intent.putExtra(EXTRA_TYPE, type);
+        switch (type) {
+            case GAMESET:
+                intent = new Intent(this, FilterGameSetActivity.class);
+                break;
+            case HERO:
+                intent = new Intent(this, FilterHeroActivity.class);
+                break;
+            case MASTERMIND:
+                intent = new Intent(this, FilterMastermindActivity.class);
+                break;
+            case VILLAINS:
+                intent = new Intent(this, FilterVillainsActivity.class);
+                break;
+            case HENCHMEN:
+                intent = new Intent(this, FilterHenchmenActivity.class);
+                break;
+            case SCHEME:
+                intent = new Intent(this, FilterSchemeActivity.class);
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + type);
+        }
 
         startActivity(intent);
     }

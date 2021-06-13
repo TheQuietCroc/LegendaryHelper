@@ -10,7 +10,27 @@
             android:supportsRtl="true"
             android:theme="@style/Theme.Legendary">
         <activity
-                android:name=".activities.FilterActivity"
+                android:name=".activities.FilterGameSetActivity"
+                android:parentActivityName=".activities.FilterSelectMenuActivity">
+        </activity>
+        <activity
+                android:name=".activities.FilterHenchmenActivity"
+                android:parentActivityName=".activities.FilterSelectMenuActivity">
+        </activity>
+        <activity
+                android:name=".activities.FilterHeroActivity"
+                android:parentActivityName=".activities.FilterSelectMenuActivity">
+        </activity>
+        <activity
+                android:name=".activities.FilterMastermindActivity"
+                android:parentActivityName=".activities.FilterSelectMenuActivity">
+        </activity>
+        <activity
+                android:name=".activities.FilterSchemeActivity"
+                android:parentActivityName=".activities.FilterSelectMenuActivity">
+        </activity>
+        <activity
+                android:name=".activities.FilterVillainsActivity"
                 android:parentActivityName=".activities.FilterSelectMenuActivity">
         </activity>
         <activity
