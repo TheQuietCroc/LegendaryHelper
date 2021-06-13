@@ -5,6 +5,11 @@ import androidx.room.Dao;
 import androidx.room.Query;
 
 import com.thequietcroc.legendary.database.entities.gamecomponents.GameSetEntity;
+import com.thequietcroc.legendary.database.entities.gamecomponents.cards.HenchmenEntity;
+import com.thequietcroc.legendary.database.entities.gamecomponents.cards.HeroEntity;
+import com.thequietcroc.legendary.database.entities.gamecomponents.cards.MastermindEntity;
+import com.thequietcroc.legendary.database.entities.gamecomponents.cards.SchemeEntity;
+import com.thequietcroc.legendary.database.entities.gamecomponents.cards.VillainsEntity;
 
 import java.util.List;
 
@@ -78,4 +83,19 @@ public interface GameSetDao extends BaseGameComponentDao<GameSetEntity, GameSetE
     @Override
     @Query("SELECT id, name FROM tblGameSets WHERE isEnabled = 1 AND id > 0 ORDER BY id ASC")
     List<GameSetEntity.Minimal> getAllEnabledSyncMinimal();
+
+    @Query("SELECT * FROM tblMasterminds WHERE setId = :setId")
+    List<MastermindEntity> getAllMastermindsInSet(final int setId);
+
+    @Query("SELECT * FROM tblSchemes WHERE setId = :setId")
+    List<SchemeEntity> getAllSchemesInSet(final int setId);
+
+    @Query("SELECT * FROM tblVillains WHERE setId = :setId")
+    List<VillainsEntity> getAllVillainsInSet(final int setId);
+
+    @Query("SELECT * FROM tblHenchmen WHERE setId = :setId")
+    List<HenchmenEntity> getAllHenchmenInSet(final int setId);
+
+    @Query("SELECT * FROM tblHeroes WHERE setId = :setId")
+    List<HeroEntity> getAllHeroesInSet(final int setId);
 }
