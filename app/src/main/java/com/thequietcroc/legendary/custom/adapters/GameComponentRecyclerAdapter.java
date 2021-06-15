@@ -20,7 +20,7 @@ public class GameComponentRecyclerAdapter<T extends BaseGameComponentEntity>
         extends RecyclerView.Adapter<GameComponentRecyclerAdapter.ViewHolder> {
 
     private final List<T> componentEntityList;
-    private Consumer<T> dbInsertConsumer;
+    private Consumer<T> dbUpdateConsumer;
     private Consumer<T> dbDeleteConsumer;
 
     public List<T> getComponentEntityList() {
@@ -57,8 +57,8 @@ public class GameComponentRecyclerAdapter<T extends BaseGameComponentEntity>
         this.componentEntityList = componentEntityList;
     }
 
-    public void setDbInsertConsumer(final Consumer<T> dbInsertConsumer) {
-        this.dbInsertConsumer = dbInsertConsumer;
+    public void setDbUpdateConsumer(final Consumer<T> dbUpdateConsumer) {
+        this.dbUpdateConsumer = dbUpdateConsumer;
     }
 
     public void setDbDeleteConsumer(final Consumer<T> dbDeleteConsumer) {
@@ -74,12 +74,11 @@ public class GameComponentRecyclerAdapter<T extends BaseGameComponentEntity>
                 .inflate(R.layout.game_component_list_item, viewGroup, false);
         final ViewHolder viewHolder = new ViewHolder(view);
 
-        viewHolder.getGameComponentEnabledCheckbox().setOnCheckedChangeListener((buttonView,
-                isChecked) -> {
+        viewHolder.getGameComponentEnabledCheckbox().setOnClickListener(v -> {
             final T entity = componentEntityList.get(viewHolder.getAdapterPosition());
 
-            entity.setEnabled(isChecked);
-            dbInsertConsumer.accept(entity);
+            entity.setEnabled(((CheckBox)v).isChecked());
+            dbUpdateConsumer.accept(entity);
         });
 
         viewHolder.getGameComponentDeleteButton().setOnClickListener(v -> {

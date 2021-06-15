@@ -6,7 +6,9 @@ import android.view.MenuItem;
 
 import com.thequietcroc.legendary.R;
 import com.thequietcroc.legendary.custom.adapters.GameComponentRecyclerAdapter;
+import com.thequietcroc.legendary.database.entities.gamecomponents.cards.HenchmenEntity;
 import com.thequietcroc.legendary.database.entities.gamecomponents.cards.MastermindEntity;
+import com.thequietcroc.legendary.database.entities.gamecomponents.cards.VillainsEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,10 +31,31 @@ public class FilterMastermindActivity extends FilterActivity {
 
         filterRecyclerView.setAdapter(gameComponentRecyclerAdapter);
 
-        gameComponentRecyclerAdapter.setDbInsertConsumer(mastermindEntity ->
-                AsyncTask.execute(() ->
-                        db.mastermindDao().insert(mastermindEntity))
+        gameComponentRecyclerAdapter.setDbUpdateConsumer(mastermindEntity ->
+                AsyncTask.execute(() -> {
+                    if (mastermindEntity.isEnabled()) {
+                        final VillainsEntity alwaysLeadsVillains = db.villainsDao()
+                                .findByIdSync(mastermindEntity.getVillainId());
+                        final HenchmenEntity alwaysLeadsHenchmen = db.henchmenDao()
+                                .findByIdSync(mastermindEntity.getHenchmenId());
+
+                        if (alwaysLeadsVillains.getId() != 0) {
+                            alwaysLeadsVillains.setEnabled(mastermindEntity.isEnabled());
+
+                            db.villainsDao().update(alwaysLeadsVillains);
+                        }
+
+                        if (alwaysLeadsHenchmen.getId() != 0) {
+                            alwaysLeadsHenchmen.setEnabled(mastermindEntity.isEnabled());
+
+                            db.henchmenDao().update(alwaysLeadsHenchmen);
+                        }
+                    }
+
+                    db.mastermindDao().update(mastermindEntity);
+                })
         );
+
         gameComponentRecyclerAdapter.setDbDeleteConsumer(mastermindEntity ->
                 AsyncTask.execute(() ->
                         db.mastermindDao().delete(mastermindEntity))

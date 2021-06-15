@@ -103,4 +103,10 @@ public interface MastermindDao extends BaseCardDao<MastermindEntity, MastermindE
     @Query("SELECT id, name, villainId, henchmenId FROM tblMasterminds WHERE setId = :setId AND "
             + "id > 0 ORDER BY id ASC")
     List<MastermindEntity.Minimal> getAllBySetIdSyncMinimal(final int setId);
+
+    @Query("SELECT * FROM tblMasterminds WHERE henchmenId = :henchmenId")
+    List<MastermindEntity> findAllByAlwaysLeadsHenchmenId(final int henchmenId);
+
+    @Query("SELECT * FROM tblMasterminds WHERE villainId = :villainId")
+    List<MastermindEntity> findAllByAlwaysLeadsVillainId(final int villainId);
 }

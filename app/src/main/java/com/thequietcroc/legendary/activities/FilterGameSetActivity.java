@@ -34,13 +34,13 @@ public class FilterGameSetActivity extends FilterActivity {
 
         filterRecyclerView.setAdapter(gameComponentRecyclerAdapter);
 
-        gameComponentRecyclerAdapter.setDbInsertConsumer(gameSetEntity ->
+        gameComponentRecyclerAdapter.setDbUpdateConsumer(gameSetEntity ->
                 AsyncTask.execute(() -> {
-                    final List<MastermindEntity> mastermindsInSet = db.gameSetDao().getAllMastermindsInSet(gameSetEntity.getId());
-                    final List<SchemeEntity> schemesInSet = db.gameSetDao().getAllSchemesInSet(gameSetEntity.getId());
-                    final List<VillainsEntity> villainsInSet = db.gameSetDao().getAllVillainsInSet(gameSetEntity.getId());
-                    final List<HenchmenEntity> henchmenInSet = db.gameSetDao().getAllHenchmenInSet(gameSetEntity.getId());
-                    final List<HeroEntity> heroesInSet = db.gameSetDao().getAllHeroesInSet(gameSetEntity.getId());
+                    final List<MastermindEntity> mastermindsInSet = db.mastermindDao().getAllBySetIdSync(gameSetEntity.getId());
+                    final List<SchemeEntity> schemesInSet = db.schemeDao().getAllBySetIdSync(gameSetEntity.getId());
+                    final List<VillainsEntity> villainsInSet = db.villainsDao().getAllBySetIdSync(gameSetEntity.getId());
+                    final List<HenchmenEntity> henchmenInSet = db.henchmenDao().getAllBySetIdSync(gameSetEntity.getId());
+                    final List<HeroEntity> heroesInSet = db.heroDao().getAllBySetIdSync(gameSetEntity.getId());
 
                     mastermindsInSet.stream().forEach(mastermindEntity -> mastermindEntity.setEnabled(gameSetEntity.isEnabled()));
                     schemesInSet.stream().forEach(schemeEntity -> schemeEntity.setEnabled(gameSetEntity.isEnabled()));
@@ -48,13 +48,15 @@ public class FilterGameSetActivity extends FilterActivity {
                     henchmenInSet.stream().forEach(henchmenEntity -> henchmenEntity.setEnabled(gameSetEntity.isEnabled()));
                     heroesInSet.stream().forEach(heroesEntity -> heroesEntity.setEnabled(gameSetEntity.isEnabled()));
 
-                    db.gameSetDao().insert(gameSetEntity);
-                    db.mastermindDao().insert(mastermindsInSet);
-                    db.schemeDao().insert(schemesInSet);
-                    db.villainsDao().insert(villainsInSet);
-                    db.henchmenDao().insert(henchmenInSet);
-                    db.heroDao().insert(heroesInSet);
-                }));
+                    db.gameSetDao().update(gameSetEntity);
+                    db.mastermindDao().update(mastermindsInSet);
+                    db.schemeDao().update(schemesInSet);
+                    db.villainsDao().update(villainsInSet);
+                    db.henchmenDao().update(henchmenInSet);
+                    db.heroDao().update(heroesInSet);
+                })
+        );
+
         gameComponentRecyclerAdapter.setDbDeleteConsumer(gameSetEntity ->
                 AsyncTask.execute(() -> {
                     // TODO: confirm delete all in set before doing it
@@ -70,7 +72,8 @@ public class FilterGameSetActivity extends FilterActivity {
 //                    db.villainsDao().delete(villainsInSet);
 //                    db.henchmenDao().delete(henchmenInSet);
 //                    db.heroDao().delete(heroesInSet);
-                }));
+                })
+        );
 
         observeOnce(this,
                 db.gameSetDao().getAllAsync(),

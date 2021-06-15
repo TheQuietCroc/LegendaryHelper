@@ -6,6 +6,7 @@ import android.view.MenuItem;
 
 import com.thequietcroc.legendary.R;
 import com.thequietcroc.legendary.custom.adapters.GameComponentRecyclerAdapter;
+import com.thequietcroc.legendary.database.entities.gamecomponents.cards.MastermindEntity;
 import com.thequietcroc.legendary.database.entities.gamecomponents.cards.VillainsEntity;
 
 import java.util.ArrayList;
@@ -29,10 +30,20 @@ public class FilterVillainsActivity extends FilterActivity {
 
         filterRecyclerView.setAdapter(gameComponentRecyclerAdapter);
 
-        gameComponentRecyclerAdapter.setDbInsertConsumer(villainsEntity ->
-                AsyncTask.execute(() ->
-                        db.villainsDao().insert(villainsEntity))
+        gameComponentRecyclerAdapter.setDbUpdateConsumer(villainsEntity ->
+                AsyncTask.execute(() -> {
+                    if (!villainsEntity.isEnabled()) {
+                        final List<MastermindEntity> mastermindEntityList = db.mastermindDao().findAllByAlwaysLeadsVillainId(villainsEntity.getId());
+                        mastermindEntityList.stream().forEach(mastermindEntity -> mastermindEntity.setEnabled(villainsEntity.isEnabled()));
+
+                        db.mastermindDao().update(mastermindEntityList);
+                    }
+
+                    db.villainsDao().update(villainsEntity);
+                })
         );
+
+        // TODO: figure out what to do when an always leads villain gets deleted
         gameComponentRecyclerAdapter.setDbDeleteConsumer(villainsEntity ->
                 AsyncTask.execute(() ->
                         db.villainsDao().delete(villainsEntity))

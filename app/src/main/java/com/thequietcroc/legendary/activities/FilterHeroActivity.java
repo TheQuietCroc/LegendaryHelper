@@ -29,10 +29,11 @@ public class FilterHeroActivity extends FilterActivity {
 
         filterRecyclerView.setAdapter(gameComponentRecyclerAdapter);
 
-        gameComponentRecyclerAdapter.setDbInsertConsumer(heroEntity ->
+        gameComponentRecyclerAdapter.setDbUpdateConsumer(heroEntity ->
                 AsyncTask.execute(() ->
-                        db.heroDao().insert(heroEntity))
+                        db.heroDao().update(heroEntity))
         );
+
         gameComponentRecyclerAdapter.setDbDeleteConsumer(heroEntity ->
                 AsyncTask.execute(() ->
                         db.heroDao().delete(heroEntity))

@@ -45,13 +45,13 @@ import static androidx.room.ForeignKey.SET_DEFAULT;
 public class MastermindEntity extends BaseCardEntity {
 
     @ColumnInfo(defaultValue = "0")
-    public boolean isEpic;
+    private boolean isEpic;
 
     @ColumnInfo(defaultValue = "0")
-    public int villainId;
+    private int villainId;
 
     @ColumnInfo(defaultValue = "0")
-    public int henchmenId;
+    private int henchmenId;
 
     public boolean isEpic() {
         return isEpic;

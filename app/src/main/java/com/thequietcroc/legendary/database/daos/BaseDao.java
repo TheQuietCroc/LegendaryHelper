@@ -3,6 +3,7 @@ package com.thequietcroc.legendary.database.daos;
 import androidx.lifecycle.LiveData;
 import androidx.room.Delete;
 import androidx.room.Insert;
+import androidx.room.Update;
 
 import com.thequietcroc.legendary.database.entities.BaseEntity;
 
@@ -39,21 +40,33 @@ public interface BaseDao<T extends BaseEntity, M extends BaseEntity.Minimal> {
 
     List<M> getAllSyncMinimal();
 
+    // update
+    @Update
+    void update(final T entity);
+
+    @Update
+    void update(final T[] entities);
+
+    @Update
+    void update(final List<T> entities);
+
+    // insert
     @Insert(onConflict = REPLACE)
-    void insert(final T entry);
+    void insert(final T entity);
 
     @Insert(onConflict = REPLACE)
-    void insert(final T[] entries);
+    void insert(final T[] entities);
 
     @Insert(onConflict = REPLACE)
-    void insert(final List<T> entries);
+    void insert(final List<T> entities);
+
+    // delete
+    @Delete
+    void delete(final T entity);
 
     @Delete
-    void delete(final T entry);
+    void delete(final T[] entities);
 
     @Delete
-    void delete(final T[] entries);
-
-    @Delete
-    void delete(final List<T> entries);
+    void delete(final List<T> entities);
 }

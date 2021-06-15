@@ -7,6 +7,7 @@ import android.view.MenuItem;
 import com.thequietcroc.legendary.R;
 import com.thequietcroc.legendary.custom.adapters.GameComponentRecyclerAdapter;
 import com.thequietcroc.legendary.database.entities.gamecomponents.cards.HenchmenEntity;
+import com.thequietcroc.legendary.database.entities.gamecomponents.cards.MastermindEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,10 +30,20 @@ public class FilterHenchmenActivity extends FilterActivity {
 
         filterRecyclerView.setAdapter(gameComponentRecyclerAdapter);
 
-        gameComponentRecyclerAdapter.setDbInsertConsumer(henchmenEntity ->
-                AsyncTask.execute(() ->
-                        db.henchmenDao().insert(henchmenEntity))
+        gameComponentRecyclerAdapter.setDbUpdateConsumer(henchmenEntity ->
+                AsyncTask.execute(() -> {
+                    if (!henchmenEntity.isEnabled()) {
+                        final List<MastermindEntity> mastermindEntityList = db.mastermindDao().findAllByAlwaysLeadsHenchmenId(henchmenEntity.getId());
+                        mastermindEntityList.stream().forEach(mastermindEntity -> mastermindEntity.setEnabled(henchmenEntity.isEnabled()));
+
+                        db.mastermindDao().update(mastermindEntityList);
+                    }
+
+                    db.henchmenDao().update(henchmenEntity);
+                })
         );
+
+        // TODO: figure out what to do when an always leads henchmen gets deleted
         gameComponentRecyclerAdapter.setDbDeleteConsumer(henchmenEntity ->
                 AsyncTask.execute(() ->
                         db.henchmenDao().delete(henchmenEntity))

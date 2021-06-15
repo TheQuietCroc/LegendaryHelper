@@ -29,10 +29,11 @@ public class FilterSchemeActivity extends FilterActivity {
 
         filterRecyclerView.setAdapter(gameComponentRecyclerAdapter);
 
-        gameComponentRecyclerAdapter.setDbInsertConsumer(schemeEntity ->
+        gameComponentRecyclerAdapter.setDbUpdateConsumer(schemeEntity ->
                 AsyncTask.execute(() ->
-                        db.schemeDao().insert(schemeEntity))
+                        db.schemeDao().update(schemeEntity))
         );
+
         gameComponentRecyclerAdapter.setDbDeleteConsumer(schemeEntity ->
                 AsyncTask.execute(() ->
                         db.schemeDao().delete(schemeEntity))
