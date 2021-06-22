@@ -6,6 +6,7 @@ import androidx.room.ForeignKey;
 import androidx.room.Index;
 
 import com.thequietcroc.legendary.database.entities.gamecomponents.GameSetEntity;
+import com.thequietcroc.legendary.models.gamecomponents.cards.Hero;
 
 import static androidx.room.ForeignKey.CASCADE;
 import static androidx.room.ForeignKey.SET_DEFAULT;
@@ -50,8 +51,24 @@ public class HeroEntity extends BaseCardEntity {
 
     @ColumnInfo(name = "flavor", defaultValue = "0")
     public boolean hasFlavorText;
+    
+    public HeroEntity() {
+        super();
+    }
+    
+    public HeroEntity(final Hero hero) {
+        super(hero);
+        
+        setHasCovert(hero.hasCovert());
+        setHasInstinct(hero.hasInstinct());
+        setHasRanged(hero.hasRanged());
+        setHasStrength(hero.hasStrength());
+        setHasTech(hero.hasTech());
+        setHasGun(hero.hasGun());
+        setHasFlavorText(hero.hasFlavorText());
+    }
 
-    public boolean isHasCovert() {
+    public boolean hasCovert() {
         return hasCovert;
     }
 
@@ -59,7 +76,7 @@ public class HeroEntity extends BaseCardEntity {
         this.hasCovert = hasCovert;
     }
 
-    public boolean isHasInstinct() {
+    public boolean hasInstinct() {
         return hasInstinct;
     }
 
@@ -67,7 +84,7 @@ public class HeroEntity extends BaseCardEntity {
         this.hasInstinct = hasInstinct;
     }
 
-    public boolean isHasRanged() {
+    public boolean hasRanged() {
         return hasRanged;
     }
 
@@ -75,7 +92,7 @@ public class HeroEntity extends BaseCardEntity {
         this.hasRanged = hasRanged;
     }
 
-    public boolean isHasStrength() {
+    public boolean hasStrength() {
         return hasStrength;
     }
 
@@ -83,7 +100,7 @@ public class HeroEntity extends BaseCardEntity {
         this.hasStrength = hasStrength;
     }
 
-    public boolean isHasTech() {
+    public boolean hasTech() {
         return hasTech;
     }
 
@@ -91,7 +108,7 @@ public class HeroEntity extends BaseCardEntity {
         this.hasTech = hasTech;
     }
 
-    public boolean isHasGun() {
+    public boolean hasGun() {
         return hasGun;
     }
 
@@ -99,19 +116,21 @@ public class HeroEntity extends BaseCardEntity {
         this.hasGun = hasGun;
     }
 
-    public boolean isHasFlavorText() {
+    public boolean hasFlavorText() {
         return hasFlavorText;
     }
 
     public void setHasFlavorText(boolean hasFlavorText) {
         this.hasFlavorText = hasFlavorText;
     }
+    
+    @Override
+    public Hero toModel() {
+        return new Hero(this);
+    }
 
     @Override
     public boolean equals(final Object o) {
-        if (o == this) {
-            return true;
-        }
 
         if (!(o instanceof HeroEntity)) {
             return false;

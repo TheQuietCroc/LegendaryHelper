@@ -1,4 +1,4 @@
-package com.thequietcroc.legendary.utilities;
+package com.thequietcroc.legendary.models;
 
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +15,7 @@ import com.google.android.material.button.MaterialButtonToggleGroup;
 import com.thequietcroc.legendary.R;
 import com.thequietcroc.legendary.custom.views.CardControl;
 import com.thequietcroc.legendary.database.LegendaryDatabase;
+import com.thequietcroc.legendary.database.entities.GameSetupEntity;
 import com.thequietcroc.legendary.database.entities.gamecomponents.cards.BaseCardEntity;
 import com.thequietcroc.legendary.database.entities.gamecomponents.cards.HenchmenEntity;
 import com.thequietcroc.legendary.database.entities.gamecomponents.cards.HeroEntity;
@@ -22,6 +23,7 @@ import com.thequietcroc.legendary.database.entities.gamecomponents.cards.Masterm
 import com.thequietcroc.legendary.database.entities.gamecomponents.cards.SchemeEntity;
 import com.thequietcroc.legendary.database.entities.gamecomponents.cards.VillainsEntity;
 import com.thequietcroc.legendary.enums.ItemType;
+import com.thequietcroc.legendary.utilities.MinimalComparator;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -38,35 +40,41 @@ import static com.thequietcroc.legendary.enums.ItemType.HERO;
 import static com.thequietcroc.legendary.enums.ItemType.VILLAINS;
 import static com.thequietcroc.legendary.utilities.LiveDataUtil.observeOnce;
 
-public class GameSetup {
+public class GameSetup extends BaseItem {
 
     private int numPlayers;
 
     private MastermindEntity.Minimal selectedMastermind;
     private SchemeEntity.Minimal selectedScheme;
-    private final List<VillainsEntity.Minimal> selectedVillainsList;
-    private final List<HenchmenEntity.Minimal> selectedHenchmenList;
-    private final List<HeroEntity.Minimal> selectedHeroList;
+    private /*final*/ List<VillainsEntity.Minimal> selectedVillainsList;
+    private /*final*/ List<HenchmenEntity.Minimal> selectedHenchmenList;
+    private /*final*/ List<HeroEntity.Minimal> selectedHeroList;
 
-    private final Map<Integer, MastermindEntity.Minimal> filteredMastermindMap = new HashMap<>();
-    private final Map<Integer, SchemeEntity.Minimal> filteredSchemeMap = new HashMap<>();
-    private final Map<Integer, VillainsEntity.Minimal> filteredVillainsMap = new HashMap<>();
-    private final Map<Integer, HenchmenEntity.Minimal> filteredHenchmenMap = new HashMap<>();
-    private final Map<Integer, HeroEntity.Minimal> filteredHeroMap = new HashMap<>();
+    private /*final*/ Map<Integer, MastermindEntity.Minimal> filteredMastermindMap = new HashMap<>();
+    private /*final*/ Map<Integer, SchemeEntity.Minimal> filteredSchemeMap = new HashMap<>();
+    private /*final*/ Map<Integer, VillainsEntity.Minimal> filteredVillainsMap = new HashMap<>();
+    private /*final*/ Map<Integer, HenchmenEntity.Minimal> filteredHenchmenMap = new HashMap<>();
+    private /*final*/ Map<Integer, HeroEntity.Minimal> filteredHeroMap = new HashMap<>();
 
-    private final ConstraintLayout containerVillains;
-    private final ConstraintLayout containerHenchmen;
-    private final ConstraintLayout containerHero;
+    private /*final*/ ConstraintLayout containerVillains;
+    private /*final*/ ConstraintLayout containerHenchmen;
+    private /*final*/ ConstraintLayout containerHero;
 
-    private final CardControl mastermindControl;
-    private final CardControl schemeControl;
-    private final List<CardControl> villainsControlList = new ArrayList<>();
-    private final List<CardControl> henchmenControlList = new ArrayList<>();
-    private final List<CardControl> heroControlList = new ArrayList<>();
+    private /*final*/ CardControl mastermindControl;
+    private /*final*/ CardControl schemeControl;
+    private /*final*/ List<CardControl> villainsControlList = new ArrayList<>();
+    private /*final*/ List<CardControl> henchmenControlList = new ArrayList<>();
+    private /*final*/ List<CardControl> heroControlList = new ArrayList<>();
 
-    private final MaterialButtonToggleGroup buttonGroupPlayers;
+    private /*final*/ MaterialButtonToggleGroup buttonGroupPlayers;
 
-    private final AtomicInteger numQueriesCompleted = new AtomicInteger(0);
+    private /*final*/ AtomicInteger numQueriesCompleted = new AtomicInteger(0);
+
+    public GameSetup(final GameSetupEntity gameSetupEntity) {
+        super(gameSetupEntity);
+
+        // TODO: implement this
+    }
 
     public GameSetup(final LifecycleOwner owner,
             final LegendaryDatabase db,
@@ -76,6 +84,7 @@ public class GameSetup {
             final ConstraintLayout containerVillains,
             final ConstraintLayout containerHenchmen,
             final ConstraintLayout containerHero) {
+        super("New Setup");
 
         this.buttonGroupPlayers = buttonGroupPlayers;
 
@@ -117,6 +126,11 @@ public class GameSetup {
                 filteredResults -> populateFilteredMap(filteredResults, filteredHeroMap));
 
 
+    }
+
+    @Override
+    public GameSetupEntity toEntity() {
+        return new GameSetupEntity(this);
     }
 
     private <T extends BaseCardEntity.Minimal> void populateFilteredMap(final List<T> cardMap,

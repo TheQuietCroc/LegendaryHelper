@@ -5,6 +5,7 @@ import androidx.room.ForeignKey;
 import androidx.room.Index;
 
 import com.thequietcroc.legendary.database.entities.gamecomponents.GameSetEntity;
+import com.thequietcroc.legendary.models.gamecomponents.cards.Villains;
 
 import static androidx.room.ForeignKey.CASCADE;
 import static androidx.room.ForeignKey.SET_DEFAULT;
@@ -29,11 +30,21 @@ import static androidx.room.ForeignKey.SET_DEFAULT;
 )
 public class VillainsEntity extends BaseCardEntity {
 
+    public VillainsEntity() {
+        super();
+    }
+
+    public VillainsEntity(final Villains villains) {
+        super(villains);
+    }
+
+    @Override
+    public Villains toModel() {
+        return new Villains(this);
+    }
+
     @Override
     public boolean equals(final Object o) {
-        if (o == this) {
-            return true;
-        }
 
         if (!(o instanceof VillainsEntity)) {
             return false;

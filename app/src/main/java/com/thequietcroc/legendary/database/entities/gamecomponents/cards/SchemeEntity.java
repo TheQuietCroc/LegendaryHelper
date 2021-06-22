@@ -5,6 +5,7 @@ import androidx.room.ForeignKey;
 import androidx.room.Index;
 
 import com.thequietcroc.legendary.database.entities.gamecomponents.GameSetEntity;
+import com.thequietcroc.legendary.models.gamecomponents.cards.Scheme;
 
 import static androidx.room.ForeignKey.CASCADE;
 import static androidx.room.ForeignKey.SET_DEFAULT;
@@ -29,11 +30,21 @@ import static androidx.room.ForeignKey.SET_DEFAULT;
 )
 public class SchemeEntity extends BaseCardEntity {
 
+    public SchemeEntity() {
+        super();
+    }
+
+    public SchemeEntity(final Scheme scheme) {
+        super(scheme);
+    }
+
+    @Override
+    public Scheme toModel() {
+        return new Scheme(this);
+    }
+
     @Override
     public boolean equals(final Object o) {
-        if (o == this) {
-            return true;
-        }
 
         if (!(o instanceof SchemeEntity)) {
             return false;

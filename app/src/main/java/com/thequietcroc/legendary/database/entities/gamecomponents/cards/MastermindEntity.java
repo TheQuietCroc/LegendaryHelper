@@ -6,6 +6,7 @@ import androidx.room.ForeignKey;
 import androidx.room.Index;
 
 import com.thequietcroc.legendary.database.entities.gamecomponents.GameSetEntity;
+import com.thequietcroc.legendary.models.gamecomponents.cards.Mastermind;
 
 import static androidx.room.ForeignKey.CASCADE;
 import static androidx.room.ForeignKey.SET_DEFAULT;
@@ -53,6 +54,18 @@ public class MastermindEntity extends BaseCardEntity {
     @ColumnInfo(defaultValue = "0")
     private int henchmenId;
 
+    public MastermindEntity() {
+        super();
+    }
+
+    public MastermindEntity(final Mastermind mastermind) {
+        super(mastermind);
+
+        this.isEpic = mastermind.isEpic();
+        this.villainId = mastermind.getAlwaysLeadsVillains().getId();
+        this.henchmenId = mastermind.getAlwaysLeadsHenchmen().getId();
+    }
+
     public boolean isEpic() {
         return isEpic;
     }
@@ -78,10 +91,12 @@ public class MastermindEntity extends BaseCardEntity {
     }
 
     @Override
+    public Mastermind toModel() {
+        return new Mastermind(this);
+    }
+
+    @Override
     public boolean equals(final Object o) {
-        if (o == this) {
-            return true;
-        }
 
         if (!(o instanceof MastermindEntity)) {
             return false;

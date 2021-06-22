@@ -5,6 +5,7 @@ import androidx.room.ForeignKey;
 import androidx.room.Index;
 
 import com.thequietcroc.legendary.database.entities.gamecomponents.GameSetEntity;
+import com.thequietcroc.legendary.models.gamecomponents.cards.Henchmen;
 
 import static androidx.room.ForeignKey.CASCADE;
 import static androidx.room.ForeignKey.SET_DEFAULT;
@@ -29,11 +30,21 @@ import static androidx.room.ForeignKey.SET_DEFAULT;
 )
 public class HenchmenEntity extends BaseCardEntity {
 
+    public HenchmenEntity() {
+        super();
+    }
+
+    public HenchmenEntity(final Henchmen henchmen) {
+        super(henchmen);
+    }
+
+    @Override
+    public Henchmen toModel() {
+        return new Henchmen(this);
+    }
+
     @Override
     public boolean equals(final Object o) {
-        if (o == this) {
-            return true;
-        }
 
         if (!(o instanceof HenchmenEntity)) {
             return false;

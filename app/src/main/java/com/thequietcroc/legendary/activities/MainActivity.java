@@ -12,7 +12,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import com.google.android.material.button.MaterialButtonToggleGroup;
 import com.thequietcroc.legendary.R;
 import com.thequietcroc.legendary.database.LegendaryDatabase;
-import com.thequietcroc.legendary.utilities.GameSetup;
+import com.thequietcroc.legendary.models.GameSetup;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -24,7 +24,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        db = LegendaryDatabase.getInstance(this);
+        LegendaryDatabase.setInstance(this);
+
+        db = LegendaryDatabase.getInstance();
 
         final ConstraintLayout villainsContainer = findViewById(R.id.containerVillains);
         final ConstraintLayout henchmenContainer = findViewById(R.id.containerHenchmen);

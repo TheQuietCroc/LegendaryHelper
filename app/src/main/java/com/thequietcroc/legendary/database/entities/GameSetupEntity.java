@@ -7,6 +7,7 @@ import androidx.room.ForeignKey;
 
 import com.thequietcroc.legendary.database.entities.gamecomponents.cards.MastermindEntity;
 import com.thequietcroc.legendary.database.entities.gamecomponents.cards.SchemeEntity;
+import com.thequietcroc.legendary.models.GameSetup;
 
 import java.util.Date;
 
@@ -78,11 +79,23 @@ public class GameSetupEntity extends BaseEntity {
         this.dateLastPlayed = dateLastPlayed;
     }
 
+    public GameSetupEntity() {
+        super();
+    }
+
+    public GameSetupEntity(final GameSetup gameSetup) {
+        super(gameSetup);
+
+        // TODO: Implement this
+    }
+
+    @Override
+    public GameSetup toModel() {
+        return new GameSetup(this);
+    }
+
     @Override
     public boolean equals(final Object o) {
-        if (o == this) {
-            return true;
-        }
 
         if (!(o instanceof GameSetupEntity)) {
             return false;

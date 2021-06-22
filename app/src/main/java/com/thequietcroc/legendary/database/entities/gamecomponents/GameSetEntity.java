@@ -3,6 +3,8 @@ package com.thequietcroc.legendary.database.entities.gamecomponents;
 import androidx.room.Entity;
 import androidx.room.Index;
 
+import com.thequietcroc.legendary.models.gamecomponents.GameSet;
+
 @Entity(
         tableName = "tblGameSets",
         indices = {
@@ -14,11 +16,21 @@ import androidx.room.Index;
 )
 public class GameSetEntity extends BaseGameComponentEntity {
 
+    public GameSetEntity() {
+        super();
+    }
+
+    public GameSetEntity(final GameSet gameSet) {
+        super(gameSet);
+    }
+
+    @Override
+    public GameSet toModel() {
+        return new GameSet(this);
+    }
+
     @Override
     public boolean equals(final Object o) {
-        if (o == this) {
-            return true;
-        }
 
         if (!(o instanceof GameSetEntity)) {
             return false;

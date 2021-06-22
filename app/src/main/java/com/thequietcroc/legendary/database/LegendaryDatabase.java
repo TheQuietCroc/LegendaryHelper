@@ -40,7 +40,11 @@ public abstract class LegendaryDatabase extends RoomDatabase {
 
     private static volatile LegendaryDatabase INSTANCE;
 
-    public static LegendaryDatabase getInstance(final Context context) {
+    public static LegendaryDatabase getInstance() {
+        return INSTANCE;
+    }
+
+    public static void setInstance(final Context context) {
         if (INSTANCE == null) {
             synchronized (LegendaryDatabase.class) {
                 if (INSTANCE == null) {
@@ -53,8 +57,6 @@ public abstract class LegendaryDatabase extends RoomDatabase {
                 }
             }
         }
-
-        return INSTANCE;
     }
 
     public abstract GameSetDao gameSetDao();

@@ -3,6 +3,8 @@ package com.thequietcroc.legendary.database.entities;
 import androidx.annotation.NonNull;
 import androidx.room.PrimaryKey;
 
+import com.thequietcroc.legendary.models.BaseItem;
+
 public abstract class BaseEntity {
 
     @PrimaryKey(autoGenerate = true)
@@ -11,11 +13,24 @@ public abstract class BaseEntity {
     @NonNull
     private String name;
 
+    public BaseEntity() {
+        this.id = 0;
+        this.name = "None";
+    }
+
+    public BaseEntity(final BaseItem baseItem) {
+        if (baseItem.getId() != -1) {
+            this.id = baseItem.getId();
+        }
+
+        this.name = baseItem.getName();
+    }
+
     public int getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(final int id) {
         this.id = id;
     }
 
@@ -24,9 +39,11 @@ public abstract class BaseEntity {
         return name;
     }
 
-    public void setName(@NonNull String name) {
+    public void setName(@NonNull final String name) {
         this.name = name;
     }
+
+    public abstract BaseItem toModel();
 
     @Override
     public boolean equals(final Object o) {
@@ -54,8 +71,6 @@ public abstract class BaseEntity {
     }
 
     public static class Minimal {
-
-        public static Minimal NONE = new Minimal();
 
         private int id = 0;
 

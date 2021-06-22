@@ -15,7 +15,7 @@ import com.thequietcroc.legendary.database.LegendaryDatabase;
 
 public abstract class FilterActivity extends AppCompatActivity {
 
-    final LegendaryDatabase db = LegendaryDatabase.getInstance(this);
+    final LegendaryDatabase db = LegendaryDatabase.getInstance();
     RecyclerView filterRecyclerView;
 
     @Override
