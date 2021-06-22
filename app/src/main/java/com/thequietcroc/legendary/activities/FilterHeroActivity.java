@@ -15,7 +15,7 @@ import static com.thequietcroc.legendary.utilities.LiveDataUtil.observeOnce;
 
 public class FilterHeroActivity extends FilterActivity {
 
-    GameComponentRecyclerAdapter<HeroEntity> gameComponentRecyclerAdapter = new GameComponentRecyclerAdapter<>(new ArrayList<>());
+    final GameComponentRecyclerAdapter<HeroEntity> gameComponentRecyclerAdapter = new GameComponentRecyclerAdapter<>(new ArrayList<>());
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {

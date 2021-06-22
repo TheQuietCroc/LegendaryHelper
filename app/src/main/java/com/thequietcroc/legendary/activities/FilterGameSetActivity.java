@@ -20,7 +20,7 @@ import static com.thequietcroc.legendary.utilities.LiveDataUtil.observeOnce;
 
 public class FilterGameSetActivity extends FilterActivity {
 
-    GameComponentRecyclerAdapter<GameSetEntity> gameComponentRecyclerAdapter = new GameComponentRecyclerAdapter<>(new ArrayList<>());
+    final GameComponentRecyclerAdapter<GameSetEntity> gameComponentRecyclerAdapter = new GameComponentRecyclerAdapter<>(new ArrayList<>());
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
