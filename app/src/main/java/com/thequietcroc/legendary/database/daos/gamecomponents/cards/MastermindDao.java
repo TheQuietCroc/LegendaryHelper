@@ -108,5 +108,5 @@ public interface MastermindDao extends BaseCardDao<MastermindEntity, MastermindE
     List<MastermindEntity> findAllByAlwaysLeadsHenchmenId(final int henchmenId);
 
     @Query("SELECT * FROM tblMasterminds WHERE villainId = :villainId")
-    List<MastermindEntity> findAllByAlwaysLeadsVillainId(final int villainId);
+    List<MastermindEntity> findAllByAlwaysLeadsVillainsId(final int villainId);
 }

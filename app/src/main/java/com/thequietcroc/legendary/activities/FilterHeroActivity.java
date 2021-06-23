@@ -7,15 +7,17 @@ import android.view.MenuItem;
 import com.thequietcroc.legendary.R;
 import com.thequietcroc.legendary.custom.adapters.GameComponentRecyclerAdapter;
 import com.thequietcroc.legendary.database.entities.gamecomponents.cards.HeroEntity;
+import com.thequietcroc.legendary.models.gamecomponents.cards.Hero;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.thequietcroc.legendary.utilities.LiveDataUtil.observeOnce;
 
 public class FilterHeroActivity extends FilterActivity {
 
-    final GameComponentRecyclerAdapter<HeroEntity> gameComponentRecyclerAdapter = new GameComponentRecyclerAdapter<>(new ArrayList<>());
+    final GameComponentRecyclerAdapter<Hero> gameComponentRecyclerAdapter = new GameComponentRecyclerAdapter<>(new ArrayList<>());
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -29,14 +31,14 @@ public class FilterHeroActivity extends FilterActivity {
 
         filterRecyclerView.setAdapter(gameComponentRecyclerAdapter);
 
-        gameComponentRecyclerAdapter.setDbUpdateConsumer(heroEntity ->
+        gameComponentRecyclerAdapter.setDbUpdateConsumer(hero ->
                 AsyncTask.execute(() ->
-                        db.heroDao().update(heroEntity))
+                        db.heroDao().update(hero.toEntity()))
         );
 
-        gameComponentRecyclerAdapter.setDbDeleteConsumer(heroEntity ->
+        gameComponentRecyclerAdapter.setDbDeleteConsumer(hero ->
                 AsyncTask.execute(() ->
-                        db.heroDao().delete(heroEntity))
+                        db.heroDao().delete(hero.toEntity()))
         );
 
         observeOnce(this,
@@ -60,7 +62,10 @@ public class FilterHeroActivity extends FilterActivity {
     }
 
     private void observerActions(final List<HeroEntity> results) {
-        gameComponentRecyclerAdapter.getComponentEntityList().addAll(results);
+        gameComponentRecyclerAdapter.getComponentEntityList().addAll(results
+                .stream()
+                .map(HeroEntity::toModel)
+                .collect(Collectors.toList()));
         gameComponentRecyclerAdapter.notifyDataSetChanged();
     }
 

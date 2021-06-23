@@ -12,7 +12,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public abstract class BaseCard extends BaseGameComponent {
 
-    volatile AtomicReference<GameSet> gameSet = new AtomicReference<>(new GameSetEntity().toModel());
+    volatile AtomicReference<GameSet> gameSet = new AtomicReference<>(new GameSet());
 
     public BaseCard() {
         super();

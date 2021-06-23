@@ -6,17 +6,19 @@ import android.view.MenuItem;
 
 import com.thequietcroc.legendary.R;
 import com.thequietcroc.legendary.custom.adapters.GameComponentRecyclerAdapter;
-import com.thequietcroc.legendary.database.entities.gamecomponents.cards.MastermindEntity;
 import com.thequietcroc.legendary.database.entities.gamecomponents.cards.VillainsEntity;
+import com.thequietcroc.legendary.models.gamecomponents.cards.Mastermind;
+import com.thequietcroc.legendary.models.gamecomponents.cards.Villains;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.thequietcroc.legendary.utilities.LiveDataUtil.observeOnce;
 
 public class FilterVillainsActivity extends FilterActivity {
 
-    final GameComponentRecyclerAdapter<VillainsEntity> gameComponentRecyclerAdapter = new GameComponentRecyclerAdapter<>(new ArrayList<>());
+    final GameComponentRecyclerAdapter<Villains> gameComponentRecyclerAdapter = new GameComponentRecyclerAdapter<>(new ArrayList<>());
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -30,23 +32,26 @@ public class FilterVillainsActivity extends FilterActivity {
 
         filterRecyclerView.setAdapter(gameComponentRecyclerAdapter);
 
-        gameComponentRecyclerAdapter.setDbUpdateConsumer(villainsEntity ->
+        gameComponentRecyclerAdapter.setDbUpdateConsumer(villains ->
                 AsyncTask.execute(() -> {
-                    if (!villainsEntity.isEnabled()) {
-                        final List<MastermindEntity> mastermindEntityList = db.mastermindDao().findAllByAlwaysLeadsVillainId(villainsEntity.getId());
-                        mastermindEntityList.stream().forEach(mastermindEntity -> mastermindEntity.setEnabled(villainsEntity.isEnabled()));
+                    if (!villains.isEnabled()) {
+                        final List<Mastermind> mastermindList = villains.getMastermindLeaderList();
+                        mastermindList.stream().forEach(mastermind -> mastermind.setEnabled(villains.isEnabled()));
 
-                        db.mastermindDao().update(mastermindEntityList);
+                        db.mastermindDao().update(mastermindList
+                                .stream()
+                                .map(Mastermind::toEntity)
+                                .collect(Collectors.toList()));
                     }
 
-                    db.villainsDao().update(villainsEntity);
+                    db.villainsDao().update(villains.toEntity());
                 })
         );
 
         // TODO: figure out what to do when an always leads villain gets deleted
-        gameComponentRecyclerAdapter.setDbDeleteConsumer(villainsEntity ->
+        gameComponentRecyclerAdapter.setDbDeleteConsumer(villains ->
                 AsyncTask.execute(() ->
-                        db.villainsDao().delete(villainsEntity))
+                        db.villainsDao().delete(villains.toEntity()))
         );
 
         observeOnce(this,
@@ -70,7 +75,10 @@ public class FilterVillainsActivity extends FilterActivity {
     }
 
     private void observerActions(final List<VillainsEntity> results) {
-        gameComponentRecyclerAdapter.getComponentEntityList().addAll(results);
+        gameComponentRecyclerAdapter.getComponentEntityList().addAll(results
+                .stream()
+                .map(VillainsEntity::toModel)
+                .collect(Collectors.toList()));
         gameComponentRecyclerAdapter.notifyDataSetChanged();
     }
 

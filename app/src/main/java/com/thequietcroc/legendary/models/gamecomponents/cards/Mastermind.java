@@ -3,17 +3,15 @@ package com.thequietcroc.legendary.models.gamecomponents.cards;
 import android.os.AsyncTask;
 
 import com.thequietcroc.legendary.database.LegendaryDatabase;
-import com.thequietcroc.legendary.database.entities.gamecomponents.cards.HenchmenEntity;
 import com.thequietcroc.legendary.database.entities.gamecomponents.cards.MastermindEntity;
-import com.thequietcroc.legendary.database.entities.gamecomponents.cards.VillainsEntity;
 
 import java.util.concurrent.atomic.AtomicReference;
 
 public class Mastermind extends BaseCard {
 
     private boolean isEpic = false;
-    private final AtomicReference<Villains> alwaysLeadsVillains = new AtomicReference<>(new VillainsEntity().toModel());
-    private final AtomicReference<Henchmen> alwaysLeadsHenchmen = new AtomicReference<>(new HenchmenEntity().toModel());
+    private final AtomicReference<Villains> alwaysLeadsVillains = new AtomicReference<>(new Villains());
+    private final AtomicReference<Henchmen> alwaysLeadsHenchmen = new AtomicReference<>(new Henchmen());
 
     public Mastermind() {
         super();

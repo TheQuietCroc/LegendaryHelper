@@ -6,18 +6,20 @@ import android.view.MenuItem;
 
 import com.thequietcroc.legendary.R;
 import com.thequietcroc.legendary.custom.adapters.GameComponentRecyclerAdapter;
-import com.thequietcroc.legendary.database.entities.gamecomponents.cards.HenchmenEntity;
 import com.thequietcroc.legendary.database.entities.gamecomponents.cards.MastermindEntity;
-import com.thequietcroc.legendary.database.entities.gamecomponents.cards.VillainsEntity;
+import com.thequietcroc.legendary.models.gamecomponents.cards.Henchmen;
+import com.thequietcroc.legendary.models.gamecomponents.cards.Mastermind;
+import com.thequietcroc.legendary.models.gamecomponents.cards.Villains;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.thequietcroc.legendary.utilities.LiveDataUtil.observeOnce;
 
 public class FilterMastermindActivity extends FilterActivity {
 
-    final GameComponentRecyclerAdapter<MastermindEntity> gameComponentRecyclerAdapter = new GameComponentRecyclerAdapter<>(new ArrayList<>());
+    final GameComponentRecyclerAdapter<Mastermind> gameComponentRecyclerAdapter = new GameComponentRecyclerAdapter<>(new ArrayList<>());
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -31,34 +33,32 @@ public class FilterMastermindActivity extends FilterActivity {
 
         filterRecyclerView.setAdapter(gameComponentRecyclerAdapter);
 
-        gameComponentRecyclerAdapter.setDbUpdateConsumer(mastermindEntity ->
+        gameComponentRecyclerAdapter.setDbUpdateConsumer(mastermind ->
                 AsyncTask.execute(() -> {
-                    if (mastermindEntity.isEnabled()) {
-                        final VillainsEntity alwaysLeadsVillains = db.villainsDao()
-                                .findByIdSync(mastermindEntity.getVillainId());
-                        final HenchmenEntity alwaysLeadsHenchmen = db.henchmenDao()
-                                .findByIdSync(mastermindEntity.getHenchmenId());
+                    if (mastermind.isEnabled()) {
+                        final Villains alwaysLeadsVillains = mastermind.getAlwaysLeadsVillains();
+                        final Henchmen alwaysLeadsHenchmen = mastermind.getAlwaysLeadsHenchmen();
 
                         if (alwaysLeadsVillains.getId() != 0) {
-                            alwaysLeadsVillains.setEnabled(mastermindEntity.isEnabled());
+                            alwaysLeadsVillains.setEnabled(mastermind.isEnabled());
 
-                            db.villainsDao().update(alwaysLeadsVillains);
+                            db.villainsDao().update(alwaysLeadsVillains.toEntity());
                         }
 
                         if (alwaysLeadsHenchmen.getId() != 0) {
-                            alwaysLeadsHenchmen.setEnabled(mastermindEntity.isEnabled());
+                            alwaysLeadsHenchmen.setEnabled(mastermind.isEnabled());
 
-                            db.henchmenDao().update(alwaysLeadsHenchmen);
+                            db.henchmenDao().update(alwaysLeadsHenchmen.toEntity());
                         }
                     }
 
-                    db.mastermindDao().update(mastermindEntity);
+                    db.mastermindDao().update(mastermind.toEntity());
                 })
         );
 
-        gameComponentRecyclerAdapter.setDbDeleteConsumer(mastermindEntity ->
+        gameComponentRecyclerAdapter.setDbDeleteConsumer(mastermind ->
                 AsyncTask.execute(() ->
-                        db.mastermindDao().delete(mastermindEntity))
+                        db.mastermindDao().delete(mastermind.toEntity()))
         );
 
         observeOnce(this,
@@ -82,7 +82,10 @@ public class FilterMastermindActivity extends FilterActivity {
     }
 
     private void observerActions(final List<MastermindEntity> results) {
-        gameComponentRecyclerAdapter.getComponentEntityList().addAll(results);
+        gameComponentRecyclerAdapter.getComponentEntityList().addAll(results
+                .stream()
+                .map(MastermindEntity::toModel)
+                .collect(Collectors.toList()));
         gameComponentRecyclerAdapter.notifyDataSetChanged();
     }
 

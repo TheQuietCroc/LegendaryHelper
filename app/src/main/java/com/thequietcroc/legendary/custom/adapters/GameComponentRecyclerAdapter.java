@@ -11,12 +11,12 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.thequietcroc.legendary.R;
-import com.thequietcroc.legendary.database.entities.gamecomponents.BaseGameComponentEntity;
+import com.thequietcroc.legendary.models.gamecomponents.BaseGameComponent;
 
 import java.util.List;
 import java.util.function.Consumer;
 
-public class GameComponentRecyclerAdapter<T extends BaseGameComponentEntity>
+public class GameComponentRecyclerAdapter<T extends BaseGameComponent>
         extends RecyclerView.Adapter<GameComponentRecyclerAdapter.ViewHolder> {
 
     private final List<T> componentEntityList;
@@ -35,9 +35,9 @@ public class GameComponentRecyclerAdapter<T extends BaseGameComponentEntity>
         public ViewHolder(final View view) {
             super(view);
 
-            gameComponentName = (TextView) view.findViewById(R.id.gameComponentName);
-            gameComponentEnabledCheckbox = (CheckBox) view.findViewById(R.id.gameComponentEnabledCheckbox);
-            gameComponentDeleteButton = (Button) view.findViewById(R.id.gameComponentDeleteButton);
+            gameComponentName = view.findViewById(R.id.gameComponentName);
+            gameComponentEnabledCheckbox = view.findViewById(R.id.gameComponentEnabledCheckbox);
+            gameComponentDeleteButton = view.findViewById(R.id.gameComponentDeleteButton);
         }
 
         public TextView getGameComponentName() {

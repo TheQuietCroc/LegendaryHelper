@@ -105,16 +105,16 @@ public class GameSetup extends BaseItem {
         this.containerHenchmen = containerHenchmen;
         this.containerHero = containerHero;
 
-        this.selectedMastermind = new MastermindEntity().toModel();
-        this.selectedScheme = new SchemeEntity().toModel();
+        this.selectedMastermind = new Mastermind();
+        this.selectedScheme = new Scheme();
         this.selectedVillainsList =
                 new ArrayList<>(Collections.nCopies(containerVillains.getChildCount(),
-                        new VillainsEntity().toModel()));
+                        new Villains()));
         this.selectedHenchmenList =
                 new ArrayList<>(Collections.nCopies(containerHenchmen.getChildCount(),
-                        new HenchmenEntity().toModel()));
+                        new Henchmen()));
         this.selectedHeroList = new ArrayList<>(Collections.nCopies(containerHero.getChildCount(),
-                new HeroEntity().toModel()));
+                new Hero()));
 
         observeOnce(owner,
                 db.mastermindDao().getAllEnabledAsync(),
@@ -207,10 +207,10 @@ public class GameSetup extends BaseItem {
             });
         }
 
-        initializeSpinner(new MastermindEntity().toModel(),
+        initializeSpinner(new Mastermind(),
                 mastermindControl.getSpinner(),
                 filteredMastermindMap);
-        initializeSpinner(new SchemeEntity().toModel(),
+        initializeSpinner(new Scheme(),
                 schemeControl.getSpinner(),
                 filteredSchemeMap);
 
@@ -629,7 +629,7 @@ public class GameSetup extends BaseItem {
         Collections.sort(filteredCardList, new BaseItemComparator<>());
         filteredCardList.add(0, noneCard);
 
-        final ArrayAdapter<T> adapter = new ArrayAdapter<>(
+        final ArrayAdapter<T> adapter = new ArrayAdapter<T>(
                 spinner.getContext(),
                 R.layout.spinner_layout,
                 filteredCardList);

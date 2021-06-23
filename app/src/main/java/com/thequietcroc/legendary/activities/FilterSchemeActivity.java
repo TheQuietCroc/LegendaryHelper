@@ -7,15 +7,17 @@ import android.view.MenuItem;
 import com.thequietcroc.legendary.R;
 import com.thequietcroc.legendary.custom.adapters.GameComponentRecyclerAdapter;
 import com.thequietcroc.legendary.database.entities.gamecomponents.cards.SchemeEntity;
+import com.thequietcroc.legendary.models.gamecomponents.cards.Scheme;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.thequietcroc.legendary.utilities.LiveDataUtil.observeOnce;
 
 public class FilterSchemeActivity extends FilterActivity {
 
-    final GameComponentRecyclerAdapter<SchemeEntity> gameComponentRecyclerAdapter = new GameComponentRecyclerAdapter<>(new ArrayList<>());
+    final GameComponentRecyclerAdapter<Scheme> gameComponentRecyclerAdapter = new GameComponentRecyclerAdapter<>(new ArrayList<>());
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -29,14 +31,14 @@ public class FilterSchemeActivity extends FilterActivity {
 
         filterRecyclerView.setAdapter(gameComponentRecyclerAdapter);
 
-        gameComponentRecyclerAdapter.setDbUpdateConsumer(schemeEntity ->
+        gameComponentRecyclerAdapter.setDbUpdateConsumer(scheme ->
                 AsyncTask.execute(() ->
-                        db.schemeDao().update(schemeEntity))
+                        db.schemeDao().update(scheme.toEntity()))
         );
 
-        gameComponentRecyclerAdapter.setDbDeleteConsumer(schemeEntity ->
+        gameComponentRecyclerAdapter.setDbDeleteConsumer(scheme ->
                 AsyncTask.execute(() ->
-                        db.schemeDao().delete(schemeEntity))
+                        db.schemeDao().delete(scheme.toEntity()))
         );
 
         observeOnce(this,
@@ -60,7 +62,10 @@ public class FilterSchemeActivity extends FilterActivity {
     }
 
     private void observerActions(final List<SchemeEntity> results) {
-        gameComponentRecyclerAdapter.getComponentEntityList().addAll(results);
+        gameComponentRecyclerAdapter.getComponentEntityList().addAll(results
+                .stream()
+                .map(SchemeEntity::toModel)
+                .collect(Collectors.toList()));
         gameComponentRecyclerAdapter.notifyDataSetChanged();
     }
 

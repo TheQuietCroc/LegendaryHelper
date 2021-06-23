@@ -7,16 +7,18 @@ import android.view.MenuItem;
 import com.thequietcroc.legendary.R;
 import com.thequietcroc.legendary.custom.adapters.GameComponentRecyclerAdapter;
 import com.thequietcroc.legendary.database.entities.gamecomponents.cards.HenchmenEntity;
-import com.thequietcroc.legendary.database.entities.gamecomponents.cards.MastermindEntity;
+import com.thequietcroc.legendary.models.gamecomponents.cards.Henchmen;
+import com.thequietcroc.legendary.models.gamecomponents.cards.Mastermind;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.thequietcroc.legendary.utilities.LiveDataUtil.observeOnce;
 
 public class FilterHenchmenActivity extends FilterActivity {
 
-    final GameComponentRecyclerAdapter<HenchmenEntity> gameComponentRecyclerAdapter = new GameComponentRecyclerAdapter<>(new ArrayList<>());
+    final GameComponentRecyclerAdapter<Henchmen> gameComponentRecyclerAdapter = new GameComponentRecyclerAdapter<>(new ArrayList<>());
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -30,23 +32,26 @@ public class FilterHenchmenActivity extends FilterActivity {
 
         filterRecyclerView.setAdapter(gameComponentRecyclerAdapter);
 
-        gameComponentRecyclerAdapter.setDbUpdateConsumer(henchmenEntity ->
+        gameComponentRecyclerAdapter.setDbUpdateConsumer(henchmen ->
                 AsyncTask.execute(() -> {
-                    if (!henchmenEntity.isEnabled()) {
-                        final List<MastermindEntity> mastermindEntityList = db.mastermindDao().findAllByAlwaysLeadsHenchmenId(henchmenEntity.getId());
-                        mastermindEntityList.stream().forEach(mastermindEntity -> mastermindEntity.setEnabled(henchmenEntity.isEnabled()));
+                    if (!henchmen.isEnabled()) {
+                        final List<Mastermind> mastermindList = henchmen.getMastermindLeaderList();
+                        mastermindList.stream().forEach(mastermind -> mastermind.setEnabled(henchmen.isEnabled()));
 
-                        db.mastermindDao().update(mastermindEntityList);
+                        db.mastermindDao().update(mastermindList
+                                .stream()
+                                .map(Mastermind::toEntity)
+                                .collect(Collectors.toList()));
                     }
 
-                    db.henchmenDao().update(henchmenEntity);
+                    db.henchmenDao().update(henchmen.toEntity());
                 })
         );
 
         // TODO: figure out what to do when an always leads henchmen gets deleted
-        gameComponentRecyclerAdapter.setDbDeleteConsumer(henchmenEntity ->
+        gameComponentRecyclerAdapter.setDbDeleteConsumer(henchmen ->
                 AsyncTask.execute(() ->
-                        db.henchmenDao().delete(henchmenEntity))
+                        db.henchmenDao().delete(henchmen.toEntity()))
         );
 
         observeOnce(this,
@@ -70,7 +75,10 @@ public class FilterHenchmenActivity extends FilterActivity {
     }
 
     private void observerActions(final List<HenchmenEntity> results) {
-        gameComponentRecyclerAdapter.getComponentEntityList().addAll(results);
+        gameComponentRecyclerAdapter.getComponentEntityList().addAll(results
+                .stream()
+                .map(HenchmenEntity::toModel)
+                .collect(Collectors.toList()));
         gameComponentRecyclerAdapter.notifyDataSetChanged();
     }
 
