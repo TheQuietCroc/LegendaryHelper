@@ -62,7 +62,7 @@ public class FilterSchemeActivity extends FilterActivity {
     }
 
     private void observerActions(final List<SchemeEntity> results) {
-        gameComponentRecyclerAdapter.getComponentEntityList().addAll(results
+        gameComponentRecyclerAdapter.getComponentList().addAll(results
                 .stream()
                 .map(SchemeEntity::toModel)
                 .collect(Collectors.toList()));

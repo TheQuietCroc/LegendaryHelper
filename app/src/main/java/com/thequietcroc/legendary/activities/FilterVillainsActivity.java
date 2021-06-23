@@ -75,7 +75,7 @@ public class FilterVillainsActivity extends FilterActivity {
     }
 
     private void observerActions(final List<VillainsEntity> results) {
-        gameComponentRecyclerAdapter.getComponentEntityList().addAll(results
+        gameComponentRecyclerAdapter.getComponentList().addAll(results
                 .stream()
                 .map(VillainsEntity::toModel)
                 .collect(Collectors.toList()));

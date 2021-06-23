@@ -75,7 +75,7 @@ public class FilterHenchmenActivity extends FilterActivity {
     }
 
     private void observerActions(final List<HenchmenEntity> results) {
-        gameComponentRecyclerAdapter.getComponentEntityList().addAll(results
+        gameComponentRecyclerAdapter.getComponentList().addAll(results
                 .stream()
                 .map(HenchmenEntity::toModel)
                 .collect(Collectors.toList()));

@@ -62,7 +62,7 @@ public class FilterHeroActivity extends FilterActivity {
     }
 
     private void observerActions(final List<HeroEntity> results) {
-        gameComponentRecyclerAdapter.getComponentEntityList().addAll(results
+        gameComponentRecyclerAdapter.getComponentList().addAll(results
                 .stream()
                 .map(HeroEntity::toModel)
                 .collect(Collectors.toList()));

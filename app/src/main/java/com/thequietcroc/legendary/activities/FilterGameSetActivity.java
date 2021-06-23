@@ -113,12 +113,11 @@ public class FilterGameSetActivity extends FilterActivity {
     }
 
     private void observerActions(final List<GameSetEntity> results) {
-        gameComponentRecyclerAdapter.getComponentEntityList().addAll(results
+        gameComponentRecyclerAdapter.getComponentList().addAll(results
                 .stream()
                 .map(GameSetEntity::toModel)
                 .collect(Collectors.toList()));
         gameComponentRecyclerAdapter.notifyDataSetChanged();
-        List<Mastermind> test = gameComponentRecyclerAdapter.getComponentEntityList().get(0).getMastermindList();
     }
 
 }

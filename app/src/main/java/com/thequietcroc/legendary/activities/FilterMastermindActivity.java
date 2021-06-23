@@ -82,7 +82,7 @@ public class FilterMastermindActivity extends FilterActivity {
     }
 
     private void observerActions(final List<MastermindEntity> results) {
-        gameComponentRecyclerAdapter.getComponentEntityList().addAll(results
+        gameComponentRecyclerAdapter.getComponentList().addAll(results
                 .stream()
                 .map(MastermindEntity::toModel)
                 .collect(Collectors.toList()));

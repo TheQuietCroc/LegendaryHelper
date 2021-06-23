@@ -19,12 +19,12 @@ import java.util.function.Consumer;
 public class GameComponentRecyclerAdapter<T extends BaseGameComponent>
         extends RecyclerView.Adapter<GameComponentRecyclerAdapter.ViewHolder> {
 
-    private final List<T> componentEntityList;
+    private final List<T> componentList;
     private Consumer<T> dbUpdateConsumer;
     private Consumer<T> dbDeleteConsumer;
 
-    public List<T> getComponentEntityList() {
-        return componentEntityList;
+    public List<T> getComponentList() {
+        return componentList;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -53,8 +53,8 @@ public class GameComponentRecyclerAdapter<T extends BaseGameComponent>
         }
     }
 
-    public GameComponentRecyclerAdapter(final List<T> componentEntityList) {
-        this.componentEntityList = componentEntityList;
+    public GameComponentRecyclerAdapter(final List<T> componentList) {
+        this.componentList = componentList;
     }
 
     public void setDbUpdateConsumer(final Consumer<T> dbUpdateConsumer) {
@@ -75,14 +75,14 @@ public class GameComponentRecyclerAdapter<T extends BaseGameComponent>
         final ViewHolder viewHolder = new ViewHolder(view);
 
         viewHolder.getGameComponentEnabledCheckbox().setOnClickListener(v -> {
-            final T entity = componentEntityList.get(viewHolder.getAdapterPosition());
+            final T entity = componentList.get(viewHolder.getAdapterPosition());
 
             entity.setEnabled(((CheckBox)v).isChecked());
             dbUpdateConsumer.accept(entity);
         });
 
         viewHolder.getGameComponentDeleteButton().setOnClickListener(v -> {
-            final T entity = componentEntityList.get(viewHolder.getAdapterPosition());
+            final T entity = componentList.get(viewHolder.getAdapterPosition());
 
             dbDeleteConsumer.accept(entity);
             notifyItemRemoved(viewHolder.getAdapterPosition());
@@ -94,7 +94,7 @@ public class GameComponentRecyclerAdapter<T extends BaseGameComponent>
     // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(final ViewHolder viewHolder, final int position) {
-        final T entity = componentEntityList.get(position);
+        final T entity = componentList.get(position);
 
         viewHolder.getGameComponentName().setText(entity.getName());
         viewHolder.getGameComponentEnabledCheckbox().setChecked(entity.isEnabled());
@@ -104,7 +104,7 @@ public class GameComponentRecyclerAdapter<T extends BaseGameComponent>
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return componentEntityList.size();
+        return componentList.size();
     }
 
 }
