@@ -16,14 +16,18 @@ import com.thequietcroc.legendary.R;
 import com.thequietcroc.legendary.custom.views.CardControl;
 import com.thequietcroc.legendary.database.LegendaryDatabase;
 import com.thequietcroc.legendary.database.entities.GameSetupEntity;
-import com.thequietcroc.legendary.database.entities.gamecomponents.cards.BaseCardEntity;
 import com.thequietcroc.legendary.database.entities.gamecomponents.cards.HenchmenEntity;
 import com.thequietcroc.legendary.database.entities.gamecomponents.cards.HeroEntity;
 import com.thequietcroc.legendary.database.entities.gamecomponents.cards.MastermindEntity;
 import com.thequietcroc.legendary.database.entities.gamecomponents.cards.SchemeEntity;
 import com.thequietcroc.legendary.database.entities.gamecomponents.cards.VillainsEntity;
 import com.thequietcroc.legendary.enums.ItemType;
-import com.thequietcroc.legendary.utilities.MinimalComparator;
+import com.thequietcroc.legendary.models.gamecomponents.cards.BaseCard;
+import com.thequietcroc.legendary.models.gamecomponents.cards.Henchmen;
+import com.thequietcroc.legendary.models.gamecomponents.cards.Hero;
+import com.thequietcroc.legendary.models.gamecomponents.cards.Mastermind;
+import com.thequietcroc.legendary.models.gamecomponents.cards.Scheme;
+import com.thequietcroc.legendary.models.gamecomponents.cards.Villains;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -32,7 +36,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static com.thequietcroc.legendary.enums.ItemType.HENCHMEN;
@@ -44,17 +47,17 @@ public class GameSetup extends BaseItem {
 
     private int numPlayers;
 
-    private MastermindEntity.Minimal selectedMastermind;
-    private SchemeEntity.Minimal selectedScheme;
-    private /*final*/ List<VillainsEntity.Minimal> selectedVillainsList;
-    private /*final*/ List<HenchmenEntity.Minimal> selectedHenchmenList;
-    private /*final*/ List<HeroEntity.Minimal> selectedHeroList;
+    private Mastermind selectedMastermind;
+    private Scheme selectedScheme;
+    private /*final*/ List<Villains> selectedVillainsList;
+    private /*final*/ List<Henchmen> selectedHenchmenList;
+    private /*final*/ List<Hero> selectedHeroList;
 
-    private /*final*/ Map<Integer, MastermindEntity.Minimal> filteredMastermindMap = new HashMap<>();
-    private /*final*/ Map<Integer, SchemeEntity.Minimal> filteredSchemeMap = new HashMap<>();
-    private /*final*/ Map<Integer, VillainsEntity.Minimal> filteredVillainsMap = new HashMap<>();
-    private /*final*/ Map<Integer, HenchmenEntity.Minimal> filteredHenchmenMap = new HashMap<>();
-    private /*final*/ Map<Integer, HeroEntity.Minimal> filteredHeroMap = new HashMap<>();
+    private final Map<Integer, Mastermind> filteredMastermindMap = new HashMap<>();
+    private final Map<Integer, Villains> filteredVillainsMap = new HashMap<>();
+    private final Map<Integer, Henchmen> filteredHenchmenMap = new HashMap<>();
+    private final Map<Integer, Scheme> filteredSchemeMap = new HashMap<>();
+    private final Map<Integer, Hero> filteredHeroMap = new HashMap<>();
 
     private /*final*/ ConstraintLayout containerVillains;
     private /*final*/ ConstraintLayout containerHenchmen;
@@ -62,13 +65,17 @@ public class GameSetup extends BaseItem {
 
     private /*final*/ CardControl mastermindControl;
     private /*final*/ CardControl schemeControl;
-    private /*final*/ List<CardControl> villainsControlList = new ArrayList<>();
-    private /*final*/ List<CardControl> henchmenControlList = new ArrayList<>();
-    private /*final*/ List<CardControl> heroControlList = new ArrayList<>();
+    private final List<CardControl> villainsControlList = new ArrayList<>();
+    private final List<CardControl> henchmenControlList = new ArrayList<>();
+    private final List<CardControl> heroControlList = new ArrayList<>();
 
     private /*final*/ MaterialButtonToggleGroup buttonGroupPlayers;
 
-    private /*final*/ AtomicInteger numQueriesCompleted = new AtomicInteger(0);
+    private final AtomicInteger numQueriesCompleted = new AtomicInteger(0);
+
+    public GameSetup() {
+        super();
+    }
 
     public GameSetup(final GameSetupEntity gameSetupEntity) {
         super(gameSetupEntity);
@@ -98,34 +105,67 @@ public class GameSetup extends BaseItem {
         this.containerHenchmen = containerHenchmen;
         this.containerHero = containerHero;
 
-        this.selectedMastermind = new MastermindEntity.Minimal();
-        this.selectedScheme = new SchemeEntity.Minimal();
+        this.selectedMastermind = new MastermindEntity().toModel();
+        this.selectedScheme = new SchemeEntity().toModel();
         this.selectedVillainsList =
                 new ArrayList<>(Collections.nCopies(containerVillains.getChildCount(),
-                        new VillainsEntity.Minimal()));
+                        new VillainsEntity().toModel()));
         this.selectedHenchmenList =
                 new ArrayList<>(Collections.nCopies(containerHenchmen.getChildCount(),
-                        new HenchmenEntity.Minimal()));
+                        new HenchmenEntity().toModel()));
         this.selectedHeroList = new ArrayList<>(Collections.nCopies(containerHero.getChildCount(),
-                new HeroEntity.Minimal()));
+                new HeroEntity().toModel()));
 
         observeOnce(owner,
-                db.mastermindDao().getAllEnabledAsyncMinimal(),
-                filteredResults -> populateFilteredMap(filteredResults, filteredMastermindMap));
-        observeOnce(owner,
-                db.schemeDao().getAllEnabledAsyncMinimal(),
-                filteredResults -> populateFilteredMap(filteredResults, filteredSchemeMap));
-        observeOnce(owner,
-                db.villainsDao().getAllEnabledAsyncMinimal(),
-                filteredResults -> populateFilteredMap(filteredResults, filteredVillainsMap));
-        observeOnce(owner,
-                db.henchmenDao().getAllEnabledAsyncMinimal(),
-                filteredResults -> populateFilteredMap(filteredResults, filteredHenchmenMap));
-        observeOnce(owner,
-                db.heroDao().getAllEnabledAsyncMinimal(),
-                filteredResults -> populateFilteredMap(filteredResults, filteredHeroMap));
+                db.mastermindDao().getAllEnabledAsync(),
+                filteredResults -> { 
+                    filteredMastermindMap.putAll(filteredResults.stream()
+                            .collect(Collectors.toMap(MastermindEntity::getId, MastermindEntity::toModel)));
 
+                    if (numQueriesCompleted.incrementAndGet() == 5) {
+                        initializeControls();
+                    } 
+        });
+        observeOnce(owner,
+                db.schemeDao().getAllEnabledAsync(),
+                filteredResults -> {
+                    filteredSchemeMap.putAll(filteredResults.stream()
+                            .collect(Collectors.toMap(SchemeEntity::getId, SchemeEntity::toModel)));
 
+                    if (numQueriesCompleted.incrementAndGet() == 5) {
+                        initializeControls();
+                    }
+        });
+        observeOnce(owner,
+                db.villainsDao().getAllEnabledAsync(),
+                filteredResults -> {
+                    filteredVillainsMap.putAll(filteredResults.stream()
+                            .collect(Collectors.toMap(VillainsEntity::getId, VillainsEntity::toModel)));
+
+                    if (numQueriesCompleted.incrementAndGet() == 5) {
+                        initializeControls();
+                    }
+        });
+        observeOnce(owner,
+                db.henchmenDao().getAllEnabledAsync(),
+                filteredResults -> {
+                    filteredHenchmenMap.putAll(filteredResults.stream()
+                            .collect(Collectors.toMap(HenchmenEntity::getId, HenchmenEntity::toModel)));
+
+                    if (numQueriesCompleted.incrementAndGet() == 5) {
+                        initializeControls();
+                    }
+        });
+        observeOnce(owner,
+                db.heroDao().getAllEnabledAsync(),
+                filteredResults -> {
+                    filteredHeroMap.putAll(filteredResults.stream()
+                            .collect(Collectors.toMap(HeroEntity::getId, HeroEntity::toModel)));
+
+                    if (numQueriesCompleted.incrementAndGet() == 5) {
+                        initializeControls();
+                    }
+        });
     }
 
     @Override
@@ -133,35 +173,23 @@ public class GameSetup extends BaseItem {
         return new GameSetupEntity(this);
     }
 
-    private <T extends BaseCardEntity.Minimal> void populateFilteredMap(final List<T> cardMap,
-            final Map<Integer, T> filteredMap) {
-
-        filteredMap.putAll(cardMap.stream()
-                .collect(Collectors.toMap(T::getId, Function.identity())));
-
-
-        if (numQueriesCompleted.incrementAndGet() == 5) {
-            initializeControls();
-        }
-    }
-
     private void setNumPlayers(final int numPlayers) {
         this.numPlayers = numPlayers;
     }
 
-    private void setSelectedMastermind(final MastermindEntity.Minimal selectedMastermind) {
+    private void setSelectedMastermind(final Mastermind selectedMastermind) {
         this.selectedMastermind = selectedMastermind;
     }
 
-    private void setSelectedScheme(final SchemeEntity.Minimal selectedScheme) {
+    private void setSelectedScheme(final Scheme selectedScheme) {
         this.selectedScheme = selectedScheme;
     }
 
     private <T> void setSelectedCard(final T selectedCard) {
-        if (selectedCard instanceof MastermindEntity.Minimal) {
-            setSelectedMastermind((MastermindEntity.Minimal) selectedCard);
-        } else if (selectedCard instanceof SchemeEntity.Minimal) {
-            setSelectedScheme((SchemeEntity.Minimal) selectedCard);
+        if (selectedCard instanceof Mastermind) {
+            setSelectedMastermind((Mastermind) selectedCard);
+        } else if (selectedCard instanceof Scheme) {
+            setSelectedScheme((Scheme) selectedCard);
         }
     }
 
@@ -179,10 +207,10 @@ public class GameSetup extends BaseItem {
             });
         }
 
-        initializeSpinner(new MastermindEntity.Minimal(),
+        initializeSpinner(new MastermindEntity().toModel(),
                 mastermindControl.getSpinner(),
                 filteredMastermindMap);
-        initializeSpinner(new SchemeEntity.Minimal(),
+        initializeSpinner(new SchemeEntity().toModel(),
                 schemeControl.getSpinner(),
                 filteredSchemeMap);
 
@@ -207,7 +235,7 @@ public class GameSetup extends BaseItem {
 
                 parent.setTag(position);
 
-                if (parent.getSelectedItem() instanceof MastermindEntity.Minimal) {
+                if (parent.getSelectedItem() instanceof Mastermind) {
                     selectAlwaysLeadsVillains();
                     selectAlwaysLeadsHenchmen();
                 }
@@ -275,13 +303,12 @@ public class GameSetup extends BaseItem {
 
     private void selectAlwaysLeadsVillains() {
         if (numPlayers > 1) {
-            final int alwaysLeadsVillainsId = selectedMastermind.getVillainId();
+            final int alwaysLeadsVillainsId = selectedMastermind.getAlwaysLeadsVillains().getId();
 
             if (alwaysLeadsVillainsId > 0) {
 
                 selectAlwaysLeadsHelper(filteredVillainsMap.get(alwaysLeadsVillainsId),
                         selectedVillainsList,
-                        filteredVillainsMap,
                         villainsControlList);
             }
         }
@@ -289,19 +316,18 @@ public class GameSetup extends BaseItem {
 
     private void selectAlwaysLeadsHenchmen() {
         if (numPlayers > 1) {
-            final int alwaysLeadsHenchmenId = selectedMastermind.getHenchmenId();
+            final int alwaysLeadsHenchmenId = selectedMastermind.getAlwaysLeadsHenchmen().getId();
 
             if (alwaysLeadsHenchmenId > 0) {
 
                 selectAlwaysLeadsHelper(filteredHenchmenMap.get(alwaysLeadsHenchmenId),
                         selectedHenchmenList,
-                        filteredHenchmenMap,
                         henchmenControlList);
             }
         }
     }
 
-    private <T extends BaseCardEntity.Minimal> T setupHelper(final CardControl control,
+    private <T extends BaseCard> T setupHelper(final CardControl control,
             final T selectedCard,
             final Map<Integer, T> filteredMap) {
         final T newSelectedCard;
@@ -322,7 +348,7 @@ public class GameSetup extends BaseItem {
         return newSelectedCard;
     }
 
-    private <T extends BaseCardEntity.Minimal> void setupHelper(final List<CardControl> controlList,
+    private <T extends BaseCard> void setupHelper(final List<CardControl> controlList,
             final Map<Integer, T> filteredMap,
             final List<T> selectedList) {
 
@@ -358,7 +384,6 @@ public class GameSetup extends BaseItem {
 
     private <T> void selectAlwaysLeadsHelper(final T alwaysLeads,
             final List<T> selectedList,
-            final Map<Integer, T> filteredMap,
             final List<CardControl> cardControlList) {
         for (final CardControl control : cardControlList) {
             if (control.getToggleLock().getVisibility() == View.INVISIBLE) {
@@ -404,8 +429,8 @@ public class GameSetup extends BaseItem {
         toggleControlLock(true, control);
     }
 
-    private BaseCardEntity.Minimal selectRandomlyFromMap(final Map<Integer, ?
-            extends BaseCardEntity.Minimal> cardList) {
+    private BaseCard selectRandomlyFromMap(final Map<Integer, ?
+            extends BaseCard> cardList) {
         return cardList.get(new Random().nextInt(cardList.size() - 1) + 1);
     }
 
@@ -476,7 +501,7 @@ public class GameSetup extends BaseItem {
             final ItemType type) {
         switch (type) {
             case HERO: {
-                adjustContainedControlsHelper(new HeroEntity.Minimal(),
+                adjustContainedControlsHelper(new Hero(),
                         numVisible,
                         heroControlList,
                         containerHero,
@@ -486,7 +511,7 @@ public class GameSetup extends BaseItem {
             }
             break;
             case VILLAINS: {
-                adjustContainedControlsHelper(new VillainsEntity.Minimal(),
+                adjustContainedControlsHelper(new Villains(),
                         numVisible,
                         villainsControlList,
                         containerVillains,
@@ -495,7 +520,7 @@ public class GameSetup extends BaseItem {
             }
             break;
             case HENCHMEN: {
-                adjustContainedControlsHelper(new HenchmenEntity.Minimal(),
+                adjustContainedControlsHelper(new Henchmen(),
                         numVisible,
                         henchmenControlList,
                         containerHenchmen,
@@ -506,7 +531,7 @@ public class GameSetup extends BaseItem {
         }
     }
 
-    private <T extends BaseCardEntity.Minimal> void adjustContainedControlsHelper(final T noneCard,
+    private <T extends BaseCard> void adjustContainedControlsHelper(final T noneCard,
             final int numVisible,
             final List<CardControl> controlList,
             final ConstraintLayout container,
@@ -577,15 +602,14 @@ public class GameSetup extends BaseItem {
         return cardControl;
     }
 
-    private <T extends BaseCardEntity.Minimal> void initializeSpinner(final T noneCard,
+    private <T extends BaseCard> void initializeSpinner(final T noneCard,
             final Spinner spinner,
             final Map<Integer, T> filteredCardMap) {
-        final List<T> filteredCardList = new ArrayList<>();
-        filteredCardList.addAll(filteredCardMap.values());
-        Collections.sort(filteredCardList, new MinimalComparator<>());
+        final List<T> filteredCardList = new ArrayList<>(filteredCardMap.values());
+        Collections.sort(filteredCardList, new BaseItemComparator<>());
         filteredCardList.add(0, noneCard);
 
-        final ArrayAdapter<T> adapter = new ArrayAdapter<T>(
+        final ArrayAdapter<T> adapter = new ArrayAdapter<>(
                 spinner.getContext(),
                 R.layout.spinner_layout,
                 filteredCardList);
@@ -596,17 +620,16 @@ public class GameSetup extends BaseItem {
         setOnItemSelectedListener(spinner);
     }
 
-    private <T extends BaseCardEntity.Minimal> void initializeSpinner(final T noneCard,
+    private <T extends BaseCard> void initializeSpinner(final T noneCard,
             final Spinner spinner,
             final Map<Integer, T> filteredCardMap,
             final List<T> selectedList,
             final int selectedIndex) {
-        final List<T> filteredCardList = new ArrayList<>();
-        filteredCardList.addAll(filteredCardMap.values());
-        Collections.sort(filteredCardList, new MinimalComparator<>());
+        final List<T> filteredCardList = new ArrayList<>(filteredCardMap.values());
+        Collections.sort(filteredCardList, new BaseItemComparator<>());
         filteredCardList.add(0, noneCard);
 
-        final ArrayAdapter<T> adapter = new ArrayAdapter<T>(
+        final ArrayAdapter<T> adapter = new ArrayAdapter<>(
                 spinner.getContext(),
                 R.layout.spinner_layout,
                 filteredCardList);

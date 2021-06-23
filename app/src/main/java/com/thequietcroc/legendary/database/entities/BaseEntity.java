@@ -19,7 +19,7 @@ public abstract class BaseEntity {
     }
 
     public BaseEntity(final BaseItem baseItem) {
-        if (baseItem.getId() != -1) {
+        if (baseItem.getId() > 0) {
             this.id = baseItem.getId();
         }
 

@@ -29,6 +29,9 @@ public abstract class BaseCardEntity extends BaseGameComponentEntity {
     }
 
     @Override
+    public abstract BaseCard toModel();
+
+    @Override
     public boolean equals(final Object o) {
 
         if (!(o instanceof BaseCardEntity)) {
