@@ -81,6 +81,8 @@ public class GameComponentRecyclerAdapter<T extends BaseGameComponent>
             dbUpdateConsumer.accept(entity);
         });
 
+        viewHolder.getGameComponentName().setOnClickListener(v -> viewHolder.getGameComponentEnabledCheckbox().performClick());
+
         viewHolder.getGameComponentDeleteButton().setOnClickListener(v -> {
             final T entity = componentList.get(viewHolder.getAdapterPosition());
 
