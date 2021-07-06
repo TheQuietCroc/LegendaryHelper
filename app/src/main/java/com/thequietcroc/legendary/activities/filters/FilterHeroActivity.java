@@ -1,13 +1,15 @@
-package com.thequietcroc.legendary.activities;
+package com.thequietcroc.legendary.activities.filters;
 
-import android.os.AsyncTask;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.thequietcroc.legendary.R;
+import com.thequietcroc.legendary.activities.info.HeroInfoActivity;
 import com.thequietcroc.legendary.custom.adapters.GameComponentRecyclerAdapter;
 import com.thequietcroc.legendary.database.entities.gamecomponents.cards.HeroEntity;
 import com.thequietcroc.legendary.models.gamecomponents.cards.Hero;
+import com.thequietcroc.legendary.utilities.DbAsyncTask;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,24 +24,28 @@ public class FilterHeroActivity extends FilterActivity {
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        final String title = String.format("%s %s", getString(R.string.filter), getString(R.string.heroes));
 
         if (null != getActionBar()) {
-            getActionBar().setTitle(R.string.activityFilterHero);
+            getActionBar().setTitle(title);
         } else if (null != getSupportActionBar()) {
-            getSupportActionBar().setTitle(R.string.activityFilterHero);
+            getSupportActionBar().setTitle(title);
         }
 
         filterRecyclerView.setAdapter(gameComponentRecyclerAdapter);
 
         gameComponentRecyclerAdapter.setDbUpdateConsumer(hero ->
-                AsyncTask.execute(() ->
+                new DbAsyncTask(() ->
                         db.heroDao().update(hero.toEntity()))
         );
 
-        gameComponentRecyclerAdapter.setDbDeleteConsumer(hero ->
-                AsyncTask.execute(() ->
-                        db.heroDao().delete(hero.toEntity()))
-        );
+        gameComponentRecyclerAdapter.setInfoButtonAction(hero -> {
+            final Intent intent = new Intent(this, HeroInfoActivity.class);
+
+            intent.putExtra(COMPONENT_EXTRA, hero);
+
+            startActivity(intent);
+        });
 
         observeOnce(this,
                 db.heroDao().getAllAsync(),

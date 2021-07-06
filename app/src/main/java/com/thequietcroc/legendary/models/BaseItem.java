@@ -2,9 +2,12 @@ package com.thequietcroc.legendary.models;
 
 import com.thequietcroc.legendary.database.entities.BaseEntity;
 
+import java.io.Serializable;
 import java.util.Comparator;
 
-public abstract class BaseItem {
+public abstract class BaseItem implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private int id = 0;
     private String name = "None";

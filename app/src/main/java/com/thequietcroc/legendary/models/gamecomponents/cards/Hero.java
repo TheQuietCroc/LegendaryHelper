@@ -4,13 +4,13 @@ import com.thequietcroc.legendary.database.entities.gamecomponents.cards.HeroEnt
 
 public class Hero extends BaseCard {
 
-    public boolean hasCovert = false;
-    public boolean hasInstinct = false;
-    public boolean hasRanged = false;
-    public boolean hasStrength = false;
-    public boolean hasTech = false;
-    public boolean hasGun = false;
-    public boolean hasFlavorText = false;
+    private boolean hasCovert = false;
+    private boolean hasInstinct = false;
+    private boolean hasRanged = false;
+    private boolean hasStrength = false;
+    private boolean hasTech = false;
+    private boolean hasGun = false;
+    private boolean hasFlavorText = false;
 
     public Hero() {
         super();

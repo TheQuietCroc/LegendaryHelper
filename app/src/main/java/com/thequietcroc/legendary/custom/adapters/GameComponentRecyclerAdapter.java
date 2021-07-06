@@ -21,7 +21,7 @@ public class GameComponentRecyclerAdapter<T extends BaseGameComponent>
 
     private final List<T> componentList;
     private Consumer<T> dbUpdateConsumer;
-    private Consumer<T> dbDeleteConsumer;
+    private Consumer<T> infoButtonConsumer;
 
     public List<T> getComponentList() {
         return componentList;
@@ -30,14 +30,14 @@ public class GameComponentRecyclerAdapter<T extends BaseGameComponent>
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView gameComponentName;
         private final CheckBox gameComponentEnabledCheckbox;
-        private final Button gameComponentDeleteButton;
+        private final Button gameComponentInfoButton;
 
         public ViewHolder(final View view) {
             super(view);
 
             gameComponentName = view.findViewById(R.id.gameComponentName);
             gameComponentEnabledCheckbox = view.findViewById(R.id.gameComponentEnabledCheckbox);
-            gameComponentDeleteButton = view.findViewById(R.id.gameComponentDeleteButton);
+            gameComponentInfoButton = view.findViewById(R.id.gameComponentInfoButton);
         }
 
         public TextView getGameComponentName() {
@@ -48,8 +48,8 @@ public class GameComponentRecyclerAdapter<T extends BaseGameComponent>
             return gameComponentEnabledCheckbox;
         }
 
-        public Button getGameComponentDeleteButton() {
-            return gameComponentDeleteButton;
+        public Button getGameComponentInfoButton() {
+            return gameComponentInfoButton;
         }
     }
 
@@ -61,8 +61,8 @@ public class GameComponentRecyclerAdapter<T extends BaseGameComponent>
         this.dbUpdateConsumer = dbUpdateConsumer;
     }
 
-    public void setDbDeleteConsumer(final Consumer<T> dbDeleteConsumer) {
-        this.dbDeleteConsumer = dbDeleteConsumer;
+    public void setInfoButtonAction(final Consumer<T> infoButtonConsumer) {
+        this.infoButtonConsumer = infoButtonConsumer;
     }
 
     // Create new views (invoked by the layout manager)
@@ -83,11 +83,10 @@ public class GameComponentRecyclerAdapter<T extends BaseGameComponent>
 
         viewHolder.getGameComponentName().setOnClickListener(v -> viewHolder.getGameComponentEnabledCheckbox().performClick());
 
-        viewHolder.getGameComponentDeleteButton().setOnClickListener(v -> {
-            final T entity = componentList.get(viewHolder.getAdapterPosition());
+        viewHolder.getGameComponentInfoButton().setOnClickListener(v -> {
+            final T gameComponent = componentList.get(viewHolder.getAdapterPosition());
 
-            dbDeleteConsumer.accept(entity);
-            notifyItemRemoved(viewHolder.getAdapterPosition());
+            infoButtonConsumer.accept(gameComponent);
         });
 
         return viewHolder;
@@ -100,7 +99,6 @@ public class GameComponentRecyclerAdapter<T extends BaseGameComponent>
 
         viewHolder.getGameComponentName().setText(entity.getName());
         viewHolder.getGameComponentEnabledCheckbox().setChecked(entity.isEnabled());
-        viewHolder.getGameComponentDeleteButton().setEnabled(entity.isCustom());
     }
 
     // Return the size of your dataset (invoked by the layout manager)

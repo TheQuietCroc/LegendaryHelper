@@ -32,25 +32,25 @@ import static androidx.room.ForeignKey.SET_DEFAULT;
 public class HeroEntity extends BaseCardEntity {
 
     @ColumnInfo(name = "covert", defaultValue = "0")
-    public boolean hasCovert;
+    private boolean hasCovert;
 
     @ColumnInfo(name = "instinct", defaultValue = "0")
-    public boolean hasInstinct;
+    private boolean hasInstinct;
 
     @ColumnInfo(name = "ranged", defaultValue = "0")
-    public boolean hasRanged;
+    private boolean hasRanged;
 
     @ColumnInfo(name = "strength", defaultValue = "0")
-    public boolean hasStrength;
+    private boolean hasStrength;
 
     @ColumnInfo(name = "tech", defaultValue = "0")
-    public boolean hasTech;
+    private boolean hasTech;
 
     @ColumnInfo(name = "gun", defaultValue = "0")
-    public boolean hasGun;
+    private boolean hasGun;
 
     @ColumnInfo(name = "flavor", defaultValue = "0")
-    public boolean hasFlavorText;
+    private boolean hasFlavorText;
     
     public HeroEntity() {
         super();

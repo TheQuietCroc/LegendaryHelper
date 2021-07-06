@@ -1,9 +1,8 @@
 package com.thequietcroc.legendary.models.gamecomponents.cards;
 
-import android.os.AsyncTask;
-
 import com.thequietcroc.legendary.database.LegendaryDatabase;
 import com.thequietcroc.legendary.database.entities.gamecomponents.cards.MastermindEntity;
+import com.thequietcroc.legendary.utilities.DbAsyncTask;
 
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -23,14 +22,14 @@ public class Mastermind extends BaseCard {
         setIsEpic(mastermindEntity.isEpic());
 
         if (mastermindEntity.getVillainId() > 0) {
-            AsyncTask.execute(() -> setAlwaysLeadsVillains(LegendaryDatabase.getInstance()
+            new DbAsyncTask(() -> setAlwaysLeadsVillains(LegendaryDatabase.getInstance()
                     .villainsDao()
                     .findByIdSync(mastermindEntity.getVillainId())
                     .toModel()));
         }
 
         if (mastermindEntity.getHenchmenId() > 0) {
-            AsyncTask.execute(() -> setAlwaysLeadsHenchmen(LegendaryDatabase.getInstance()
+            new DbAsyncTask(() -> setAlwaysLeadsHenchmen(LegendaryDatabase.getInstance()
                     .henchmenDao()
                     .findByIdSync(mastermindEntity.getHenchmenId())
                     .toModel()));

@@ -1,4 +1,4 @@
-package com.thequietcroc.legendary.activities;
+package com.thequietcroc.legendary.activities.filters;
 
 import android.os.Bundle;
 import android.view.Menu;
@@ -14,6 +14,8 @@ import com.thequietcroc.legendary.R;
 import com.thequietcroc.legendary.database.LegendaryDatabase;
 
 public abstract class FilterActivity extends AppCompatActivity {
+
+    public static final String COMPONENT_EXTRA = "component";
 
     final LegendaryDatabase db = LegendaryDatabase.getInstance();
     RecyclerView filterRecyclerView;

@@ -1,4 +1,4 @@
-package com.thequietcroc.legendary.activities;
+package com.thequietcroc.legendary.activities.filters;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,9 +17,9 @@ public class FilterSelectMenuActivity extends AppCompatActivity {
         setContentView(R.layout.activity_filter_select_menu);
 
         if (null != getActionBar()) {
-            getActionBar().setTitle(R.string.activityFilter);
+            getActionBar().setTitle(R.string.filter);
         } else if (null != getSupportActionBar()) {
-            getSupportActionBar().setTitle(R.string.activityFilter);
+            getSupportActionBar().setTitle(R.string.filter);
         }
 
         findViewById(R.id.buttonFilterGameSets).setOnClickListener(v -> openFilterActivity(ItemType.GAMESET));

@@ -1,15 +1,17 @@
-package com.thequietcroc.legendary.activities;
+package com.thequietcroc.legendary.activities.filters;
 
-import android.os.AsyncTask;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.thequietcroc.legendary.R;
+import com.thequietcroc.legendary.activities.info.MastermindInfoActivity;
 import com.thequietcroc.legendary.custom.adapters.GameComponentRecyclerAdapter;
 import com.thequietcroc.legendary.database.entities.gamecomponents.cards.MastermindEntity;
 import com.thequietcroc.legendary.models.gamecomponents.cards.Henchmen;
 import com.thequietcroc.legendary.models.gamecomponents.cards.Mastermind;
 import com.thequietcroc.legendary.models.gamecomponents.cards.Villains;
+import com.thequietcroc.legendary.utilities.DbAsyncTask;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,17 +26,18 @@ public class FilterMastermindActivity extends FilterActivity {
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        final String title = String.format("%s %s", getString(R.string.filter), getString(R.string.masterminds));
 
         if (null != getActionBar()) {
-            getActionBar().setTitle(R.string.activityFilterMastermind);
+            getActionBar().setTitle(title);
         } else if (null != getSupportActionBar()) {
-            getSupportActionBar().setTitle(R.string.activityFilterMastermind);
+            getSupportActionBar().setTitle(title);
         }
 
         filterRecyclerView.setAdapter(gameComponentRecyclerAdapter);
 
         gameComponentRecyclerAdapter.setDbUpdateConsumer(mastermind ->
-                AsyncTask.execute(() -> {
+                new DbAsyncTask(() -> {
                     if (mastermind.isEnabled()) {
                         final Villains alwaysLeadsVillains = mastermind.getAlwaysLeadsVillains();
                         final Henchmen alwaysLeadsHenchmen = mastermind.getAlwaysLeadsHenchmen();
@@ -56,10 +59,13 @@ public class FilterMastermindActivity extends FilterActivity {
                 })
         );
 
-        gameComponentRecyclerAdapter.setDbDeleteConsumer(mastermind ->
-                AsyncTask.execute(() ->
-                        db.mastermindDao().delete(mastermind.toEntity()))
-        );
+        gameComponentRecyclerAdapter.setInfoButtonAction(mastermind -> {
+            final Intent intent = new Intent(this, MastermindInfoActivity.class);
+
+            intent.putExtra(COMPONENT_EXTRA, mastermind);
+
+            startActivity(intent);
+        });
 
         observeOnce(this,
                 db.mastermindDao().getAllAsync(),

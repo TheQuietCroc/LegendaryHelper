@@ -11,6 +11,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.google.android.material.button.MaterialButtonToggleGroup;
 import com.thequietcroc.legendary.R;
+import com.thequietcroc.legendary.activities.filters.FilterSelectMenuActivity;
 import com.thequietcroc.legendary.database.LegendaryDatabase;
 import com.thequietcroc.legendary.models.GameSetup;
 

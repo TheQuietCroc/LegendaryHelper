@@ -1,13 +1,15 @@
-package com.thequietcroc.legendary.activities;
+package com.thequietcroc.legendary.activities.filters;
 
-import android.os.AsyncTask;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.thequietcroc.legendary.R;
+import com.thequietcroc.legendary.activities.info.SchemeInfoActivity;
 import com.thequietcroc.legendary.custom.adapters.GameComponentRecyclerAdapter;
 import com.thequietcroc.legendary.database.entities.gamecomponents.cards.SchemeEntity;
 import com.thequietcroc.legendary.models.gamecomponents.cards.Scheme;
+import com.thequietcroc.legendary.utilities.DbAsyncTask;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,24 +24,28 @@ public class FilterSchemeActivity extends FilterActivity {
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        final String title = String.format("%s %s", getString(R.string.filter), getString(R.string.schemes));
 
         if (null != getActionBar()) {
-            getActionBar().setTitle(R.string.activityFilterScheme);
+            getActionBar().setTitle(title);
         } else if (null != getSupportActionBar()) {
-            getSupportActionBar().setTitle(R.string.activityFilterScheme);
+            getSupportActionBar().setTitle(title);
         }
 
         filterRecyclerView.setAdapter(gameComponentRecyclerAdapter);
 
         gameComponentRecyclerAdapter.setDbUpdateConsumer(scheme ->
-                AsyncTask.execute(() ->
+                new DbAsyncTask(() ->
                         db.schemeDao().update(scheme.toEntity()))
         );
 
-        gameComponentRecyclerAdapter.setDbDeleteConsumer(scheme ->
-                AsyncTask.execute(() ->
-                        db.schemeDao().delete(scheme.toEntity()))
-        );
+        gameComponentRecyclerAdapter.setInfoButtonAction(scheme -> {
+            final Intent intent = new Intent(this, SchemeInfoActivity.class);
+
+            intent.putExtra(COMPONENT_EXTRA, scheme);
+
+            startActivity(intent);
+        });
 
         observeOnce(this,
                 db.schemeDao().getAllAsync(),

@@ -1,7 +1,5 @@
 package com.thequietcroc.legendary.models.gamecomponents;
 
-import android.os.AsyncTask;
-
 import com.thequietcroc.legendary.database.LegendaryDatabase;
 import com.thequietcroc.legendary.database.daos.gamecomponents.cards.HenchmenDao;
 import com.thequietcroc.legendary.database.daos.gamecomponents.cards.HeroDao;
@@ -14,6 +12,7 @@ import com.thequietcroc.legendary.models.gamecomponents.cards.Hero;
 import com.thequietcroc.legendary.models.gamecomponents.cards.Mastermind;
 import com.thequietcroc.legendary.models.gamecomponents.cards.Scheme;
 import com.thequietcroc.legendary.models.gamecomponents.cards.Villains;
+import com.thequietcroc.legendary.utilities.DbAsyncTask;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -50,19 +49,11 @@ public class GameSet extends BaseGameComponent {
 
             final MastermindDao mastermindDao = LegendaryDatabase.getInstance().mastermindDao();
 
-            try {
-                mastermindList.addAll(mastermindDao
-                        .getAllBySetIdSync(getId())
-                        .stream()
-                        .map(Mastermind::new)
-                        .collect(Collectors.toList()));
-            } catch (IllegalStateException e) {
-                AsyncTask.execute(() -> mastermindList.addAll(mastermindDao
-                        .getAllBySetIdSync(getId())
-                        .stream()
-                        .map(Mastermind::new)
-                        .collect(Collectors.toList())));
-            }
+            new DbAsyncTask(() -> mastermindList.addAll(mastermindDao
+                    .getAllBySetIdSync(getId())
+                    .stream()
+                    .map(Mastermind::new)
+                    .collect(Collectors.toList())));
         }
 
         return mastermindList;
@@ -73,19 +64,11 @@ public class GameSet extends BaseGameComponent {
 
             final SchemeDao schemeDao = LegendaryDatabase.getInstance().schemeDao();
 
-            try {
-                schemeList.addAll(schemeDao
-                        .getAllBySetIdSync(getId())
-                        .stream()
-                        .map(Scheme::new)
-                        .collect(Collectors.toList()));
-            } catch (IllegalStateException e) {
-                AsyncTask.execute(() -> schemeList.addAll(schemeDao
-                        .getAllBySetIdSync(getId())
-                        .stream()
-                        .map(Scheme::new)
-                        .collect(Collectors.toList())));
-            }
+            new DbAsyncTask(() -> schemeList.addAll(schemeDao
+                    .getAllBySetIdSync(getId())
+                    .stream()
+                    .map(Scheme::new)
+                    .collect(Collectors.toList())));
         }
 
         return schemeList;
@@ -96,19 +79,11 @@ public class GameSet extends BaseGameComponent {
 
             final VillainsDao villainsDao = LegendaryDatabase.getInstance().villainsDao();
 
-            try {
-                villainsList.addAll(villainsDao
-                        .getAllBySetIdSync(getId())
-                        .stream()
-                        .map(Villains::new)
-                        .collect(Collectors.toList()));
-            } catch (IllegalStateException e) {
-                AsyncTask.execute(() -> villainsList.addAll(villainsDao
-                        .getAllBySetIdSync(getId())
-                        .stream()
-                        .map(Villains::new)
-                        .collect(Collectors.toList())));
-            }
+            new DbAsyncTask(() -> villainsList.addAll(villainsDao
+                    .getAllBySetIdSync(getId())
+                    .stream()
+                    .map(Villains::new)
+                    .collect(Collectors.toList())));
         }
 
         return villainsList;
@@ -119,19 +94,11 @@ public class GameSet extends BaseGameComponent {
 
             final HenchmenDao henchmenDao = LegendaryDatabase.getInstance().henchmenDao();
 
-            try {
-                henchmenList.addAll(henchmenDao
-                        .getAllBySetIdSync(getId())
-                        .stream()
-                        .map(Henchmen::new)
-                        .collect(Collectors.toList()));
-            } catch (IllegalStateException e) {
-                AsyncTask.execute(() -> henchmenList.addAll(henchmenDao
-                        .getAllBySetIdSync(getId())
-                        .stream()
-                        .map(Henchmen::new)
-                        .collect(Collectors.toList())));
-            }
+            new DbAsyncTask(() -> henchmenList.addAll(henchmenDao
+                    .getAllBySetIdSync(getId())
+                    .stream()
+                    .map(Henchmen::new)
+                    .collect(Collectors.toList())));
         }
 
         return henchmenList;
@@ -142,19 +109,11 @@ public class GameSet extends BaseGameComponent {
 
             final HeroDao heroDao = LegendaryDatabase.getInstance().heroDao();
 
-            try {
-                heroList.addAll(heroDao
-                        .getAllBySetIdSync(getId())
-                        .stream()
-                        .map(Hero::new)
-                        .collect(Collectors.toList()));
-            } catch (IllegalStateException e) {
-                AsyncTask.execute(() -> heroList.addAll(heroDao
-                        .getAllBySetIdSync(getId())
-                        .stream()
-                        .map(Hero::new)
-                        .collect(Collectors.toList())));
-            }
+            new DbAsyncTask(() -> heroList.addAll(heroDao
+                    .getAllBySetIdSync(getId())
+                    .stream()
+                    .map(Hero::new)
+                    .collect(Collectors.toList())));
         }
 
         return heroList;

@@ -1,10 +1,11 @@
-package com.thequietcroc.legendary.activities;
+package com.thequietcroc.legendary.activities.filters;
 
-import android.os.AsyncTask;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.thequietcroc.legendary.R;
+import com.thequietcroc.legendary.activities.info.GameSetInfoActivity;
 import com.thequietcroc.legendary.custom.adapters.GameComponentRecyclerAdapter;
 import com.thequietcroc.legendary.database.entities.gamecomponents.GameSetEntity;
 import com.thequietcroc.legendary.models.gamecomponents.GameSet;
@@ -13,6 +14,7 @@ import com.thequietcroc.legendary.models.gamecomponents.cards.Hero;
 import com.thequietcroc.legendary.models.gamecomponents.cards.Mastermind;
 import com.thequietcroc.legendary.models.gamecomponents.cards.Scheme;
 import com.thequietcroc.legendary.models.gamecomponents.cards.Villains;
+import com.thequietcroc.legendary.utilities.DbAsyncTask;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,17 +29,18 @@ public class FilterGameSetActivity extends FilterActivity {
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        final String title = String.format("%s %s", getString(R.string.filter), getString(R.string.gameSets));
 
         if (null != getActionBar()) {
-            getActionBar().setTitle(R.string.activityFilterGameSet);
+            getActionBar().setTitle(title);
         } else if (null != getSupportActionBar()) {
-            getSupportActionBar().setTitle(R.string.activityFilterGameSet);
+            getSupportActionBar().setTitle(title);
         }
 
         filterRecyclerView.setAdapter(gameComponentRecyclerAdapter);
 
         gameComponentRecyclerAdapter.setDbUpdateConsumer(gameSet ->
-                AsyncTask.execute(() -> {
+                new DbAsyncTask(() -> {
                     final List<Mastermind> mastermindsInSet = gameSet.getMastermindList();
                     final List<Scheme> schemesInSet = gameSet.getSchemeList();
                     final List<Villains> villainsInSet = gameSet.getVillainsList();
@@ -74,23 +77,13 @@ public class FilterGameSetActivity extends FilterActivity {
                 })
         );
 
-        gameComponentRecyclerAdapter.setDbDeleteConsumer(gameSet ->
-                AsyncTask.execute(() -> {
-                    // TODO: confirm delete all in set before doing it
-//                    final List<MastermindEntity> mastermindsInSet = db.gameSetDao().getAllMastermindsInSet(gameSet.getId());
-//                    final List<SchemeEntity> schemesInSet = db.gameSetDao().getAllSchemesInSet(gameSet.getId());
-//                    final List<VillainsEntity> villainsInSet = db.gameSetDao().getAllVillainsInSet(gameSet.getId());
-//                    final List<HenchmenEntity> henchmenInSet = db.gameSetDao().getAllHenchmenInSet(gameSet.getId());
-//                    final List<HeroEntity> heroesInSet = db.gameSetDao().getAllHeroesInSet(gameSet.getId());
+        gameComponentRecyclerAdapter.setInfoButtonAction(gameSet -> {
+            final Intent intent = new Intent(this, GameSetInfoActivity.class);
 
-                    db.gameSetDao().delete(gameSet.toEntity());
-//                    db.mastermindDao().delete(mastermindsInSet);
-//                    db.schemeDao().delete(schemesInSet);
-//                    db.villainsDao().delete(villainsInSet);
-//                    db.henchmenDao().delete(henchmenInSet);
-//                    db.heroDao().delete(heroesInSet);
-                })
-        );
+            intent.putExtra(COMPONENT_EXTRA, gameSet);
+
+            startActivity(intent);
+        });
 
         observeOnce(this,
                 db.gameSetDao().getAllAsync(),

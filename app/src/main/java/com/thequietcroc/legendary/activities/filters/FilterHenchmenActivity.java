@@ -1,14 +1,16 @@
-package com.thequietcroc.legendary.activities;
+package com.thequietcroc.legendary.activities.filters;
 
-import android.os.AsyncTask;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.thequietcroc.legendary.R;
+import com.thequietcroc.legendary.activities.info.HenchmenInfoActivity;
 import com.thequietcroc.legendary.custom.adapters.GameComponentRecyclerAdapter;
 import com.thequietcroc.legendary.database.entities.gamecomponents.cards.HenchmenEntity;
 import com.thequietcroc.legendary.models.gamecomponents.cards.Henchmen;
 import com.thequietcroc.legendary.models.gamecomponents.cards.Mastermind;
+import com.thequietcroc.legendary.utilities.DbAsyncTask;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,17 +25,18 @@ public class FilterHenchmenActivity extends FilterActivity {
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        final String title = String.format("%s %s", getString(R.string.filter), getString(R.string.henchmen));
 
         if (null != getActionBar()) {
-            getActionBar().setTitle(R.string.activityFilterHenchmen);
+            getActionBar().setTitle(title);
         } else if (null != getSupportActionBar()) {
-            getSupportActionBar().setTitle(R.string.activityFilterHenchmen);
+            getSupportActionBar().setTitle(title);
         }
 
         filterRecyclerView.setAdapter(gameComponentRecyclerAdapter);
 
         gameComponentRecyclerAdapter.setDbUpdateConsumer(henchmen ->
-                AsyncTask.execute(() -> {
+                new DbAsyncTask(() -> {
                     if (!henchmen.isEnabled()) {
                         final List<Mastermind> mastermindList = henchmen.getMastermindLeaderList();
                         mastermindList.stream().forEach(mastermind -> mastermind.setEnabled(henchmen.isEnabled()));
@@ -48,11 +51,13 @@ public class FilterHenchmenActivity extends FilterActivity {
                 })
         );
 
-        // TODO: figure out what to do when an always leads henchmen gets deleted
-        gameComponentRecyclerAdapter.setDbDeleteConsumer(henchmen ->
-                AsyncTask.execute(() ->
-                        db.henchmenDao().delete(henchmen.toEntity()))
-        );
+        gameComponentRecyclerAdapter.setInfoButtonAction(henchmen -> {
+            final Intent intent = new Intent(this, HenchmenInfoActivity.class);
+
+            intent.putExtra(COMPONENT_EXTRA, henchmen);
+
+            startActivity(intent);
+        });
 
         observeOnce(this,
                 db.henchmenDao().getAllAsync(),

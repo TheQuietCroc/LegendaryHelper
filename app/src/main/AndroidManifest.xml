@@ -10,36 +10,48 @@
             android:supportsRtl="true"
             android:theme="@style/Theme.Legendary">
         <activity
-                android:name=".activities.FilterGameSetActivity"
-                android:parentActivityName=".activities.FilterSelectMenuActivity">
-        </activity>
+                android:name=".activities.filters.FilterGameSetActivity"
+                android:parentActivityName=".activities.filters.FilterSelectMenuActivity" />
         <activity
-                android:name=".activities.FilterHenchmenActivity"
-                android:parentActivityName=".activities.FilterSelectMenuActivity">
-        </activity>
+                android:name=".activities.filters.FilterHenchmenActivity"
+                android:parentActivityName=".activities.filters.FilterSelectMenuActivity" />
         <activity
-                android:name=".activities.FilterHeroActivity"
-                android:parentActivityName=".activities.FilterSelectMenuActivity">
-        </activity>
+                android:name=".activities.filters.FilterHeroActivity"
+                android:parentActivityName=".activities.filters.FilterSelectMenuActivity" />
         <activity
-                android:name=".activities.FilterMastermindActivity"
-                android:parentActivityName=".activities.FilterSelectMenuActivity">
-        </activity>
+                android:name=".activities.filters.FilterMastermindActivity"
+                android:parentActivityName=".activities.filters.FilterSelectMenuActivity" />
         <activity
-                android:name=".activities.FilterSchemeActivity"
-                android:parentActivityName=".activities.FilterSelectMenuActivity">
-        </activity>
+                android:name=".activities.filters.FilterSchemeActivity"
+                android:parentActivityName=".activities.filters.FilterSelectMenuActivity" />
         <activity
-                android:name=".activities.FilterVillainsActivity"
-                android:parentActivityName=".activities.FilterSelectMenuActivity">
-        </activity>
+                android:name=".activities.filters.FilterVillainsActivity"
+                android:parentActivityName=".activities.filters.FilterSelectMenuActivity" />
         <activity
-                android:name=".activities.FilterSelectMenuActivity"
-                android:parentActivityName=".activities.MainActivity">
-        </activity>
+                android:name=".activities.filters.FilterSelectMenuActivity"
+                android:parentActivityName=".activities.MainActivity" />
+        <activity
+                android:name=".activities.info.GameSetInfoActivity"
+                android:parentActivityName=".activities.filters.FilterGameSetActivity" />
+        <activity
+                android:name=".activities.info.HenchmenInfoActivity"
+                android:parentActivityName=".activities.filters.FilterHenchmenActivity" />
+        <activity
+                android:name=".activities.info.HeroInfoActivity"
+                android:parentActivityName=".activities.filters.FilterHeroActivity" />
+        <activity
+                android:name=".activities.info.MastermindInfoActivity"
+                android:parentActivityName=".activities.filters.FilterMastermindActivity" />
+        <activity
+                android:name=".activities.info.SchemeInfoActivity"
+                android:parentActivityName=".activities.filters.FilterSchemeActivity" />
+        <activity
+                android:name=".activities.info.VillainsInfoActivity"
+                android:parentActivityName=".activities.filters.FilterVillainsActivity" />
         <activity android:name=".activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

@@ -1,12 +1,10 @@
 package com.thequietcroc.legendary.models.gamecomponents.cards;
 
-import android.os.AsyncTask;
-
 import com.thequietcroc.legendary.database.LegendaryDatabase;
-import com.thequietcroc.legendary.database.entities.gamecomponents.GameSetEntity;
 import com.thequietcroc.legendary.database.entities.gamecomponents.cards.BaseCardEntity;
 import com.thequietcroc.legendary.models.gamecomponents.BaseGameComponent;
 import com.thequietcroc.legendary.models.gamecomponents.GameSet;
+import com.thequietcroc.legendary.utilities.DbAsyncTask;
 
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -21,7 +19,7 @@ public abstract class BaseCard extends BaseGameComponent {
     public BaseCard(final BaseCardEntity baseCardEntity) {
         super(baseCardEntity);
 
-        AsyncTask.execute(() -> setGameSet(LegendaryDatabase.getInstance()
+        new DbAsyncTask(() -> setGameSet(LegendaryDatabase.getInstance()
                 .gameSetDao()
                 .findByIdSync(baseCardEntity.getGameSetId())
                 .toModel()));

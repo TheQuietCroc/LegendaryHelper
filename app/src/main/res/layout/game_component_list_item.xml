@@ -24,7 +24,7 @@
             android:id="@+id/gameComponentEnabledCheckbox"
             app:layout_constraintTop_toTopOf="@+id/gameComponentName"
             app:layout_constraintBottom_toBottomOf="@+id/gameComponentName"
-            app:layout_constraintEnd_toStartOf="@+id/gameComponentDeleteButton"
+            app:layout_constraintEnd_toStartOf="@+id/gameComponentInfoButton"
             android:layout_marginRight="8dp"
             android:layout_marginEnd="8dp" />
 
@@ -34,9 +34,9 @@
             android:layout_marginRight="16dp"
             android:layout_marginEnd="16dp"
             app:layout_constraintEnd_toEndOf="parent"
-            android:id="@+id/gameComponentDeleteButton"
+            android:id="@+id/gameComponentInfoButton"
             app:layout_constraintTop_toTopOf="@+id/gameComponentName"
             app:layout_constraintBottom_toBottomOf="@+id/gameComponentName"
-            android:background="@drawable/trash_forever" />
+            android:background="@drawable/info" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

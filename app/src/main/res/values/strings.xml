@@ -1,17 +1,17 @@
 <resources>
     <string name="app_name">Legendary Helper</string>
 
-    <string name="labelPlayers">Players</string>
-    <string name="labelMastermind">Mastermind</string>
-    <string name="labelMasterminds">Masterminds</string>
-    <string name="labelScheme">Scheme</string>
-    <string name="labelSchemes">Schemes</string>
-    <string name="labelVillains">Villains</string>
-    <string name="labelHenchmen">Henchmen</string>
-    <string name="labelHero">Hero</string>
-    <string name="labelHeroes">Heroes</string>
-    <string name="labelLock">Lock</string>
-    <string name="labelGameSets">Game Sets</string>
+    <string name="players">Players</string>
+    <string name="mastermind">Mastermind</string>
+    <string name="masterminds">Masterminds</string>
+    <string name="scheme">Scheme</string>
+    <string name="schemes">Schemes</string>
+    <string name="villains">Villains</string>
+    <string name="henchmen">Henchmen</string>
+    <string name="hero">Hero</string>
+    <string name="heroes">Heroes</string>
+    <string name="lock">Lock</string>
+    <string name="gameSets">Game Sets</string>
 
     <string name="button1">1</string>
     <string name="button2">2</string>
@@ -19,13 +19,9 @@
     <string name="button4">4</string>
     <string name="button5">5</string>
 
-    <string name="activityFilter">Filter</string>
-    <string name="activityFilterGameSet">Filter Game Sets</string>
-    <string name="activityFilterHenchmen">Filter Henchmen</string>
-    <string name="activityFilterHero">Filter Heroes</string>
-    <string name="activityFilterMastermind">Filter Masterminds</string>
-    <string name="activityFilterScheme">Filter Schemes</string>
-    <string name="activityFilterVillains">Filter Villains</string>
+    <string name="filter">Filter</string>
 
-    <string name="checkEnabled">Enabled</string>
+    <string name="enabled">Enabled</string>
+    <string name="delete">Delete</string>
+    <string name="add_new">Add New</string>
 </resources>
