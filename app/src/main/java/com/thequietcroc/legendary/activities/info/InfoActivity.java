@@ -15,8 +15,6 @@ import com.thequietcroc.legendary.database.LegendaryDatabase;
 import com.thequietcroc.legendary.models.BaseItem;
 import com.thequietcroc.legendary.models.gamecomponents.BaseGameComponent;
 
-import org.apache.commons.lang3.StringUtils;
-
 import java.util.concurrent.atomic.AtomicReference;
 
 public abstract class InfoActivity extends AppCompatActivity {
@@ -50,22 +48,29 @@ public abstract class InfoActivity extends AppCompatActivity {
                         .setTitle(getString(R.string.confirmDeleteTitle))
                         .setPositiveButton(R.string.yes, (dialog, which) -> deleteComponent())
                         .setNegativeButton(R.string.cancel, (dialog, which) -> {})
-                        .create();
+                        .create()
+                        .show();
             } break;
             case R.id.infoMenuSave: {
                 saveComponent();
             } break;
             default:
-                new AlertDialog.Builder(this)
-                        .setMessage(R.string.confirmSave)
-                        .setTitle(R.string.save)
-                        .setPositiveButton(R.string.yes, (dialog, which) -> {
-                            saveComponent();
-                            NavUtils.navigateUpFromSameTask(this);
-                        })
-                        .setNeutralButton(R.string.cancel, (dialog, which) -> {})
-                        .setNegativeButton(R.string.no, (dialog, which) -> NavUtils.navigateUpFromSameTask(this))
-                        .create();
+                if (componentAtomicReference.get().isCustom()) {
+                    new AlertDialog.Builder(this)
+                            .setMessage(R.string.confirmSave)
+                            .setTitle(R.string.save)
+                            .setPositiveButton(R.string.yes, (dialog, which) -> {
+                                saveComponent();
+                                NavUtils.navigateUpFromSameTask(this);
+                            })
+                            .setNeutralButton(R.string.cancel, (dialog, which) -> {})
+                            .setNegativeButton(R.string.no,
+                                    (dialog, which) -> NavUtils.navigateUpFromSameTask(this))
+                            .create()
+                            .show();
+                } else {
+                    NavUtils.navigateUpFromSameTask(this);
+                }
             break;
         }
 
@@ -82,20 +87,13 @@ public abstract class InfoActivity extends AppCompatActivity {
         return true;
     }
 
-    protected void setTitle(final String placeholder) {
+    protected void setTitle() {
         final BaseGameComponent component = componentAtomicReference.get();
-        final String title;
-
-        if (StringUtils.isBlank(component.getName())) {
-            title = placeholder;
-        } else {
-            title = component.getName();
-        }
 
         if (null != getActionBar()) {
-            getActionBar().setTitle(title);
+            getActionBar().setTitle(component.getName());
         } else if (null != getSupportActionBar()) {
-            getSupportActionBar().setTitle(title);
+            getSupportActionBar().setTitle(component.getName());
         }
     }
 

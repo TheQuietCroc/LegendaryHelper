@@ -68,9 +68,16 @@ public class FilterVillainsActivity extends FilterActivity {
     public boolean onOptionsItemSelected(final MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menuActionAddNew: {
+                final Intent intent = new Intent(this, VillainsInfoActivity.class);
 
-            }
-            break;
+                intent.putExtra(COMPONENT_EXTRA,
+                        new Villains(String.format(
+                                "%s %s",
+                                getString(R.string.custom),
+                                getString(R.string.villains))));
+
+              startActivity(intent);
+            } break;
             default:
                 super.onOptionsItemSelected(item);
                 break;

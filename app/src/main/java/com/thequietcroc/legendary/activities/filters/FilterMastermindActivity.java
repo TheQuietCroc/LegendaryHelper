@@ -76,9 +76,16 @@ public class FilterMastermindActivity extends FilterActivity {
     public boolean onOptionsItemSelected(final MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menuActionAddNew: {
+                final Intent intent = new Intent(this, MastermindInfoActivity.class);
 
-            }
-            break;
+                intent.putExtra(COMPONENT_EXTRA,
+                        new Mastermind(String.format(
+                                "%s %s",
+                                getString(R.string.custom),
+                                getString(R.string.mastermind))));
+
+                startActivity(intent);
+            } break;
             default:
                 super.onOptionsItemSelected(item);
                 break;

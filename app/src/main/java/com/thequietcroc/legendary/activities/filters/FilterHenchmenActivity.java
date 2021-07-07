@@ -68,9 +68,16 @@ public class FilterHenchmenActivity extends FilterActivity {
     public boolean onOptionsItemSelected(final MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menuActionAddNew: {
+                final Intent intent = new Intent(this, HenchmenInfoActivity.class);
 
-            }
-            break;
+                intent.putExtra(COMPONENT_EXTRA,
+                        new Henchmen(String.format(
+                                "%s %s",
+                                getString(R.string.custom),
+                                getString(R.string.henchmen))));
+
+                startActivity(intent);
+            } break;
             default:
                 super.onOptionsItemSelected(item);
                 break;

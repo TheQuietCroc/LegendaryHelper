@@ -5,7 +5,7 @@ import com.thequietcroc.legendary.models.BaseItem;
 
 public abstract class BaseGameComponent extends BaseItem {
 
-    private boolean isCustom = false;
+    private boolean isCustom = true;
     private boolean isEnabled = true;
 
     public BaseGameComponent() {

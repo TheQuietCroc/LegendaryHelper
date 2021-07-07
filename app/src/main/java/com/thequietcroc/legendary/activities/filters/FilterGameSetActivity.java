@@ -94,9 +94,16 @@ public class FilterGameSetActivity extends FilterActivity {
     public boolean onOptionsItemSelected(final MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menuActionAddNew: {
+                final Intent intent = new Intent(this, GameSetInfoActivity.class);
 
-            }
-            break;
+                intent.putExtra(COMPONENT_EXTRA,
+                        new GameSet(String.format(
+                                "%s %s",
+                                getString(R.string.custom),
+                                getString(R.string.gameSet))));
+
+                startActivity(intent);
+            } break;
             default:
                 super.onOptionsItemSelected(item);
                 break;

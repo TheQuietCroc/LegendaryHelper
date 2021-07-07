@@ -3,7 +3,6 @@ package com.thequietcroc.legendary.activities.info;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.thequietcroc.legendary.R;
 import com.thequietcroc.legendary.models.gamecomponents.cards.Scheme;
 
 import static com.thequietcroc.legendary.activities.filters.FilterActivity.COMPONENT_EXTRA;
@@ -19,6 +18,6 @@ public class SchemeInfoActivity extends InfoActivity {
             componentAtomicReference.set((Scheme) intent.getSerializableExtra(COMPONENT_EXTRA));
         }
 
-        setTitle(String.format("%s %s", getString(R.string.custom), getString(R.string.scheme)));
+        setTitle();
     }
 }

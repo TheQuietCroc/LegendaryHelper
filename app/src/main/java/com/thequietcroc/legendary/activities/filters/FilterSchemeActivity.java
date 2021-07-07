@@ -56,9 +56,16 @@ public class FilterSchemeActivity extends FilterActivity {
     public boolean onOptionsItemSelected(final MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menuActionAddNew: {
+                final Intent intent = new Intent(this, SchemeInfoActivity.class);
 
-            }
-            break;
+                intent.putExtra(COMPONENT_EXTRA,
+                        new Scheme(String.format(
+                                "%s %s",
+                                getString(R.string.custom),
+                                getString(R.string.scheme))));
+
+                startActivity(intent);
+            } break;
             default:
                 super.onOptionsItemSelected(item);
                 break;
