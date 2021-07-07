@@ -100,7 +100,7 @@ public class Hero extends BaseCard {
         final HeroDao heroDao = LegendaryDatabase.getInstance().heroDao();
 
         if (0 == getId()) {
-            heroDao.insert(toEntity());
+            setId((int) heroDao.insert(toEntity()));
         } else {
             heroDao.update(toEntity());
         }
@@ -108,9 +108,11 @@ public class Hero extends BaseCard {
 
     @Override
     public void dbDelete() {
-        final HeroDao heroDao = LegendaryDatabase.getInstance().heroDao();
+        if (0 < getId()) {
+            final HeroDao heroDao = LegendaryDatabase.getInstance().heroDao();
 
-        heroDao.delete(toEntity());
+            heroDao.delete(toEntity());
+        }
     }
 
     @Override

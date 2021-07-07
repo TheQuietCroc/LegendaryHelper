@@ -178,7 +178,7 @@ public class GameSetup extends BaseItem {
 //        final GameSetupDao gameSetupDao = LegendaryDatabase.getInstance().gameSetupDao();
 //
 //        if (0 == getId()) {
-//            gameSetupDao.insert(toEntity());
+//            setId((int) gameSetupDao.insert(toEntity()));
 //        } else {
 //            gameSetupDao.update(toEntity());
 //        }
@@ -186,9 +186,11 @@ public class GameSetup extends BaseItem {
 
     @Override
     public void dbDelete() {
-//        final GameSetupDao gameSetupDao = LegendaryDatabase.getInstance().gameSetupDao();
+//        if (0 < getId()) {
+//            final GameSetupDao gameSetupDao = LegendaryDatabase.getInstance().gameSetupDao();
 //
-//        gameSetupDao.delete(toEntity());
+//            gameSetupDao.delete(toEntity());
+//        }
     }
 
     private void setNumPlayers(final int numPlayers) {

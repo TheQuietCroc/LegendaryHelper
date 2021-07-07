@@ -75,7 +75,7 @@ public class Mastermind extends BaseCard {
         final MastermindDao mastermindDao = LegendaryDatabase.getInstance().mastermindDao();
 
         if (0 == getId()) {
-            mastermindDao.insert(toEntity());
+            setId((int) mastermindDao.insert(toEntity()));
         } else {
             mastermindDao.update(toEntity());
         }
@@ -83,9 +83,11 @@ public class Mastermind extends BaseCard {
 
     @Override
     public void dbDelete() {
-        final MastermindDao mastermindDao = LegendaryDatabase.getInstance().mastermindDao();
+        if (0 < getId()) {
+            final MastermindDao mastermindDao = LegendaryDatabase.getInstance().mastermindDao();
 
-        mastermindDao.delete(toEntity());
+            mastermindDao.delete(toEntity());
+        }
     }
 
     @Override

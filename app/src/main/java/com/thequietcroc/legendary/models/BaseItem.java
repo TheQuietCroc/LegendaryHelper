@@ -27,7 +27,7 @@ public abstract class BaseItem implements Serializable {
         return id;
     }
 
-    private void setId(final int id) {
+    protected void setId(final int id) {
         this.id = id;
     }
 

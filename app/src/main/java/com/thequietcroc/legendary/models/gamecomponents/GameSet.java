@@ -125,7 +125,7 @@ public class GameSet extends BaseGameComponent {
         final GameSetDao gameSetDao = LegendaryDatabase.getInstance().gameSetDao();
 
         if (0 == getId()) {
-            gameSetDao.insert(toEntity());
+            setId((int) gameSetDao.insert(toEntity()));
         } else {
             gameSetDao.update(toEntity());
         }
@@ -133,9 +133,11 @@ public class GameSet extends BaseGameComponent {
 
     @Override
     public void dbDelete() {
-        final GameSetDao gameSetDao = LegendaryDatabase.getInstance().gameSetDao();
+        if (0 < getId()) {
+            final GameSetDao gameSetDao = LegendaryDatabase.getInstance().gameSetDao();
 
-        gameSetDao.delete(toEntity());
+            gameSetDao.delete(toEntity());
+        }
     }
 
     @Override

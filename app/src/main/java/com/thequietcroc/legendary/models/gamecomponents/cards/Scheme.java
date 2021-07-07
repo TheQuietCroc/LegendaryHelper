@@ -28,7 +28,7 @@ public class Scheme extends BaseCard {
         final SchemeDao schemeDao = LegendaryDatabase.getInstance().schemeDao();
 
         if (0 == getId()) {
-            schemeDao.insert(toEntity());
+            setId((int) schemeDao.insert(toEntity()));
         } else {
             schemeDao.update(toEntity());
         }
@@ -36,9 +36,11 @@ public class Scheme extends BaseCard {
 
     @Override
     public void dbDelete() {
-        final SchemeDao schemeDao = LegendaryDatabase.getInstance().schemeDao();
+        if (0 < getId()) {
+            final SchemeDao schemeDao = LegendaryDatabase.getInstance().schemeDao();
 
-        schemeDao.delete(toEntity());
+            schemeDao.delete(toEntity());
+        }
     }
 
     @Override

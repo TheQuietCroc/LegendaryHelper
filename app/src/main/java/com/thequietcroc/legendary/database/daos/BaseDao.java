@@ -9,8 +9,6 @@ import com.thequietcroc.legendary.database.entities.BaseEntity;
 
 import java.util.List;
 
-import static androidx.room.OnConflictStrategy.REPLACE;
-
 public interface BaseDao<T extends BaseEntity, M extends BaseEntity.Minimal> {
 
     // findByName
@@ -51,14 +49,14 @@ public interface BaseDao<T extends BaseEntity, M extends BaseEntity.Minimal> {
     void update(final List<T> entities);
 
     // insert
-    @Insert(onConflict = REPLACE)
-    void insert(final T entity);
+    @Insert
+    long insert(final T entity);
 
-    @Insert(onConflict = REPLACE)
-    void insert(final T[] entities);
+    @Insert
+    long[] insert(final T[] entities);
 
-    @Insert(onConflict = REPLACE)
-    void insert(final List<T> entities);
+    @Insert
+    List<Long> insert(final List<T> entities);
 
     // delete
     @Delete

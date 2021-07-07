@@ -110,7 +110,7 @@ public abstract class InfoActivity extends AppCompatActivity {
                 Toast.LENGTH_SHORT).show();
     }
 
-    private void saveComponent() {
+    protected void saveComponent() {
         final BaseItem component = componentAtomicReference.get();
 
         component.dbSave();

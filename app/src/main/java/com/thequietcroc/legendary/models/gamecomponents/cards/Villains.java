@@ -55,7 +55,7 @@ public class Villains extends BaseCard {
         final VillainsDao villainsDao = LegendaryDatabase.getInstance().villainsDao();
 
         if (0 == getId()) {
-            villainsDao.insert(toEntity());
+            setId((int) villainsDao.insert(toEntity()));
         } else {
             villainsDao.update(toEntity());
         }
@@ -63,9 +63,11 @@ public class Villains extends BaseCard {
 
     @Override
     public void dbDelete() {
-        final VillainsDao villainsDao = LegendaryDatabase.getInstance().villainsDao();
+        if (0 < getId()) {
+            final VillainsDao villainsDao = LegendaryDatabase.getInstance().villainsDao();
 
-        villainsDao.delete(toEntity());
+            villainsDao.delete(toEntity());
+        }
     }
 
     @Override

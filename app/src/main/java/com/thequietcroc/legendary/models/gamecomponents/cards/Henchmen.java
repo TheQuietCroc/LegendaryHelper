@@ -55,7 +55,7 @@ public class Henchmen extends BaseCard {
         final HenchmenDao henchmenDao = LegendaryDatabase.getInstance().henchmenDao();
 
         if (0 == getId()) {
-            henchmenDao.insert(toEntity());
+            setId((int) henchmenDao.insert(toEntity()));
         } else {
             henchmenDao.update(toEntity());
         }
@@ -63,9 +63,11 @@ public class Henchmen extends BaseCard {
 
     @Override
     public void dbDelete() {
-        final HenchmenDao henchmenDao = LegendaryDatabase.getInstance().henchmenDao();
+        if (0 < getId()) {
+            final HenchmenDao henchmenDao = LegendaryDatabase.getInstance().henchmenDao();
 
-        henchmenDao.delete(toEntity());
+            henchmenDao.delete(toEntity());
+        }
     }
 
     @Override
