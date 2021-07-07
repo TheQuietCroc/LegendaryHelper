@@ -14,6 +14,7 @@ public class GameSetInfoActivity extends InfoActivity {
         super.onCreate(savedInstanceState);
 
         final Intent intent = getIntent();
+
         if (intent.hasExtra(COMPONENT_EXTRA)) {
             componentAtomicReference.set((GameSet) intent.getSerializableExtra(COMPONENT_EXTRA));
         }

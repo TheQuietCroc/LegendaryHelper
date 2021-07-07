@@ -8,6 +8,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.core.app.NavUtils;
 
 import com.thequietcroc.legendary.R;
@@ -26,6 +27,24 @@ public abstract class InfoActivity extends AppCompatActivity {
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_component_info);
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(final Menu menu) {
+        final BaseGameComponent component = componentAtomicReference.get();
+        final boolean isCustom = component.isCustom();
+
+        menu.findItem(R.id.infoMenuDelete).setVisible(isCustom);
+        menu.findItem(R.id.infoMenuSave).setVisible(isCustom);
+
+        final SwitchCompat enabledSwitch = menu.findItem(R.id.infoMenuEnabled)
+                .getActionView().findViewById(R.id.menuItemSwitch);
+
+        enabledSwitch.setChecked(component.isEnabled());
+        enabledSwitch.setOnClickListener(v ->
+                component.setEnabled(((SwitchCompat) v).isChecked()));
+
+        return true;
     }
 
     @Override
@@ -73,16 +92,6 @@ public abstract class InfoActivity extends AppCompatActivity {
                 }
             break;
         }
-
-        return true;
-    }
-
-    @Override
-    public boolean onPrepareOptionsMenu(final Menu menu) {
-        final boolean isCustom = componentAtomicReference.get().isCustom();
-
-        menu.findItem(R.id.infoMenuDelete).setVisible(isCustom);
-        menu.findItem(R.id.infoMenuSave).setVisible(isCustom);
 
         return true;
     }

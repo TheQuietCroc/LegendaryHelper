@@ -14,6 +14,7 @@ public class VillainsInfoActivity extends InfoActivity {
         super.onCreate(savedInstanceState);
 
         final Intent intent = getIntent();
+
         if (intent.hasExtra(COMPONENT_EXTRA)) {
             componentAtomicReference.set((Villains) intent.getSerializableExtra(COMPONENT_EXTRA));
         }

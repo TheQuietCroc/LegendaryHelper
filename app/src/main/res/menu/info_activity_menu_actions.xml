@@ -2,10 +2,15 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+            android:id="@+id/infoMenuEnabled"
+            android:title="@string/enabled"
+            app:showAsAction="always"
+            app:actionLayout="@layout/switch_item"/>
+    <item
             android:id="@+id/infoMenuSave"
             android:icon="@drawable/save"
             android:title="@string/save"
-            app:showAsAction="always" />
+            app:showAsAction="ifRoom" />
     <item
             android:id="@+id/infoMenuDelete"
             android:icon="@drawable/delete"

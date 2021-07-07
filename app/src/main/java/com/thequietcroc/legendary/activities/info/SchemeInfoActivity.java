@@ -14,6 +14,7 @@ public class SchemeInfoActivity extends InfoActivity {
         super.onCreate(savedInstanceState);
 
         final Intent intent = getIntent();
+
         if (intent.hasExtra(COMPONENT_EXTRA)) {
             componentAtomicReference.set((Scheme) intent.getSerializableExtra(COMPONENT_EXTRA));
         }

@@ -14,6 +14,7 @@ public class HeroInfoActivity extends InfoActivity {
         super.onCreate(savedInstanceState);
 
         final Intent intent = getIntent();
+
         if (intent.hasExtra(COMPONENT_EXTRA)) {
             componentAtomicReference.set((Hero) intent.getSerializableExtra(COMPONENT_EXTRA));
         }
