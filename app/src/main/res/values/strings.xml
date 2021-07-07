@@ -22,6 +22,7 @@
 
     <string name="confirmDeleteMessage">Are you sure you want to delete</string>
     <string name="confirmDeleteTitle">Confirm Deletion</string>
+    <string name="confirmSave">Would you like to save before exiting?</string>
 
     <string name="filter">Filter</string>
     <string name="enabled">Enabled</string>
@@ -34,4 +35,5 @@
     <string name="cancel">Cancel</string>
     <string name="deleted">deleted</string>
     <string name="saved">saved</string>
+    <string name="no">No</string>
 </resources>

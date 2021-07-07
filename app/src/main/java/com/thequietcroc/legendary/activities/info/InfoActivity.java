@@ -44,7 +44,7 @@ public abstract class InfoActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.infoMenuDelete: {
                 new AlertDialog.Builder(this)
-                        .setMessage(String.format("%s \"%s\"",
+                        .setMessage(String.format("%s \"%s\"?",
                                 getString(R.string.confirmDeleteMessage),
                                 componentAtomicReference.get().getName()))
                         .setTitle(getString(R.string.confirmDeleteTitle))
@@ -56,7 +56,16 @@ public abstract class InfoActivity extends AppCompatActivity {
                 saveComponent();
             } break;
             default:
-                NavUtils.navigateUpFromSameTask(this);
+                new AlertDialog.Builder(this)
+                        .setMessage(R.string.confirmSave)
+                        .setTitle(R.string.save)
+                        .setPositiveButton(R.string.yes, (dialog, which) -> {
+                            saveComponent();
+                            NavUtils.navigateUpFromSameTask(this);
+                        })
+                        .setNeutralButton(R.string.cancel, (dialog, which) -> {})
+                        .setNegativeButton(R.string.no, (dialog, which) -> NavUtils.navigateUpFromSameTask(this))
+                        .create();
             break;
         }
 
