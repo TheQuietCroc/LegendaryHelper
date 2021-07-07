@@ -2,6 +2,7 @@ package com.thequietcroc.legendary.models.gamecomponents.cards;
 
 import com.thequietcroc.legendary.database.LegendaryDatabase;
 import com.thequietcroc.legendary.database.daos.gamecomponents.cards.MastermindDao;
+import com.thequietcroc.legendary.database.daos.gamecomponents.cards.VillainsDao;
 import com.thequietcroc.legendary.database.entities.gamecomponents.cards.MastermindEntity;
 import com.thequietcroc.legendary.database.entities.gamecomponents.cards.VillainsEntity;
 import com.thequietcroc.legendary.utilities.DbAsyncTask;
@@ -47,6 +48,24 @@ public class Villains extends BaseCard {
     @Override
     public VillainsEntity toEntity() {
         return new VillainsEntity(this);
+    }
+
+    @Override
+    public void dbSave() {
+        final VillainsDao villainsDao = LegendaryDatabase.getInstance().villainsDao();
+
+        if (0 == getId()) {
+            villainsDao.insert(toEntity());
+        } else {
+            villainsDao.update(toEntity());
+        }
+    }
+
+    @Override
+    public void dbDelete() {
+        final VillainsDao villainsDao = LegendaryDatabase.getInstance().villainsDao();
+
+        villainsDao.delete(toEntity());
     }
 
     @Override

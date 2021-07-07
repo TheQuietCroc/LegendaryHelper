@@ -1,6 +1,7 @@
 package com.thequietcroc.legendary.models.gamecomponents.cards;
 
 import com.thequietcroc.legendary.database.LegendaryDatabase;
+import com.thequietcroc.legendary.database.daos.gamecomponents.cards.MastermindDao;
 import com.thequietcroc.legendary.database.entities.gamecomponents.cards.MastermindEntity;
 import com.thequietcroc.legendary.utilities.DbAsyncTask;
 
@@ -67,6 +68,24 @@ public class Mastermind extends BaseCard {
     @Override
     public MastermindEntity toEntity() {
         return new MastermindEntity(this);
+    }
+
+    @Override
+    public void dbSave() {
+        final MastermindDao mastermindDao = LegendaryDatabase.getInstance().mastermindDao();
+
+        if (0 == getId()) {
+            mastermindDao.insert(toEntity());
+        } else {
+            mastermindDao.update(toEntity());
+        }
+    }
+
+    @Override
+    public void dbDelete() {
+        final MastermindDao mastermindDao = LegendaryDatabase.getInstance().mastermindDao();
+
+        mastermindDao.delete(toEntity());
     }
 
     @Override

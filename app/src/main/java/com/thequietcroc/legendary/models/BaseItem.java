@@ -41,6 +41,10 @@ public abstract class BaseItem implements Serializable {
 
     public abstract BaseEntity toEntity();
 
+    public abstract void dbSave();
+
+    public abstract void dbDelete();
+
     @Override
     public boolean equals(final Object o) {
         if (o == this) {

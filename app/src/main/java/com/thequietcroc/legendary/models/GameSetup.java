@@ -173,6 +173,24 @@ public class GameSetup extends BaseItem {
         return new GameSetupEntity(this);
     }
 
+    @Override
+    public void dbSave() {
+//        final GameSetupDao gameSetupDao = LegendaryDatabase.getInstance().gameSetupDao();
+//
+//        if (0 == getId()) {
+//            gameSetupDao.insert(toEntity());
+//        } else {
+//            gameSetupDao.update(toEntity());
+//        }
+    }
+
+    @Override
+    public void dbDelete() {
+//        final GameSetupDao gameSetupDao = LegendaryDatabase.getInstance().gameSetupDao();
+//
+//        gameSetupDao.delete(toEntity());
+    }
+
     private void setNumPlayers(final int numPlayers) {
         this.numPlayers = numPlayers;
     }

@@ -14,7 +14,7 @@
             android:layout_marginLeft="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginStart="16dp"
-            android:id="@+id/name"
+            android:id="@+id/infoName"
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
             app:layout_constraintEnd_toEndOf="parent"

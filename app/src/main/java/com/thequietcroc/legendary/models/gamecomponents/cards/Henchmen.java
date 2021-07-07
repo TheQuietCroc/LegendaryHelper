@@ -1,6 +1,7 @@
 package com.thequietcroc.legendary.models.gamecomponents.cards;
 
 import com.thequietcroc.legendary.database.LegendaryDatabase;
+import com.thequietcroc.legendary.database.daos.gamecomponents.cards.HenchmenDao;
 import com.thequietcroc.legendary.database.daos.gamecomponents.cards.MastermindDao;
 import com.thequietcroc.legendary.database.entities.gamecomponents.cards.HenchmenEntity;
 import com.thequietcroc.legendary.database.entities.gamecomponents.cards.MastermindEntity;
@@ -47,6 +48,24 @@ public class Henchmen extends BaseCard {
     @Override
     public HenchmenEntity toEntity() {
         return new HenchmenEntity(this);
+    }
+
+    @Override
+    public void dbSave() {
+        final HenchmenDao henchmenDao = LegendaryDatabase.getInstance().henchmenDao();
+
+        if (0 == getId()) {
+            henchmenDao.insert(toEntity());
+        } else {
+            henchmenDao.update(toEntity());
+        }
+    }
+
+    @Override
+    public void dbDelete() {
+        final HenchmenDao henchmenDao = LegendaryDatabase.getInstance().henchmenDao();
+
+        henchmenDao.delete(toEntity());
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.thequietcroc.legendary.models.gamecomponents;
 
 import com.thequietcroc.legendary.database.LegendaryDatabase;
+import com.thequietcroc.legendary.database.daos.gamecomponents.GameSetDao;
 import com.thequietcroc.legendary.database.daos.gamecomponents.cards.HenchmenDao;
 import com.thequietcroc.legendary.database.daos.gamecomponents.cards.HeroDao;
 import com.thequietcroc.legendary.database.daos.gamecomponents.cards.MastermindDao;
@@ -117,6 +118,24 @@ public class GameSet extends BaseGameComponent {
         }
 
         return heroList;
+    }
+
+    @Override
+    public void dbSave() {
+        final GameSetDao gameSetDao = LegendaryDatabase.getInstance().gameSetDao();
+
+        if (0 == getId()) {
+            gameSetDao.insert(toEntity());
+        } else {
+            gameSetDao.update(toEntity());
+        }
+    }
+
+    @Override
+    public void dbDelete() {
+        final GameSetDao gameSetDao = LegendaryDatabase.getInstance().gameSetDao();
+
+        gameSetDao.delete(toEntity());
     }
 
     @Override

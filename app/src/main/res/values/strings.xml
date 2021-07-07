@@ -2,6 +2,7 @@
     <string name="app_name">Legendary Helper</string>
 
     <string name="players">Players</string>
+
     <string name="mastermind">Mastermind</string>
     <string name="masterminds">Masterminds</string>
     <string name="scheme">Scheme</string>
@@ -10,7 +11,7 @@
     <string name="henchmen">Henchmen</string>
     <string name="hero">Hero</string>
     <string name="heroes">Heroes</string>
-    <string name="lock">Lock</string>
+    <string name="gameSet">Game Set</string>
     <string name="gameSets">Game Sets</string>
 
     <string name="button1">1</string>
@@ -19,9 +20,18 @@
     <string name="button4">4</string>
     <string name="button5">5</string>
 
-    <string name="filter">Filter</string>
+    <string name="confirmDeleteMessage">Are you sure you want to delete</string>
+    <string name="confirmDeleteTitle">Confirm Deletion</string>
 
+    <string name="filter">Filter</string>
     <string name="enabled">Enabled</string>
     <string name="delete">Delete</string>
     <string name="add_new">Add New</string>
+    <string name="custom">Custom</string>
+    <string name="lock">Lock</string>
+    <string name="save">Save</string>
+    <string name="yes">Yes</string>
+    <string name="cancel">Cancel</string>
+    <string name="deleted">deleted</string>
+    <string name="saved">saved</string>
 </resources>
