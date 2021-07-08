@@ -7,7 +7,7 @@ import com.thequietcroc.legendary.database.entities.gamecomponents.cards.BaseCar
 
 import java.util.List;
 
-public interface BaseCardDao<T extends BaseCardEntity, M extends BaseCardEntity.Minimal> extends BaseGameComponentDao<T, M> {
+public interface BaseCardDao<T extends BaseCardEntity> extends BaseGameComponentDao<T> {
 
     // findByName
     @Override
@@ -16,24 +16,12 @@ public interface BaseCardDao<T extends BaseCardEntity, M extends BaseCardEntity.
     @Override
     T findByNameSync(final String name);
 
-    @Override
-    LiveData<M> findByNameAsyncMinimal(final String name);
-
-    @Override
-    M findByNameSyncMinimal(final String name);
-
     // findById
     @Override
     LiveData<T> findByIdAsync(final int id);
 
     @Override
     T findByIdSync(final int id);
-
-    @Override
-    LiveData<M> findByIdAsyncMinimal(final int id);
-
-    @Override
-    M findByIdSyncMinimal(final int id);
 
     // getAll
     @Override
@@ -42,12 +30,6 @@ public interface BaseCardDao<T extends BaseCardEntity, M extends BaseCardEntity.
     @Override
     List<T> getAllSync();
 
-    @Override
-    LiveData<List<M>> getAllAsyncMinimal();
-
-    @Override
-    List<M> getAllSyncMinimal();
-
     // getAllEnabled
     @Override
     LiveData<List<T>> getAllEnabledAsync();
@@ -55,16 +37,8 @@ public interface BaseCardDao<T extends BaseCardEntity, M extends BaseCardEntity.
     @Override
     List<T> getAllEnabledSync();
 
-    LiveData<List<M>> getAllEnabledAsyncMinimal();
-
-    List<M> getAllEnabledSyncMinimal();
-
     // getAllBySetId
     LiveData<List<T>> getAllBySetIdAsync(final int setId);
 
     List<T> getAllBySetIdSync(final int setId);
-
-    LiveData<List<M>> getAllBySetIdAsyncMinimal(final int setID);
-
-    List<M> getAllBySetIdSyncMinimal(final int setId);
 }

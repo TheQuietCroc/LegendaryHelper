@@ -1,5 +1,6 @@
 package com.thequietcroc.legendary.activities.filters;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.thequietcroc.legendary.R;
 import com.thequietcroc.legendary.database.LegendaryDatabase;
+import com.thequietcroc.legendary.models.gamecomponents.BaseGameComponent;
 
 public abstract class FilterActivity extends AppCompatActivity {
 
@@ -44,5 +46,21 @@ public abstract class FilterActivity extends AppCompatActivity {
         }
 
         return true;
+    }
+
+    protected <T extends BaseGameComponent> void startNewActivity(final T component, final Class<?> activityClass) {
+        final Intent intent = new Intent(this, activityClass);
+
+        intent.putExtra(COMPONENT_EXTRA, component);
+
+        startActivity(intent);
+    }
+
+    protected void setTitle(final String title) {
+        if (null != getActionBar()) {
+            getActionBar().setTitle(title);
+        } else if (null != getSupportActionBar()) {
+            getSupportActionBar().setTitle(title);
+        }
     }
 }

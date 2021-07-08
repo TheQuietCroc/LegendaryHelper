@@ -9,7 +9,7 @@ import com.thequietcroc.legendary.database.entities.GameSetupEntity;
 import java.util.List;
 
 @Dao
-public interface GameSetupDao extends BaseDao<GameSetupEntity, GameSetupEntity.Minimal> {
+public interface GameSetupDao extends BaseDao<GameSetupEntity> {
 
     // findByName
     @Override
@@ -20,14 +20,6 @@ public interface GameSetupDao extends BaseDao<GameSetupEntity, GameSetupEntity.M
     @Query("SELECT * FROM tblGameSetups WHERE name = :name LIMIT 1")
     GameSetupEntity findByNameSync(final String name);
 
-    @Override
-    @Query("SELECT id, name FROM tblGameSetups WHERE name = :name LIMIT 1")
-    LiveData<GameSetupEntity.Minimal> findByNameAsyncMinimal(final String name);
-
-    @Override
-    @Query("SELECT id, name FROM tblGameSetups WHERE name = :name LIMIT 1")
-    GameSetupEntity.Minimal findByNameSyncMinimal(final String name);
-
     // findById
     @Override
     @Query("SELECT * FROM tblGameSetups WHERE id = :id LIMIT 1")
@@ -37,14 +29,6 @@ public interface GameSetupDao extends BaseDao<GameSetupEntity, GameSetupEntity.M
     @Query("SELECT * FROM tblGameSetups WHERE id = :id LIMIT 1")
     GameSetupEntity findByIdSync(final int id);
 
-    @Override
-    @Query("SELECT id, name FROM tblGameSetups WHERE id = :id LIMIT 1")
-    LiveData<GameSetupEntity.Minimal> findByIdAsyncMinimal(final int id);
-
-    @Override
-    @Query("SELECT id, name FROM tblGameSetups WHERE id = :id LIMIT 1")
-    GameSetupEntity.Minimal findByIdSyncMinimal(final int id);
-
     // getAll
     @Override
     @Query("SELECT * FROM tblGameSetups WHERE id > 0 ORDER BY dateLastPlayed DESC")
@@ -53,12 +37,4 @@ public interface GameSetupDao extends BaseDao<GameSetupEntity, GameSetupEntity.M
     @Override
     @Query("SELECT * FROM tblGameSetups WHERE id > 0 ORDER BY dateLastPlayed DESC")
     List<GameSetupEntity> getAllSync();
-
-    @Override
-    @Query("SELECT id, name FROM tblGameSetups WHERE id > 0 ORDER BY dateLastPlayed DESC")
-    LiveData<List<GameSetupEntity.Minimal>> getAllAsyncMinimal();
-
-    @Override
-    @Query("SELECT id, name FROM tblGameSetups WHERE id > 0 ORDER BY dateLastPlayed DESC")
-    List<GameSetupEntity.Minimal> getAllSyncMinimal();
 }

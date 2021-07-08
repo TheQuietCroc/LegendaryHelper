@@ -39,7 +39,4 @@ public abstract class BaseGameComponentEntity extends BaseEntity {
     public void setEnabled(boolean enabled) {
         isEnabled = enabled;
     }
-
-    public static class Minimal extends BaseEntity.Minimal {
-    }
 }

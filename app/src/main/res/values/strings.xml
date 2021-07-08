@@ -23,6 +23,7 @@
     <string name="confirmDeleteMessage">Are you sure you want to delete</string>
     <string name="confirmDeleteTitle">Confirm Deletion</string>
     <string name="confirmSave">Would you like to save before exiting?</string>
+    <string name="addAlwaysLeaderDescription">Sets this card to always be lead by the selected Mastermind</string>
 
     <string name="filter">Filter</string>
     <string name="enabled">Enabled</string>
@@ -36,4 +37,25 @@
     <string name="deleted">deleted</string>
     <string name="saved">saved</string>
     <string name="no">No</string>
+    <string name="name">Name</string>
+    <string name="alwaysLeadBy">Always Lead By</string>
+    <string name="add">Add</string>
+    <string name="gameSetInfo">Game Set Info</string>
+    <string name="henchmenInfo">Henchmen Info</string>
+    <string name="heroInfo">Hero Info</string>
+    <string name="mastermindInfo">Mastermind Info</string>
+    <string name="schemeInfo">Scheme Info</string>
+    <string name="villainsInfo">Villains Info</string>
+    <string name="filterGameSets">Filter Game Sets</string>
+    <string name="customGameSet">Custom Game Set</string>
+    <string name="filterVillains">Filter Villains</string>
+    <string name="customVillains">Custom Villains</string>
+    <string name="filterHenchmen">Filter Henchmen</string>
+    <string name="customHenchmen">Custom Henchmen</string>
+    <string name="filterHeroes">Filter Heroes</string>
+    <string name="customHero">Custom Hero</string>
+    <string name="filterMasterminds">Filter Masterminds</string>
+    <string name="customMastermind">Custom Mastermind</string>
+    <string name="filterSchemes">Filter Schemes</string>
+    <string name="customScheme">Custom Scheme</string>
 </resources>

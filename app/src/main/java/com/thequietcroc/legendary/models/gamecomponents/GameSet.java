@@ -1,7 +1,6 @@
 package com.thequietcroc.legendary.models.gamecomponents;
 
 import com.thequietcroc.legendary.database.LegendaryDatabase;
-import com.thequietcroc.legendary.database.daos.gamecomponents.GameSetDao;
 import com.thequietcroc.legendary.database.daos.gamecomponents.cards.HenchmenDao;
 import com.thequietcroc.legendary.database.daos.gamecomponents.cards.HeroDao;
 import com.thequietcroc.legendary.database.daos.gamecomponents.cards.MastermindDao;
@@ -120,24 +119,51 @@ public class GameSet extends BaseGameComponent {
         return heroList;
     }
 
-    @Override
     public void dbSave() {
-        final GameSetDao gameSetDao = LegendaryDatabase.getInstance().gameSetDao();
 
-        if (0 == getId()) {
-            setId((int) gameSetDao.insert(toEntity()));
-        } else {
-            gameSetDao.update(toEntity());
-        }
+        new DbAsyncTask(() -> {
+
+            final List<Mastermind> mastermindsInSet = getMastermindList();
+            final List<Scheme> schemesInSet = getSchemeList();
+            final List<Villains> villainsInSet = getVillainsList();
+            final List<Henchmen> henchmenInSet = getHenchmenList();
+            final List<Hero> heroesInSet = getHeroList();
+
+            mastermindsInSet.stream().forEach(mastermind -> mastermind.setEnabled(isEnabled()));
+            schemesInSet.stream().forEach(scheme -> scheme.setEnabled(isEnabled()));
+            villainsInSet.stream().forEach(villains -> villains.setEnabled(isEnabled()));
+            henchmenInSet.stream().forEach(henchmen -> henchmen.setEnabled(isEnabled()));
+            heroesInSet.stream().forEach(heroes -> heroes.setEnabled(isEnabled()));
+
+            final LegendaryDatabase db = LegendaryDatabase.getInstance();
+
+            db.mastermindDao().update(mastermindsInSet
+                    .stream()
+                    .map(Mastermind::toEntity)
+                    .collect(Collectors.toList()));
+            db.schemeDao().update(schemesInSet
+                    .stream()
+                    .map(Scheme::toEntity)
+                    .collect(Collectors.toList()));
+            db.villainsDao().update(villainsInSet
+                    .stream()
+                    .map(Villains::toEntity)
+                    .collect(Collectors.toList()));
+            db.henchmenDao().update(henchmenInSet
+                    .stream()
+                    .map(Henchmen::toEntity)
+                    .collect(Collectors.toList()));
+            db.heroDao().update(heroesInSet
+                    .stream()
+                    .map(Hero::toEntity)
+                    .collect(Collectors.toList()));
+        });
+
+        dbSave(LegendaryDatabase.getInstance().gameSetDao(), toEntity());
     }
 
-    @Override
     public void dbDelete() {
-        if (0 < getId()) {
-            final GameSetDao gameSetDao = LegendaryDatabase.getInstance().gameSetDao();
-
-            gameSetDao.delete(toEntity());
-        }
+        dbDelete(LegendaryDatabase.getInstance().gameSetDao(), toEntity());
     }
 
     @Override

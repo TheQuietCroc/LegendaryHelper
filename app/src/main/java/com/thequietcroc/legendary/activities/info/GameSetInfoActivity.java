@@ -1,11 +1,8 @@
 package com.thequietcroc.legendary.activities.info;
 
-import android.content.Intent;
 import android.os.Bundle;
 
-import com.thequietcroc.legendary.models.gamecomponents.GameSet;
-
-import static com.thequietcroc.legendary.activities.filters.FilterActivity.COMPONENT_EXTRA;
+import com.thequietcroc.legendary.R;
 
 public class GameSetInfoActivity extends InfoActivity {
 
@@ -13,12 +10,6 @@ public class GameSetInfoActivity extends InfoActivity {
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        final Intent intent = getIntent();
-
-        if (intent.hasExtra(COMPONENT_EXTRA)) {
-            componentAtomicReference.set((GameSet) intent.getSerializableExtra(COMPONENT_EXTRA));
-        }
-
-        setTitle();
+        setTitle(getString(R.string.gameSetInfo));
     }
 }

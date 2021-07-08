@@ -1,7 +1,6 @@
 package com.thequietcroc.legendary.models.gamecomponents.cards;
 
 import com.thequietcroc.legendary.database.LegendaryDatabase;
-import com.thequietcroc.legendary.database.daos.gamecomponents.cards.SchemeDao;
 import com.thequietcroc.legendary.database.entities.gamecomponents.cards.SchemeEntity;
 
 public class Scheme extends BaseCard {
@@ -23,24 +22,12 @@ public class Scheme extends BaseCard {
         return new SchemeEntity(this);
     }
 
-    @Override
     public void dbSave() {
-        final SchemeDao schemeDao = LegendaryDatabase.getInstance().schemeDao();
-
-        if (0 == getId()) {
-            setId((int) schemeDao.insert(toEntity()));
-        } else {
-            schemeDao.update(toEntity());
-        }
+        super.dbSave(LegendaryDatabase.getInstance().schemeDao(), toEntity());
     }
 
-    @Override
     public void dbDelete() {
-        if (0 < getId()) {
-            final SchemeDao schemeDao = LegendaryDatabase.getInstance().schemeDao();
-
-            schemeDao.delete(toEntity());
-        }
+        super.dbDelete(LegendaryDatabase.getInstance().schemeDao(), toEntity());
     }
 
     @Override

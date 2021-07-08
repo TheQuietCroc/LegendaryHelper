@@ -1,7 +1,6 @@
 package com.thequietcroc.legendary.models.gamecomponents.cards;
 
 import com.thequietcroc.legendary.database.LegendaryDatabase;
-import com.thequietcroc.legendary.database.daos.gamecomponents.cards.MastermindDao;
 import com.thequietcroc.legendary.database.entities.gamecomponents.cards.MastermindEntity;
 import com.thequietcroc.legendary.utilities.DbAsyncTask;
 
@@ -70,24 +69,28 @@ public class Mastermind extends BaseCard {
         return new MastermindEntity(this);
     }
 
-    @Override
     public void dbSave() {
-        final MastermindDao mastermindDao = LegendaryDatabase.getInstance().mastermindDao();
+        if (isEnabled()) {
+            final Villains alwaysLeadsVillains = getAlwaysLeadsVillains();
 
-        if (0 == getId()) {
-            setId((int) mastermindDao.insert(toEntity()));
-        } else {
-            mastermindDao.update(toEntity());
+            if (alwaysLeadsVillains.getId() != 0) {
+                alwaysLeadsVillains.setEnabled(isEnabled());
+                alwaysLeadsVillains.dbSave();
+            }
+
+            final Henchmen alwaysLeadsHenchmen = getAlwaysLeadsHenchmen();
+
+            if (alwaysLeadsHenchmen.getId() != 0) {
+                alwaysLeadsHenchmen.setEnabled(isEnabled());
+                alwaysLeadsHenchmen.dbSave();
+            }
         }
+
+        super.dbSave(LegendaryDatabase.getInstance().mastermindDao(), toEntity());
     }
 
-    @Override
     public void dbDelete() {
-        if (0 < getId()) {
-            final MastermindDao mastermindDao = LegendaryDatabase.getInstance().mastermindDao();
-
-            mastermindDao.delete(toEntity());
-        }
+        super.dbDelete(LegendaryDatabase.getInstance().mastermindDao(), toEntity());
     }
 
     @Override

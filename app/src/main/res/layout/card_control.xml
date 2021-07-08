@@ -15,7 +15,7 @@
             android:id="@+id/cardControlLock"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:background="@drawable/lock"
+            android:background="@drawable/toggle_lock"
             android:textOff=""
             android:textOn=""
             android:enabled="false" />

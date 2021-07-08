@@ -2,19 +2,14 @@ package com.thequietcroc.legendary.models.gamecomponents.cards;
 
 import com.thequietcroc.legendary.database.LegendaryDatabase;
 import com.thequietcroc.legendary.database.daos.gamecomponents.cards.MastermindDao;
-import com.thequietcroc.legendary.database.daos.gamecomponents.cards.VillainsDao;
-import com.thequietcroc.legendary.database.entities.gamecomponents.cards.MastermindEntity;
 import com.thequietcroc.legendary.database.entities.gamecomponents.cards.VillainsEntity;
 import com.thequietcroc.legendary.utilities.DbAsyncTask;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class Villains extends BaseCard {
 
-    private final List<Mastermind> mastermindLeaderList = Collections.synchronizedList(new ArrayList<>());
+    private final AtomicReference<Mastermind> mastermindLeaderAtomicReference = new AtomicReference<>();
 
     public Villains() {
         super();
@@ -28,21 +23,17 @@ public class Villains extends BaseCard {
         super(name);
     }
 
-    public List<Mastermind> getMastermindLeaderList() {
-        if (mastermindLeaderList.isEmpty()) {
+    public Mastermind getMastermindLeader() {
+        if (mastermindLeaderAtomicReference.get() == null) {
 
             final MastermindDao mastermindDao = LegendaryDatabase.getInstance().mastermindDao();
 
             new DbAsyncTask(() -> {
-                mastermindLeaderList.addAll(mastermindDao
-                        .findAllByAlwaysLeadsVillainsId(getId())
-                        .stream()
-                        .map(MastermindEntity::toModel)
-                        .collect(Collectors.toList()));
+                mastermindLeaderAtomicReference.set(mastermindDao.findByAlwaysLeadsVillainsId(getId()).toModel());
             });
         }
 
-        return mastermindLeaderList;
+        return mastermindLeaderAtomicReference.get();
     }
 
     @Override
@@ -50,24 +41,19 @@ public class Villains extends BaseCard {
         return new VillainsEntity(this);
     }
 
-    @Override
     public void dbSave() {
-        final VillainsDao villainsDao = LegendaryDatabase.getInstance().villainsDao();
+        if (!isEnabled()) {
+            final Mastermind mastermindLeader = getMastermindLeader();
 
-        if (0 == getId()) {
-            setId((int) villainsDao.insert(toEntity()));
-        } else {
-            villainsDao.update(toEntity());
+            mastermindLeader.setEnabled(isEnabled());
+            mastermindLeader.dbSave();
         }
+
+        super.dbSave(LegendaryDatabase.getInstance().villainsDao(), toEntity());
     }
 
-    @Override
     public void dbDelete() {
-        if (0 < getId()) {
-            final VillainsDao villainsDao = LegendaryDatabase.getInstance().villainsDao();
-
-            villainsDao.delete(toEntity());
-        }
+        super.dbDelete(LegendaryDatabase.getInstance().villainsDao(), toEntity());
     }
 
     @Override

@@ -1,20 +1,15 @@
 package com.thequietcroc.legendary.models.gamecomponents.cards;
 
 import com.thequietcroc.legendary.database.LegendaryDatabase;
-import com.thequietcroc.legendary.database.daos.gamecomponents.cards.HenchmenDao;
 import com.thequietcroc.legendary.database.daos.gamecomponents.cards.MastermindDao;
 import com.thequietcroc.legendary.database.entities.gamecomponents.cards.HenchmenEntity;
-import com.thequietcroc.legendary.database.entities.gamecomponents.cards.MastermindEntity;
 import com.thequietcroc.legendary.utilities.DbAsyncTask;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class Henchmen extends BaseCard {
 
-    private final List<Mastermind> mastermindLeaderList = Collections.synchronizedList(new ArrayList<>());
+    private final AtomicReference<Mastermind> mastermindLeaderAtomicReference = new AtomicReference<>();
 
     public Henchmen() {
         super();
@@ -28,21 +23,17 @@ public class Henchmen extends BaseCard {
         super(name);
     }
 
-    public List<Mastermind> getMastermindLeaderList() {
-        if (mastermindLeaderList.isEmpty()) {
+    public Mastermind getMastermindLeader() {
+        if (mastermindLeaderAtomicReference.get() == null) {
 
             final MastermindDao mastermindDao = LegendaryDatabase.getInstance().mastermindDao();
 
             new DbAsyncTask(() -> {
-                mastermindLeaderList.addAll(mastermindDao
-                        .findAllByAlwaysLeadsHenchmenId(getId())
-                        .stream()
-                        .map(MastermindEntity::toModel)
-                        .collect(Collectors.toList()));
+                mastermindLeaderAtomicReference.set(mastermindDao.findByAlwaysLeadsHenchmenId(getId()).toModel());
             });
         }
 
-        return mastermindLeaderList;
+        return mastermindLeaderAtomicReference.get();
     }
 
     @Override
@@ -50,24 +41,20 @@ public class Henchmen extends BaseCard {
         return new HenchmenEntity(this);
     }
 
-    @Override
     public void dbSave() {
-        final HenchmenDao henchmenDao = LegendaryDatabase.getInstance().henchmenDao();
 
-        if (0 == getId()) {
-            setId((int) henchmenDao.insert(toEntity()));
-        } else {
-            henchmenDao.update(toEntity());
+        if (!isEnabled()) {
+            final Mastermind mastermindLeader = getMastermindLeader();
+
+            mastermindLeader.setEnabled(isEnabled());
+            mastermindLeader.dbSave();
         }
+
+        super.dbSave(LegendaryDatabase.getInstance().henchmenDao(), toEntity());
     }
 
-    @Override
     public void dbDelete() {
-        if (0 < getId()) {
-            final HenchmenDao henchmenDao = LegendaryDatabase.getInstance().henchmenDao();
-
-            henchmenDao.delete(toEntity());
-        }
+        super.dbDelete(LegendaryDatabase.getInstance().henchmenDao(), toEntity());
     }
 
     @Override

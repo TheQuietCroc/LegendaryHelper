@@ -173,7 +173,6 @@ public class GameSetup extends BaseItem {
         return new GameSetupEntity(this);
     }
 
-    @Override
     public void dbSave() {
 //        final GameSetupDao gameSetupDao = LegendaryDatabase.getInstance().gameSetupDao();
 //
@@ -184,7 +183,6 @@ public class GameSetup extends BaseItem {
 //        }
     }
 
-    @Override
     public void dbDelete() {
 //        if (0 < getId()) {
 //            final GameSetupDao gameSetupDao = LegendaryDatabase.getInstance().gameSetupDao();

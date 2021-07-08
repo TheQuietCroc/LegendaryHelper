@@ -103,20 +103,4 @@ public class GameSetupEntity extends BaseEntity {
 
         return super.equals(o);
     }
-
-    public static class Minimal extends BaseEntity.Minimal {
-
-        @Override
-        public boolean equals(final Object o) {
-            if (o == this) {
-                return true;
-            }
-
-            if (!(o instanceof Minimal)) {
-                return false;
-            }
-
-            return super.equals(o);
-        }
-    }
 }

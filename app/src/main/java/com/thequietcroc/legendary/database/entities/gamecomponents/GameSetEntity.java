@@ -38,20 +38,4 @@ public class GameSetEntity extends BaseGameComponentEntity {
 
         return super.equals(o);
     }
-
-    public static class Minimal extends BaseGameComponentEntity.Minimal {
-
-        @Override
-        public boolean equals(final Object o) {
-            if (o == this) {
-                return true;
-            }
-
-            if (!(o instanceof Minimal)) {
-                return false;
-            }
-
-            return super.equals(o);
-        }
-    }
 }

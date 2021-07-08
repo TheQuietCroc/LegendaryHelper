@@ -1,6 +1,8 @@
 package com.thequietcroc.legendary.models;
 
+import com.thequietcroc.legendary.database.daos.BaseDao;
 import com.thequietcroc.legendary.database.entities.BaseEntity;
+import com.thequietcroc.legendary.utilities.DbAsyncTask;
 
 import java.io.Serializable;
 import java.util.Comparator;
@@ -44,6 +46,21 @@ public abstract class BaseItem implements Serializable {
     public abstract void dbSave();
 
     public abstract void dbDelete();
+
+    protected  <D extends BaseDao<E>, E extends BaseEntity> void dbSave(D dao, E entity) {
+
+        if (0 == getId()) {
+            new DbAsyncTask(() -> setId((int) dao.insert(entity)));
+        } else {
+            new DbAsyncTask(() -> dao.update(entity));
+        }
+    }
+
+    protected  <D extends BaseDao<E>, E extends BaseEntity> void dbDelete(D dao, E entity) {
+        if (0 < getId()) {
+            new DbAsyncTask(() -> dao.delete(entity));
+        }
+    }
 
     @Override
     public boolean equals(final Object o) {

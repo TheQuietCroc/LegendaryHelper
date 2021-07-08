@@ -1,7 +1,6 @@
 package com.thequietcroc.legendary.models.gamecomponents.cards;
 
 import com.thequietcroc.legendary.database.LegendaryDatabase;
-import com.thequietcroc.legendary.database.daos.gamecomponents.cards.HeroDao;
 import com.thequietcroc.legendary.database.entities.gamecomponents.cards.HeroEntity;
 
 public class Hero extends BaseCard {
@@ -95,24 +94,12 @@ public class Hero extends BaseCard {
         return new HeroEntity(this);
     }
 
-    @Override
     public void dbSave() {
-        final HeroDao heroDao = LegendaryDatabase.getInstance().heroDao();
-
-        if (0 == getId()) {
-            setId((int) heroDao.insert(toEntity()));
-        } else {
-            heroDao.update(toEntity());
-        }
+        super.dbSave(LegendaryDatabase.getInstance().heroDao(), toEntity());
     }
 
-    @Override
     public void dbDelete() {
-        if (0 < getId()) {
-            final HeroDao heroDao = LegendaryDatabase.getInstance().heroDao();
-
-            heroDao.delete(toEntity());
-        }
+        super.dbDelete(LegendaryDatabase.getInstance().heroDao(), toEntity());
     }
 
     @Override
