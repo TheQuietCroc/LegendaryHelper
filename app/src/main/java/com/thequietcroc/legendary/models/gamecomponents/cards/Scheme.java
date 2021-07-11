@@ -5,8 +5,11 @@ import com.thequietcroc.legendary.database.entities.gamecomponents.cards.SchemeE
 
 public class Scheme extends BaseCard {
 
-    public Scheme() {
-        super();
+    public static Scheme NONE;
+
+    static {
+        NONE = new Scheme("None");
+        NONE.setId(0);
     }
 
     public Scheme(final SchemeEntity schemeEntity) {
@@ -23,11 +26,11 @@ public class Scheme extends BaseCard {
     }
 
     public void dbSave() {
-        super.dbSave(LegendaryDatabase.getInstance().schemeDao(), toEntity());
+        dbSave(LegendaryDatabase.getInstance().schemeDao(), toEntity());
     }
 
     public void dbDelete() {
-        super.dbDelete(LegendaryDatabase.getInstance().schemeDao(), toEntity());
+        dbDelete(LegendaryDatabase.getInstance().schemeDao(), toEntity());
     }
 
     @Override

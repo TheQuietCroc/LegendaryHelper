@@ -21,15 +21,18 @@ import java.util.stream.Collectors;
 
 public class GameSet extends BaseGameComponent {
 
+    public static GameSet NONE;
+
+    static {
+        NONE = new GameSet("None");
+        NONE.setId(0);
+    }
+
     private final List<Mastermind> mastermindList = Collections.synchronizedList(new ArrayList<>());
     private final List<Scheme> schemeList = Collections.synchronizedList(new ArrayList<>());
     private final List<Villains> villainsList = Collections.synchronizedList(new ArrayList<>());
     private final List<Henchmen> henchmenList = Collections.synchronizedList(new ArrayList<>());
     private final List<Hero> heroList = Collections.synchronizedList(new ArrayList<>());
-
-    public GameSet() {
-        super();
-    }
 
     public GameSet(final GameSetEntity gameSetEntity) {
         super(gameSetEntity);
@@ -120,7 +123,6 @@ public class GameSet extends BaseGameComponent {
     }
 
     public void dbSave() {
-
         new DbAsyncTask(() -> {
 
             final List<Mastermind> mastermindsInSet = getMastermindList();
@@ -157,9 +159,9 @@ public class GameSet extends BaseGameComponent {
                     .stream()
                     .map(Hero::toEntity)
                     .collect(Collectors.toList()));
-        });
 
-        dbSave(LegendaryDatabase.getInstance().gameSetDao(), toEntity());
+            dbSave(LegendaryDatabase.getInstance().gameSetDao(), toEntity());
+        });
     }
 
     public void dbDelete() {

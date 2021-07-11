@@ -8,10 +8,6 @@ public abstract class BaseGameComponent extends BaseItem {
     private boolean isCustom = true;
     private boolean isEnabled = true;
 
-    public BaseGameComponent() {
-        super();
-    }
-
     public BaseGameComponent(final BaseGameComponentEntity baseGameComponentEntity) {
         super(baseGameComponentEntity);
 

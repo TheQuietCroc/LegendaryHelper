@@ -58,4 +58,6 @@
     <string name="customMastermind">Custom Mastermind</string>
     <string name="filterSchemes">Filter Schemes</string>
     <string name="customScheme">Custom Scheme</string>
+    <string name="mastermindLeaderLabel">Mastermind Leader:</string>
+    <string name="gameSetLabel">Game Set:</string>
 </resources>

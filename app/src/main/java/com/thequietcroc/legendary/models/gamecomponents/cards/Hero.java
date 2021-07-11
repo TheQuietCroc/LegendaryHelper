@@ -5,6 +5,13 @@ import com.thequietcroc.legendary.database.entities.gamecomponents.cards.HeroEnt
 
 public class Hero extends BaseCard {
 
+    public static Hero NONE;
+
+    static {
+        NONE = new Hero("None");
+        NONE.setId(0);
+    }
+
     private boolean hasCovert = false;
     private boolean hasInstinct = false;
     private boolean hasRanged = false;
@@ -12,10 +19,6 @@ public class Hero extends BaseCard {
     private boolean hasTech = false;
     private boolean hasGun = false;
     private boolean hasFlavorText = false;
-
-    public Hero() {
-        super();
-    }
 
     public Hero(final HeroEntity heroEntity) {
         super(heroEntity);
@@ -95,11 +98,11 @@ public class Hero extends BaseCard {
     }
 
     public void dbSave() {
-        super.dbSave(LegendaryDatabase.getInstance().heroDao(), toEntity());
+        dbSave(LegendaryDatabase.getInstance().heroDao(), toEntity());
     }
 
     public void dbDelete() {
-        super.dbDelete(LegendaryDatabase.getInstance().heroDao(), toEntity());
+        dbDelete(LegendaryDatabase.getInstance().heroDao(), toEntity());
     }
 
     @Override

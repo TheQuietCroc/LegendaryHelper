@@ -7,7 +7,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -92,21 +91,7 @@ public abstract class InfoActivity extends AppCompatActivity {
                 saveComponent();
             } break;
             default:
-                if (componentAtomicReference.get().isCustom()) {
-                    new AlertDialog.Builder(this)
-                            .setMessage(R.string.confirmSave)
-                            .setTitle(R.string.save)
-                            .setPositiveButton(R.string.yes, (dialog, which) -> {
-                                saveAndExit();
-                            })
-                            .setNeutralButton(R.string.cancel, (dialog, which) -> {})
-                            .setNegativeButton(R.string.no,
-                                    (dialog, which) -> NavUtils.navigateUpFromSameTask(this))
-                            .create()
-                            .show();
-                } else {
-                    saveAndExit();
-                }
+                saveAndExit();
             break;
         }
 
@@ -135,12 +120,6 @@ public abstract class InfoActivity extends AppCompatActivity {
 
             component.dbDelete();
             NavUtils.navigateUpFromSameTask(this);
-
-            Toast.makeText(this,
-                    String.format("\"%s\" %s",
-                            component.getName(),
-                            getString(R.string.deleted)),
-                    Toast.LENGTH_SHORT).show();
         });
     }
 
@@ -151,11 +130,5 @@ public abstract class InfoActivity extends AppCompatActivity {
         component.setEnabled(enabledSwitch.isChecked());
 
         component.dbSave();
-
-        Toast.makeText(this,
-                String.format("\"%s\" %s",
-                        component.getName(),
-                        getString(R.string.saved)),
-                Toast.LENGTH_SHORT).show();
     }
 }

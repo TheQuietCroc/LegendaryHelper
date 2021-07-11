@@ -11,10 +11,8 @@ public abstract class BaseItem implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private int id = 0;
-    private String name = "None";
-
-    public BaseItem() {}
+    private Integer id = null;
+    private String name = "";
 
     public BaseItem(final BaseEntity baseEntity) {
         setId(baseEntity.getId());
@@ -25,11 +23,11 @@ public abstract class BaseItem implements Serializable {
         setName(name);
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    protected void setId(final int id) {
+    protected void setId(final Integer id) {
         this.id = id;
     }
 
@@ -47,19 +45,22 @@ public abstract class BaseItem implements Serializable {
 
     public abstract void dbDelete();
 
-    protected  <D extends BaseDao<E>, E extends BaseEntity> void dbSave(D dao, E entity) {
-
-        if (0 == getId()) {
-            new DbAsyncTask(() -> setId((int) dao.insert(entity)));
-        } else {
-            new DbAsyncTask(() -> dao.update(entity));
-        }
+    protected  <D extends BaseDao<E>, E extends BaseEntity> void dbSave(final D dao, final E entity) {
+        new DbAsyncTask(() -> {
+            if (null == getId()) {
+                setId((int) dao.insert(entity));
+            } else if (0 < getId()) {
+                dao.update(entity);
+            }
+        });
     }
 
-    protected  <D extends BaseDao<E>, E extends BaseEntity> void dbDelete(D dao, E entity) {
-        if (0 < getId()) {
-            new DbAsyncTask(() -> dao.delete(entity));
-        }
+    protected  <D extends BaseDao<E>, E extends BaseEntity> void dbDelete(final D dao, final E entity) {
+        new DbAsyncTask(() ->  {
+            if (null != getId() && 0 < getId()) {
+                dao.delete(entity);
+            }
+        });
     }
 
     @Override
@@ -74,7 +75,7 @@ public abstract class BaseItem implements Serializable {
 
         final BaseItem b = (BaseItem) o;
 
-        return id == b.id;
+        return id.equals(b.id);
     }
 
     @Override

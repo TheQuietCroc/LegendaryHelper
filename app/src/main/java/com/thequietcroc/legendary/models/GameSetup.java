@@ -73,10 +73,6 @@ public class GameSetup extends BaseItem {
 
     private final AtomicInteger numQueriesCompleted = new AtomicInteger(0);
 
-    public GameSetup() {
-        super();
-    }
-
     public GameSetup(final GameSetupEntity gameSetupEntity) {
         super(gameSetupEntity);
 
@@ -105,16 +101,16 @@ public class GameSetup extends BaseItem {
         this.containerHenchmen = containerHenchmen;
         this.containerHero = containerHero;
 
-        this.selectedMastermind = new Mastermind();
-        this.selectedScheme = new Scheme();
+        this.selectedMastermind = Mastermind.NONE;
+        this.selectedScheme = Scheme.NONE;
         this.selectedVillainsList =
                 new ArrayList<>(Collections.nCopies(containerVillains.getChildCount(),
-                        new Villains()));
+                        Villains.NONE));
         this.selectedHenchmenList =
                 new ArrayList<>(Collections.nCopies(containerHenchmen.getChildCount(),
-                        new Henchmen()));
+                        Henchmen.NONE));
         this.selectedHeroList = new ArrayList<>(Collections.nCopies(containerHero.getChildCount(),
-                new Hero()));
+                Hero.NONE));
 
         observeOnce(owner,
                 db.mastermindDao().getAllEnabledAsync(),
@@ -225,10 +221,10 @@ public class GameSetup extends BaseItem {
             });
         }
 
-        initializeSpinner(new Mastermind(),
+        initializeSpinner(Mastermind.NONE,
                 mastermindControl.getSpinner(),
                 filteredMastermindMap);
-        initializeSpinner(new Scheme(),
+        initializeSpinner(Scheme.NONE,
                 schemeControl.getSpinner(),
                 filteredSchemeMap);
 
@@ -519,7 +515,7 @@ public class GameSetup extends BaseItem {
             final ItemType type) {
         switch (type) {
             case HERO: {
-                adjustContainedControlsHelper(new Hero(),
+                adjustContainedControlsHelper(Hero.NONE,
                         numVisible,
                         heroControlList,
                         containerHero,
@@ -529,7 +525,7 @@ public class GameSetup extends BaseItem {
             }
             break;
             case VILLAINS: {
-                adjustContainedControlsHelper(new Villains(),
+                adjustContainedControlsHelper(Villains.NONE,
                         numVisible,
                         villainsControlList,
                         containerVillains,
@@ -538,7 +534,7 @@ public class GameSetup extends BaseItem {
             }
             break;
             case HENCHMEN: {
-                adjustContainedControlsHelper(new Henchmen(),
+                adjustContainedControlsHelper(Henchmen.NONE,
                         numVisible,
                         henchmenControlList,
                         containerHenchmen,

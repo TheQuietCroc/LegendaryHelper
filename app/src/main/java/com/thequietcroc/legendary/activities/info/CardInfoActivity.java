@@ -26,8 +26,6 @@ public abstract class CardInfoActivity extends InfoActivity {
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        final BaseCard card = (BaseCard) componentAtomicReference.get();
-
         final View cardInfoControls = LayoutInflater.from(componentControlsLayout.getContext())
                 .inflate(R.layout.card_info_controls, componentControlsLayout, false);
 
@@ -36,6 +34,7 @@ public abstract class CardInfoActivity extends InfoActivity {
         componentControlsLayout.addView(cardInfoControls);
 
         new DbAsyncTask(() -> {
+            final BaseCard card = (BaseCard) componentAtomicReference.get();
             final ArrayAdapter<GameSet> adapter;
 
             if (card.isCustom()) {
@@ -46,7 +45,7 @@ public abstract class CardInfoActivity extends InfoActivity {
                         .map(GameSetEntity::toModel)
                         .collect(Collectors.toList());
 
-                gameSetList.add(0, new GameSet("None"));
+                gameSetList.add(0, GameSet.NONE);
 
                 adapter = new ArrayAdapter<>(
                         cardInfoGameSetSpinner.getContext(),
@@ -61,7 +60,7 @@ public abstract class CardInfoActivity extends InfoActivity {
 
                 cardInfoGameSetSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
-                    public void onItemSelected(AdapterView<?> parent,
+                    public void onItemSelected(final AdapterView<?> parent,
                             final View view,
                             final int position,
                             final long id) {
@@ -69,7 +68,7 @@ public abstract class CardInfoActivity extends InfoActivity {
                     }
 
                     @Override
-                    public void onNothingSelected(AdapterView<?> parent) {
+                    public void onNothingSelected(final AdapterView<?> parent) {
 
                     }
                 });

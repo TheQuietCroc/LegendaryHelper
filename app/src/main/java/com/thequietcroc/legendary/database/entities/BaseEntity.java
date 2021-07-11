@@ -8,10 +8,11 @@ import com.thequietcroc.legendary.models.BaseItem;
 public abstract class BaseEntity {
 
     @PrimaryKey(autoGenerate = true)
-    private int id;
+    @NonNull
+    private Integer id;
 
     @NonNull
-    private String name;
+    private String name = "";
 
     public BaseEntity() {
         this.id = 0;
@@ -19,18 +20,15 @@ public abstract class BaseEntity {
     }
 
     public BaseEntity(final BaseItem baseItem) {
-        if (baseItem.getId() > 0) {
-            this.id = baseItem.getId();
-        }
-
+        this.id = baseItem.getId();
         this.name = baseItem.getName();
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(final int id) {
+    public void setId(@NonNull Integer id) {
         this.id = id;
     }
 
@@ -57,7 +55,7 @@ public abstract class BaseEntity {
 
         final BaseEntity b = (BaseEntity) o;
 
-        return id == b.id;
+        return id.equals(b.id);
     }
 
     @Override
