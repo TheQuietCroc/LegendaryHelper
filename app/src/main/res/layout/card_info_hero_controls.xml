@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:weightSum="1"
+        android:gravity="bottom"
+        android:layout_marginTop="16dp">
+
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="1"
+            android:gravity="center">
+
+        <ToggleButton
+                android:id="@+id/cardInfoHeroCovertToggle"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:background="@drawable/toggle_covert"
+                android:textOff=""
+                android:textOn="" />
+
+        <ToggleButton
+                android:id="@+id/cardInfoHeroInstinctToggle"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:background="@drawable/toggle_instinct"
+                android:textOff=""
+                android:textOn=""
+                android:layout_marginLeft="21dp"
+                android:layout_marginStart="21dp" />
+
+        <ToggleButton
+                android:id="@+id/cardInfoHeroRangedToggle"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:background="@drawable/toggle_ranged"
+                android:textOff=""
+                android:textOn=""
+                android:layout_marginLeft="21dp"
+                android:layout_marginStart="21dp" />
+
+        <ToggleButton
+                android:id="@+id/cardInfoHeroStrengthToggle"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:background="@drawable/toggle_strength"
+                android:textOff=""
+                android:textOn=""
+                android:layout_marginLeft="21dp"
+                android:layout_marginStart="21dp" />
+
+        <ToggleButton
+                android:id="@+id/cardInfoHeroTechToggle"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:background="@drawable/toggle_tech"
+                android:textOff=""
+                android:textOn=""
+                android:layout_marginLeft="21dp"
+                android:layout_marginStart="21dp" />
+    </LinearLayout>
+
+    <CheckBox
+            android:text="@string/has_gun_in_art"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/cardInfoHeroGunCheckbox"
+            android:layout_marginTop="16dp" />
+
+    <CheckBox
+            android:text="@string/has_flavor_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/cardInfoHeroFlavortextCheckbox"
+            android:layout_marginTop="16dp" />
+
+</LinearLayout>

@@ -63,4 +63,7 @@
     <string name="villainsLabel">Villains:</string>
     <string name="alwaysLeads">Always Leads</string>
     <string name="henchmenLabel">Henchmen:</string>
+    <string name="covert">Covert</string>
+    <string name="has_gun_in_art">Has gun in art</string>
+    <string name="has_flavor_text">Has flavor text</string>
 </resources>
