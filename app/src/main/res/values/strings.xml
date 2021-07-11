@@ -60,4 +60,7 @@
     <string name="customScheme">Custom Scheme</string>
     <string name="mastermindLeaderLabel">Mastermind Leader:</string>
     <string name="gameSetLabel">Game Set:</string>
+    <string name="villainsLabel">Villains:</string>
+    <string name="alwaysLeads">Always Leads</string>
+    <string name="henchmenLabel">Henchmen:</string>
 </resources>

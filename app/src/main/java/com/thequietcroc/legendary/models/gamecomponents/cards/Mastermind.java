@@ -29,6 +29,8 @@ public class Mastermind extends BaseCard {
                     .villainsDao()
                     .findByIdSync(mastermindEntity.getVillainId())
                     .toModel()));
+        } else {
+            setAlwaysLeadsVillains(Villains.NONE);
         }
 
         if (mastermindEntity.getHenchmenId() > 0) {
@@ -36,6 +38,8 @@ public class Mastermind extends BaseCard {
                     .henchmenDao()
                     .findByIdSync(mastermindEntity.getHenchmenId())
                     .toModel()));
+        } else {
+            setAlwaysLeadsHenchmen(Henchmen.NONE);
         }
     }
 
