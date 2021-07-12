@@ -1,6 +1,8 @@
 package com.thequietcroc.legendary.activities.info;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -40,13 +42,12 @@ public abstract class CardInfoActivity extends InfoActivity {
             if (card.isCustom()) {
                 final List<GameSet> gameSetList = LegendaryDatabase.getInstance()
                         .gameSetDao()
-                        .getAllCustomSync()
+                        .getAllCustom()
                         .stream()
                         .map(GameSetEntity::toModel)
                         .collect(Collectors.toList());
 
                 gameSetList.add(0, GameSet.NONE);
-
                 adapter = new ArrayAdapter<>(
                         cardInfoGameSetSpinner.getContext(),
                         R.layout.spinner_layout,
@@ -55,22 +56,25 @@ public abstract class CardInfoActivity extends InfoActivity {
 
                 adapter.setDropDownViewResource(R.layout.spinner_layout);
 
-                cardInfoGameSetSpinner.setAdapter(adapter);
-                cardInfoGameSetSpinner.setSelection(gameSetList.indexOf(card.getGameSet()));
+                new Handler(Looper.getMainLooper()).post(() -> {
 
-                cardInfoGameSetSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(final AdapterView<?> parent,
-                            final View view,
-                            final int position,
-                            final long id) {
-                        card.setGameSet(gameSetList.get(position));
-                    }
+                    cardInfoGameSetSpinner.setAdapter(adapter);
+                    cardInfoGameSetSpinner.setSelection(gameSetList.indexOf(card.getGameSet()));
 
-                    @Override
-                    public void onNothingSelected(final AdapterView<?> parent) {
+                    cardInfoGameSetSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(final AdapterView<?> parent,
+                                final View view,
+                                final int position,
+                                final long id) {
+                            card.setGameSet(gameSetList.get(position));
+                        }
 
-                    }
+                        @Override
+                        public void onNothingSelected(final AdapterView<?> parent) {
+
+                        }
+                    });
                 });
             } else {
                 adapter = new ArrayAdapter<>(
@@ -81,8 +85,10 @@ public abstract class CardInfoActivity extends InfoActivity {
 
                 adapter.setDropDownViewResource(R.layout.spinner_layout);
 
-                cardInfoGameSetSpinner.setAdapter(adapter);
-                cardInfoGameSetSpinner.setEnabled(false);
+                new Handler(Looper.getMainLooper()).post(() -> {
+                    cardInfoGameSetSpinner.setAdapter(adapter);
+                    cardInfoGameSetSpinner.setEnabled(false);
+                });
             }
         });
     }

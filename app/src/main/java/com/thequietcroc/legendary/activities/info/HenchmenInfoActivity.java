@@ -42,7 +42,7 @@ public class HenchmenInfoActivity extends CardInfoActivity {
 
                 final List<Mastermind> mastermindList = LegendaryDatabase.getInstance()
                         .mastermindDao()
-                        .getAllBySetIdSync(henchmen.getGameSet().getId())
+                        .getAllBySetId(henchmen.getGameSet().getId())
                         .stream()
                         .map(MastermindEntity::toModel)
                         .collect(Collectors.toList());

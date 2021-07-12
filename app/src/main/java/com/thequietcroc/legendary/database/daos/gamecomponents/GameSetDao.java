@@ -1,6 +1,5 @@
 package com.thequietcroc.legendary.database.daos.gamecomponents;
 
-import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Query;
 
@@ -11,48 +10,23 @@ import java.util.List;
 @Dao
 public interface GameSetDao extends BaseGameComponentDao<GameSetEntity> {
 
-    // findByName
     @Override
     @Query("SELECT * FROM tblGameSets WHERE name LIKE :name LIMIT 1")
-    LiveData<GameSetEntity> findByNameAsync(final String name);
-
-    @Override
-    @Query("SELECT * FROM tblGameSets WHERE name LIKE :name LIMIT 1")
-    GameSetEntity findByNameSync(final String name);
-
-    // findById
-    @Override
-    @Query("SELECT * FROM tblGameSets WHERE id = :id LIMIT 1")
-    LiveData<GameSetEntity> findByIdAsync(final int id);
+    GameSetEntity findByName(final String name);
 
     @Override
     @Query("SELECT * FROM tblGameSets WHERE id = :id LIMIT 1")
-    GameSetEntity findByIdSync(final int id);
-
-    // getAll
-    @Override
-    @Query("SELECT * FROM tblGameSets WHERE id > 0 ORDER BY id ASC")
-    LiveData<List<GameSetEntity>> getAllAsync();
+    GameSetEntity findById(final int id);
 
     @Override
     @Query("SELECT * FROM tblGameSets WHERE id > 0 ORDER BY id ASC")
-    List<GameSetEntity> getAllSync();
-
-    // getAllEnabled
-    @Override
-    @Query("SELECT * FROM tblGameSets WHERE isEnabled = 1 AND id > 0 ORDER BY id ASC")
-    LiveData<List<GameSetEntity>> getAllEnabledAsync();
+    List<GameSetEntity> getAll();
 
     @Override
     @Query("SELECT * FROM tblGameSets WHERE isEnabled = 1 AND id > 0 ORDER BY id ASC")
-    List<GameSetEntity> getAllEnabledSync();
-
-    // getAllCustom
-    @Override
-    @Query("SELECT * FROM tblGameSets WHERE isCustom = 1 AND id > 0 ORDER BY id ASC")
-    LiveData<List<GameSetEntity>> getAllCustomAsync();
+    List<GameSetEntity> getAllEnabled();
 
     @Override
     @Query("SELECT * FROM tblGameSets WHERE isCustom = 1 AND id > 0 ORDER BY id ASC")
-    List<GameSetEntity> getAllCustomSync();
+    List<GameSetEntity> getAllCustom();
 }

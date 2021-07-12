@@ -1,5 +1,7 @@
 package com.thequietcroc.legendary.models;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -28,6 +30,7 @@ import com.thequietcroc.legendary.models.gamecomponents.cards.Hero;
 import com.thequietcroc.legendary.models.gamecomponents.cards.Mastermind;
 import com.thequietcroc.legendary.models.gamecomponents.cards.Scheme;
 import com.thequietcroc.legendary.models.gamecomponents.cards.Villains;
+import com.thequietcroc.legendary.utilities.DbAsyncTask;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -35,13 +38,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 import static com.thequietcroc.legendary.enums.ItemType.HENCHMEN;
 import static com.thequietcroc.legendary.enums.ItemType.HERO;
 import static com.thequietcroc.legendary.enums.ItemType.VILLAINS;
-import static com.thequietcroc.legendary.utilities.LiveDataUtil.observeOnce;
 
 public class GameSetup extends BaseItem {
 
@@ -53,11 +54,11 @@ public class GameSetup extends BaseItem {
     private /*final*/ List<Henchmen> selectedHenchmenList;
     private /*final*/ List<Hero> selectedHeroList;
 
-    private final Map<Integer, Mastermind> filteredMastermindMap = new HashMap<>();
-    private final Map<Integer, Villains> filteredVillainsMap = new HashMap<>();
-    private final Map<Integer, Henchmen> filteredHenchmenMap = new HashMap<>();
-    private final Map<Integer, Scheme> filteredSchemeMap = new HashMap<>();
-    private final Map<Integer, Hero> filteredHeroMap = new HashMap<>();
+    private final Map<Integer, Mastermind> enabledMastermindsMap = new HashMap<>();
+    private final Map<Integer, Villains> enabledVillainsMap = new HashMap<>();
+    private final Map<Integer, Henchmen> enabledHenchmenMap = new HashMap<>();
+    private final Map<Integer, Scheme> enabledSchemesMap = new HashMap<>();
+    private final Map<Integer, Hero> enabledHeroesMap = new HashMap<>();
 
     private /*final*/ ConstraintLayout containerVillains;
     private /*final*/ ConstraintLayout containerHenchmen;
@@ -70,8 +71,6 @@ public class GameSetup extends BaseItem {
     private final List<CardControl> heroControlList = new ArrayList<>();
 
     private /*final*/ MaterialButtonToggleGroup buttonGroupPlayers;
-
-    private final AtomicInteger numQueriesCompleted = new AtomicInteger(0);
 
     public GameSetup(final GameSetupEntity gameSetupEntity) {
         super(gameSetupEntity);
@@ -112,55 +111,33 @@ public class GameSetup extends BaseItem {
         this.selectedHeroList = new ArrayList<>(Collections.nCopies(containerHero.getChildCount(),
                 Hero.NONE));
 
-        observeOnce(owner,
-                db.mastermindDao().getAllEnabledAsync(),
-                filteredResults -> { 
-                    filteredMastermindMap.putAll(filteredResults.stream()
-                            .collect(Collectors.toMap(MastermindEntity::getId, MastermindEntity::toModel)));
+        new DbAsyncTask(() -> {
+            final List<MastermindEntity> enabledMasterminds = db.mastermindDao().getAllEnabled();
 
-                    if (numQueriesCompleted.incrementAndGet() == 5) {
-                        initializeControls();
-                    } 
-        });
-        observeOnce(owner,
-                db.schemeDao().getAllEnabledAsync(),
-                filteredResults -> {
-                    filteredSchemeMap.putAll(filteredResults.stream()
-                            .collect(Collectors.toMap(SchemeEntity::getId, SchemeEntity::toModel)));
+            enabledMastermindsMap.putAll(enabledMasterminds.stream()
+                    .collect(Collectors.toMap(MastermindEntity::getId, MastermindEntity::toModel)));
 
-                    if (numQueriesCompleted.incrementAndGet() == 5) {
-                        initializeControls();
-                    }
-        });
-        observeOnce(owner,
-                db.villainsDao().getAllEnabledAsync(),
-                filteredResults -> {
-                    filteredVillainsMap.putAll(filteredResults.stream()
-                            .collect(Collectors.toMap(VillainsEntity::getId, VillainsEntity::toModel)));
+            final List<SchemeEntity> enabledSchemes = db.schemeDao().getAllEnabled();
 
-                    if (numQueriesCompleted.incrementAndGet() == 5) {
-                        initializeControls();
-                    }
-        });
-        observeOnce(owner,
-                db.henchmenDao().getAllEnabledAsync(),
-                filteredResults -> {
-                    filteredHenchmenMap.putAll(filteredResults.stream()
-                            .collect(Collectors.toMap(HenchmenEntity::getId, HenchmenEntity::toModel)));
+            enabledSchemesMap.putAll(enabledSchemes.stream()
+                    .collect(Collectors.toMap(SchemeEntity::getId, SchemeEntity::toModel)));
 
-                    if (numQueriesCompleted.incrementAndGet() == 5) {
-                        initializeControls();
-                    }
-        });
-        observeOnce(owner,
-                db.heroDao().getAllEnabledAsync(),
-                filteredResults -> {
-                    filteredHeroMap.putAll(filteredResults.stream()
-                            .collect(Collectors.toMap(HeroEntity::getId, HeroEntity::toModel)));
+            final List<VillainsEntity> enabledVillains = db.villainsDao().getAllEnabled();
 
-                    if (numQueriesCompleted.incrementAndGet() == 5) {
-                        initializeControls();
-                    }
+            enabledVillainsMap.putAll(enabledVillains.stream()
+                    .collect(Collectors.toMap(VillainsEntity::getId, VillainsEntity::toModel)));
+
+            final List<HenchmenEntity> enabledHenchmen = db.henchmenDao().getAllEnabled();
+
+            enabledHenchmenMap.putAll(enabledHenchmen.stream()
+                    .collect(Collectors.toMap(HenchmenEntity::getId, HenchmenEntity::toModel)));
+
+            final List<HeroEntity> enabledHeroes = db.heroDao().getAllEnabled();
+
+            enabledHeroesMap.putAll(enabledHeroes.stream()
+                    .collect(Collectors.toMap(HeroEntity::getId, HeroEntity::toModel)));
+
+            new Handler(Looper.getMainLooper()).post(this::initializeControls);
         });
     }
 
@@ -223,10 +200,10 @@ public class GameSetup extends BaseItem {
 
         initializeSpinner(Mastermind.NONE,
                 mastermindControl.getSpinner(),
-                filteredMastermindMap);
+                enabledMastermindsMap);
         initializeSpinner(Scheme.NONE,
                 schemeControl.getSpinner(),
-                filteredSchemeMap);
+                enabledSchemesMap);
 
         adjustContainedControls();
     }
@@ -306,13 +283,13 @@ public class GameSetup extends BaseItem {
 
         selectedMastermind = setupHelper(mastermindControl,
                 selectedMastermind,
-                filteredMastermindMap);
-        selectedScheme = setupHelper(schemeControl, selectedScheme, filteredSchemeMap);
-        setupHelper(villainsControlList, filteredVillainsMap, selectedVillainsList);
+                enabledMastermindsMap);
+        selectedScheme = setupHelper(schemeControl, selectedScheme, enabledSchemesMap);
+        setupHelper(villainsControlList, enabledVillainsMap, selectedVillainsList);
         selectAlwaysLeadsVillains();
-        setupHelper(henchmenControlList, filteredHenchmenMap, selectedHenchmenList);
+        setupHelper(henchmenControlList, enabledHenchmenMap, selectedHenchmenList);
         selectAlwaysLeadsHenchmen();
-        setupHelper(heroControlList, filteredHeroMap, selectedHeroList);
+        setupHelper(heroControlList, enabledHeroesMap, selectedHeroList);
     }
 
     private void selectAlwaysLeadsVillains() {
@@ -321,7 +298,7 @@ public class GameSetup extends BaseItem {
 
             if (alwaysLeadsVillainsId > 0) {
 
-                selectAlwaysLeadsHelper(filteredVillainsMap.get(alwaysLeadsVillainsId),
+                selectAlwaysLeadsHelper(enabledVillainsMap.get(alwaysLeadsVillainsId),
                         selectedVillainsList,
                         villainsControlList);
             }
@@ -334,7 +311,7 @@ public class GameSetup extends BaseItem {
 
             if (alwaysLeadsHenchmenId > 0) {
 
-                selectAlwaysLeadsHelper(filteredHenchmenMap.get(alwaysLeadsHenchmenId),
+                selectAlwaysLeadsHelper(enabledHenchmenMap.get(alwaysLeadsHenchmenId),
                         selectedHenchmenList,
                         henchmenControlList);
             }
@@ -519,7 +496,7 @@ public class GameSetup extends BaseItem {
                         numVisible,
                         heroControlList,
                         containerHero,
-                        filteredHeroMap,
+                        enabledHeroesMap,
                         selectedHeroList);
 
             }
@@ -529,7 +506,7 @@ public class GameSetup extends BaseItem {
                         numVisible,
                         villainsControlList,
                         containerVillains,
-                        filteredVillainsMap,
+                        enabledVillainsMap,
                         selectedVillainsList);
             }
             break;
@@ -538,7 +515,7 @@ public class GameSetup extends BaseItem {
                         numVisible,
                         henchmenControlList,
                         containerHenchmen,
-                        filteredHenchmenMap,
+                        enabledHenchmenMap,
                         selectedHenchmenList);
             }
             break;

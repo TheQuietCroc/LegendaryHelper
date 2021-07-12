@@ -17,7 +17,7 @@ public abstract class BaseCard extends BaseGameComponent {
 
         new DbAsyncTask(() -> setGameSet(LegendaryDatabase.getInstance()
                 .gameSetDao()
-                .findByIdSync(baseCardEntity.getGameSetId())
+                .findById(baseCardEntity.getGameSetId())
                 .toModel()));
     }
 

@@ -1,6 +1,8 @@
 package com.thequietcroc.legendary.activities.filters;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.MenuItem;
 
 import com.thequietcroc.legendary.R;
@@ -8,12 +10,11 @@ import com.thequietcroc.legendary.activities.info.VillainsInfoActivity;
 import com.thequietcroc.legendary.custom.adapters.GameComponentRecyclerAdapter;
 import com.thequietcroc.legendary.database.entities.gamecomponents.cards.VillainsEntity;
 import com.thequietcroc.legendary.models.gamecomponents.cards.Villains;
+import com.thequietcroc.legendary.utilities.DbAsyncTask;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static com.thequietcroc.legendary.utilities.LiveDataUtil.observeOnce;
 
 public class FilterVillainsActivity extends FilterActivity {
 
@@ -29,9 +30,18 @@ public class FilterVillainsActivity extends FilterActivity {
         gameComponentRecyclerAdapter.setInfoButtonAction(villains ->
                 startNewActivity(villains, VillainsInfoActivity.class));
 
-        observeOnce(this,
-                db.villainsDao().getAllAsync(),
-                this::observerActions);
+        new DbAsyncTask(() -> {
+            final List<VillainsEntity> results = db.villainsDao().getAll();
+
+            new Handler(Looper.getMainLooper()).post(() -> {
+                gameComponentRecyclerAdapter.getComponentList().addAll(results
+                        .stream()
+                        .map(VillainsEntity::toModel)
+                        .collect(Collectors.toList()));
+
+                gameComponentRecyclerAdapter.notifyDataSetChanged();
+            });
+        });
     }
 
     @Override
@@ -48,13 +58,4 @@ public class FilterVillainsActivity extends FilterActivity {
 
         return true;
     }
-
-    private void observerActions(final List<VillainsEntity> results) {
-        gameComponentRecyclerAdapter.getComponentList().addAll(results
-                .stream()
-                .map(VillainsEntity::toModel)
-                .collect(Collectors.toList()));
-        gameComponentRecyclerAdapter.notifyDataSetChanged();
-    }
-
 }

@@ -53,7 +53,7 @@ public class GameSet extends BaseGameComponent {
             final MastermindDao mastermindDao = LegendaryDatabase.getInstance().mastermindDao();
 
             new DbAsyncTask(() -> mastermindList.addAll(mastermindDao
-                    .getAllBySetIdSync(getId())
+                    .getAllBySetId(getId())
                     .stream()
                     .map(Mastermind::new)
                     .collect(Collectors.toList())));
@@ -68,7 +68,7 @@ public class GameSet extends BaseGameComponent {
             final SchemeDao schemeDao = LegendaryDatabase.getInstance().schemeDao();
 
             new DbAsyncTask(() -> schemeList.addAll(schemeDao
-                    .getAllBySetIdSync(getId())
+                    .getAllBySetId(getId())
                     .stream()
                     .map(Scheme::new)
                     .collect(Collectors.toList())));
@@ -83,7 +83,7 @@ public class GameSet extends BaseGameComponent {
             final VillainsDao villainsDao = LegendaryDatabase.getInstance().villainsDao();
 
             new DbAsyncTask(() -> villainsList.addAll(villainsDao
-                    .getAllBySetIdSync(getId())
+                    .getAllBySetId(getId())
                     .stream()
                     .map(Villains::new)
                     .collect(Collectors.toList())));
@@ -98,7 +98,7 @@ public class GameSet extends BaseGameComponent {
             final HenchmenDao henchmenDao = LegendaryDatabase.getInstance().henchmenDao();
 
             new DbAsyncTask(() -> henchmenList.addAll(henchmenDao
-                    .getAllBySetIdSync(getId())
+                    .getAllBySetId(getId())
                     .stream()
                     .map(Henchmen::new)
                     .collect(Collectors.toList())));
@@ -113,7 +113,7 @@ public class GameSet extends BaseGameComponent {
             final HeroDao heroDao = LegendaryDatabase.getInstance().heroDao();
 
             new DbAsyncTask(() -> heroList.addAll(heroDao
-                    .getAllBySetIdSync(getId())
+                    .getAllBySetId(getId())
                     .stream()
                     .map(Hero::new)
                     .collect(Collectors.toList())));

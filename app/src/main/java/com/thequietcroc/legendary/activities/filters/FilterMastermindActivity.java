@@ -1,6 +1,8 @@
 package com.thequietcroc.legendary.activities.filters;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.MenuItem;
 
 import com.thequietcroc.legendary.R;
@@ -8,12 +10,11 @@ import com.thequietcroc.legendary.activities.info.MastermindInfoActivity;
 import com.thequietcroc.legendary.custom.adapters.GameComponentRecyclerAdapter;
 import com.thequietcroc.legendary.database.entities.gamecomponents.cards.MastermindEntity;
 import com.thequietcroc.legendary.models.gamecomponents.cards.Mastermind;
+import com.thequietcroc.legendary.utilities.DbAsyncTask;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static com.thequietcroc.legendary.utilities.LiveDataUtil.observeOnce;
 
 public class FilterMastermindActivity extends FilterActivity {
 
@@ -29,9 +30,18 @@ public class FilterMastermindActivity extends FilterActivity {
         gameComponentRecyclerAdapter.setInfoButtonAction(mastermind ->
                 startNewActivity(mastermind, MastermindInfoActivity.class));
 
-        observeOnce(this,
-                db.mastermindDao().getAllAsync(),
-                this::observerActions);
+        new DbAsyncTask(() -> {
+            final List<MastermindEntity> results = db.mastermindDao().getAll();
+
+            new Handler(Looper.getMainLooper()).post(() -> {
+                gameComponentRecyclerAdapter.getComponentList().addAll(results
+                        .stream()
+                        .map(MastermindEntity::toModel)
+                        .collect(Collectors.toList()));
+
+                gameComponentRecyclerAdapter.notifyDataSetChanged();
+            });
+        });
     }
 
     @Override
@@ -48,13 +58,4 @@ public class FilterMastermindActivity extends FilterActivity {
 
         return true;
     }
-
-    private void observerActions(final List<MastermindEntity> results) {
-        gameComponentRecyclerAdapter.getComponentList().addAll(results
-                .stream()
-                .map(MastermindEntity::toModel)
-                .collect(Collectors.toList()));
-        gameComponentRecyclerAdapter.notifyDataSetChanged();
-    }
-
 }

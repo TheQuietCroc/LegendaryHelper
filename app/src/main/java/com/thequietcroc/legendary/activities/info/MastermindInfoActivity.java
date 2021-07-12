@@ -47,7 +47,7 @@ public class MastermindInfoActivity extends CardInfoActivity {
 
                 final List<Villains> villainsList = LegendaryDatabase.getInstance()
                         .villainsDao()
-                        .getAllBySetIdSync(mastermind.getGameSet().getId())
+                        .getAllBySetId(mastermind.getGameSet().getId())
                         .stream()
                         .map(VillainsEntity::toModel)
                         .collect(Collectors.toList());
@@ -82,7 +82,7 @@ public class MastermindInfoActivity extends CardInfoActivity {
 
                 final List<Henchmen> henchmenList = LegendaryDatabase.getInstance()
                         .henchmenDao()
-                        .getAllBySetIdSync(mastermind.getGameSet().getId())
+                        .getAllBySetId(mastermind.getGameSet().getId())
                         .stream()
                         .map(HenchmenEntity::toModel)
                         .collect(Collectors.toList());

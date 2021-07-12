@@ -1,6 +1,5 @@
 package com.thequietcroc.legendary.database.daos.gamecomponents.cards;
 
-import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Query;
 
@@ -11,50 +10,25 @@ import java.util.List;
 @Dao
 public interface MastermindDao extends BaseCardDao<MastermindEntity> {
 
-    // findByName
     @Override
     @Query("SELECT * FROM tblMasterminds WHERE name LIKE :name LIMIT 1")
-    LiveData<MastermindEntity> findByNameAsync(final String name);
-
-    @Override
-    @Query("SELECT * FROM tblMasterminds WHERE name LIKE :name LIMIT 1")
-    MastermindEntity findByNameSync(final String name);
-
-    // findById
-    @Override
-    @Query("SELECT * FROM tblMasterminds WHERE id = :id LIMIT 1")
-    LiveData<MastermindEntity> findByIdAsync(final int id);
+    MastermindEntity findByName(final String name);
 
     @Override
     @Query("SELECT * FROM tblMasterminds WHERE id = :id LIMIT 1")
-    MastermindEntity findByIdSync(final int id);
-
-    // getAll
-    @Override
-    @Query("SELECT * FROM tblMasterminds WHERE id > 0 ORDER BY id ASC")
-    LiveData<List<MastermindEntity>> getAllAsync();
+    MastermindEntity findById(final int id);
 
     @Override
     @Query("SELECT * FROM tblMasterminds WHERE id > 0 ORDER BY id ASC")
-    List<MastermindEntity> getAllSync();
-
-    // getAllEnabled
-    @Override
-    @Query("SELECT * FROM tblMasterminds WHERE isEnabled = 1 AND id > 0 ORDER BY id ASC")
-    LiveData<List<MastermindEntity>> getAllEnabledAsync();
+    List<MastermindEntity> getAll();
 
     @Override
     @Query("SELECT * FROM tblMasterminds WHERE isEnabled = 1 AND id > 0 ORDER BY id ASC")
-    List<MastermindEntity> getAllEnabledSync();
-
-    // getAllBySetId
-    @Override
-    @Query("SELECT * FROM tblMasterminds WHERE setId = :setId AND id > 0 ORDER BY id ASC")
-    LiveData<List<MastermindEntity>> getAllBySetIdAsync(final int setId);
+    List<MastermindEntity> getAllEnabled();
 
     @Override
     @Query("SELECT * FROM tblMasterminds WHERE setId = :setId AND id > 0 ORDER BY id ASC")
-    List<MastermindEntity> getAllBySetIdSync(final int setId);
+    List<MastermindEntity> getAllBySetId(final int setId);
 
     @Query("SELECT * FROM tblMasterminds WHERE henchmenId = :henchmenId LIMIT 1")
     MastermindEntity findByAlwaysLeadsHenchmenId(final int henchmenId);
@@ -62,12 +36,7 @@ public interface MastermindDao extends BaseCardDao<MastermindEntity> {
     @Query("SELECT * FROM tblMasterminds WHERE villainId = :villainId LIMIT 1")
     MastermindEntity findByAlwaysLeadsVillainsId(final int villainId);
 
-    // getAllCustom
     @Override
     @Query("SELECT * FROM tblMasterminds WHERE isCustom = 1 AND id > 0 ORDER BY id ASC")
-    LiveData<List<MastermindEntity>> getAllCustomAsync();
-
-    @Override
-    @Query("SELECT * FROM tblMasterminds WHERE isCustom = 1 AND id > 0 ORDER BY id ASC")
-    List<MastermindEntity> getAllCustomSync();
+    List<MastermindEntity> getAllCustom();
 }

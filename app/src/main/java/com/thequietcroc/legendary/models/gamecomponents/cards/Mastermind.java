@@ -27,7 +27,7 @@ public class Mastermind extends BaseCard {
         if (mastermindEntity.getVillainId() > 0) {
             new DbAsyncTask(() -> setAlwaysLeadsVillains(LegendaryDatabase.getInstance()
                     .villainsDao()
-                    .findByIdSync(mastermindEntity.getVillainId())
+                    .findById(mastermindEntity.getVillainId())
                     .toModel()));
         } else {
             setAlwaysLeadsVillains(Villains.NONE);
@@ -36,7 +36,7 @@ public class Mastermind extends BaseCard {
         if (mastermindEntity.getHenchmenId() > 0) {
             new DbAsyncTask(() -> setAlwaysLeadsHenchmen(LegendaryDatabase.getInstance()
                     .henchmenDao()
-                    .findByIdSync(mastermindEntity.getHenchmenId())
+                    .findById(mastermindEntity.getHenchmenId())
                     .toModel()));
         } else {
             setAlwaysLeadsHenchmen(Henchmen.NONE);

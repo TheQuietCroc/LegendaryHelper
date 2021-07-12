@@ -1,6 +1,5 @@
 package com.thequietcroc.legendary.database.daos;
 
-import androidx.lifecycle.LiveData;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Update;
@@ -11,20 +10,11 @@ import java.util.List;
 
 public interface BaseDao<T extends BaseEntity> {
 
-    // findByName
-    LiveData<T> findByNameAsync(final String name);
+    T findByName(final String name);
 
-    T findByNameSync(final String name);
+    T findById(final int id);
 
-    // findById
-    LiveData<T> findByIdAsync(final int id);
-
-    T findByIdSync(final int id);
-
-    // getAll
-    LiveData<List<T>> getAllAsync();
-
-    List<T> getAllSync();
+    List<T> getAll();
 
     // update
     @Update

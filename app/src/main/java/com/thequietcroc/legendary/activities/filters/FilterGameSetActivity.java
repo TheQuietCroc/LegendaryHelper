@@ -1,6 +1,8 @@
 package com.thequietcroc.legendary.activities.filters;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.MenuItem;
 
 import com.thequietcroc.legendary.R;
@@ -8,12 +10,11 @@ import com.thequietcroc.legendary.activities.info.GameSetInfoActivity;
 import com.thequietcroc.legendary.custom.adapters.GameComponentRecyclerAdapter;
 import com.thequietcroc.legendary.database.entities.gamecomponents.GameSetEntity;
 import com.thequietcroc.legendary.models.gamecomponents.GameSet;
+import com.thequietcroc.legendary.utilities.DbAsyncTask;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static com.thequietcroc.legendary.utilities.LiveDataUtil.observeOnce;
 
 public class FilterGameSetActivity extends FilterActivity {
 
@@ -29,9 +30,18 @@ public class FilterGameSetActivity extends FilterActivity {
         gameComponentRecyclerAdapter.setInfoButtonAction(gameSet ->
                 startNewActivity(gameSet, GameSetInfoActivity.class));
 
-        observeOnce(this,
-                db.gameSetDao().getAllAsync(),
-                this::observerActions);
+        new DbAsyncTask(() -> {
+            final List<GameSetEntity> results = db.gameSetDao().getAll();
+
+            new Handler(Looper.getMainLooper()).post(() -> {
+                gameComponentRecyclerAdapter.getComponentList().addAll(results
+                        .stream()
+                        .map(GameSetEntity::toModel)
+                        .collect(Collectors.toList()));
+
+                gameComponentRecyclerAdapter.notifyDataSetChanged();
+            });
+        });
     }
 
     @Override
@@ -47,14 +57,6 @@ public class FilterGameSetActivity extends FilterActivity {
         }
 
         return true;
-    }
-
-    private void observerActions(final List<GameSetEntity> results) {
-        gameComponentRecyclerAdapter.getComponentList().addAll(results
-                .stream()
-                .map(GameSetEntity::toModel)
-                .collect(Collectors.toList()));
-        gameComponentRecyclerAdapter.notifyDataSetChanged();
     }
 
 }
