@@ -1,6 +1,8 @@
 package com.thequietcroc.legendary.activities.info;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -10,8 +12,8 @@ import android.widget.Spinner;
 import com.thequietcroc.legendary.R;
 import com.thequietcroc.legendary.database.LegendaryDatabase;
 import com.thequietcroc.legendary.database.entities.gamecomponents.cards.MastermindEntity;
-import com.thequietcroc.legendary.models.gamecomponents.cards.Villains;
 import com.thequietcroc.legendary.models.gamecomponents.cards.Mastermind;
+import com.thequietcroc.legendary.models.gamecomponents.cards.Villains;
 import com.thequietcroc.legendary.utilities.DbAsyncTask;
 
 import java.util.Collections;
@@ -57,22 +59,24 @@ public class VillainsInfoActivity extends CardInfoActivity {
 
                 adapter.setDropDownViewResource(R.layout.spinner_layout);
 
-                mastermindLeaderSpinner.setAdapter(adapter);
-                mastermindLeaderSpinner.setSelection(mastermindList.indexOf(villains.getMastermindLeader()));
+                new Handler(Looper.getMainLooper()).post(() -> {
+                    mastermindLeaderSpinner.setAdapter(adapter);
+                    mastermindLeaderSpinner.setSelection(mastermindList.indexOf(villains.getMastermindLeader()));
 
-                mastermindLeaderSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(final AdapterView<?> parent,
-                            final View view,
-                            final int position,
-                            final long id) {
-                        mastermindList.get(position).setAlwaysLeadsVillains(villains);
-                    }
+                    mastermindLeaderSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(final AdapterView<?> parent,
+                                final View view,
+                                final int position,
+                                final long id) {
+                            mastermindList.get(position).setAlwaysLeadsVillains(villains);
+                        }
 
-                    @Override
-                    public void onNothingSelected(final AdapterView<?> parent) {
+                        @Override
+                        public void onNothingSelected(final AdapterView<?> parent) {
 
-                    }
+                        }
+                    });
                 });
             } else {
                 adapter = new ArrayAdapter<>(
@@ -83,8 +87,10 @@ public class VillainsInfoActivity extends CardInfoActivity {
 
                 adapter.setDropDownViewResource(R.layout.spinner_layout);
 
-                mastermindLeaderSpinner.setAdapter(adapter);
-                mastermindLeaderSpinner.setEnabled(false);
+                new Handler(Looper.getMainLooper()).post(() -> {
+                    mastermindLeaderSpinner.setAdapter(adapter);
+                    mastermindLeaderSpinner.setEnabled(false);
+                });
             }
         });
     }

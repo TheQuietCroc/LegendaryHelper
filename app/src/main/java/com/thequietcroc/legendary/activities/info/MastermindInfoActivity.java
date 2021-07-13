@@ -1,6 +1,8 @@
 package com.thequietcroc.legendary.activities.info;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -62,24 +64,6 @@ public class MastermindInfoActivity extends CardInfoActivity {
 
                 villainsAdapter.setDropDownViewResource(R.layout.spinner_layout);
 
-                alwaysLeadsVillainsSpinner.setAdapter(villainsAdapter);
-                alwaysLeadsVillainsSpinner.setSelection(villainsList.indexOf(mastermind.getAlwaysLeadsVillains()));
-
-                alwaysLeadsVillainsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(final AdapterView<?> parent,
-                            final View view,
-                            final int position,
-                            final long id) {
-                        mastermind.setAlwaysLeadsVillains(villainsList.get(position));
-                    }
-
-                    @Override
-                    public void onNothingSelected(final AdapterView<?> parent) {
-
-                    }
-                });
-
                 final List<Henchmen> henchmenList = LegendaryDatabase.getInstance()
                         .henchmenDao()
                         .getAllBySetId(mastermind.getGameSet().getId())
@@ -97,22 +81,42 @@ public class MastermindInfoActivity extends CardInfoActivity {
 
                 henchmenAdapter.setDropDownViewResource(R.layout.spinner_layout);
 
-                alwaysLeadsHenchmenSpinner.setAdapter(henchmenAdapter);
-                alwaysLeadsHenchmenSpinner.setSelection(henchmenList.indexOf(mastermind.getAlwaysLeadsHenchmen()));
+                new Handler(Looper.getMainLooper()).post(() -> {
+                    alwaysLeadsVillainsSpinner.setAdapter(villainsAdapter);
+                    alwaysLeadsVillainsSpinner.setSelection(villainsList.indexOf(mastermind.getAlwaysLeadsVillains()));
 
-                alwaysLeadsHenchmenSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(final AdapterView<?> parent,
-                            final View view,
-                            final int position,
-                            final long id) {
-                        mastermind.setAlwaysLeadsHenchmen(henchmenList.get(position));
-                    }
+                    alwaysLeadsVillainsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(final AdapterView<?> parent,
+                                final View view,
+                                final int position,
+                                final long id) {
+                            mastermind.setAlwaysLeadsVillains(villainsList.get(position));
+                        }
 
-                    @Override
-                    public void onNothingSelected(final AdapterView<?> parent) {
+                        @Override
+                        public void onNothingSelected(final AdapterView<?> parent) {
 
-                    }
+                        }
+                    });
+
+                    alwaysLeadsHenchmenSpinner.setAdapter(henchmenAdapter);
+                    alwaysLeadsHenchmenSpinner.setSelection(henchmenList.indexOf(mastermind.getAlwaysLeadsHenchmen()));
+
+                    alwaysLeadsHenchmenSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(final AdapterView<?> parent,
+                                final View view,
+                                final int position,
+                                final long id) {
+                            mastermind.setAlwaysLeadsHenchmen(henchmenList.get(position));
+                        }
+
+                        @Override
+                        public void onNothingSelected(final AdapterView<?> parent) {
+
+                        }
+                    });
                 });
             } else {
                 villainsAdapter = new ArrayAdapter<>(
@@ -123,9 +127,6 @@ public class MastermindInfoActivity extends CardInfoActivity {
 
                 villainsAdapter.setDropDownViewResource(R.layout.spinner_layout);
 
-                alwaysLeadsVillainsSpinner.setAdapter(villainsAdapter);
-                alwaysLeadsVillainsSpinner.setEnabled(false);
-                
                 henchmenAdapter = new ArrayAdapter<>(
                         alwaysLeadsHenchmenSpinner.getContext(),
                         R.layout.spinner_layout,
@@ -134,8 +135,13 @@ public class MastermindInfoActivity extends CardInfoActivity {
 
                 henchmenAdapter.setDropDownViewResource(R.layout.spinner_layout);
 
-                alwaysLeadsHenchmenSpinner.setAdapter(henchmenAdapter);
-                alwaysLeadsHenchmenSpinner.setEnabled(false);
+                new Handler(Looper.getMainLooper()).post(() -> {
+                    alwaysLeadsVillainsSpinner.setAdapter(villainsAdapter);
+                    alwaysLeadsVillainsSpinner.setEnabled(false);
+
+                    alwaysLeadsHenchmenSpinner.setAdapter(henchmenAdapter);
+                    alwaysLeadsHenchmenSpinner.setEnabled(false);
+                });
             }
         });
     }

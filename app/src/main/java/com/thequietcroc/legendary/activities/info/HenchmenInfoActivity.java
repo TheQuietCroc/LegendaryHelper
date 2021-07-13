@@ -1,6 +1,8 @@
 package com.thequietcroc.legendary.activities.info;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -57,22 +59,24 @@ public class HenchmenInfoActivity extends CardInfoActivity {
 
                 adapter.setDropDownViewResource(R.layout.spinner_layout);
 
-                mastermindLeaderSpinner.setAdapter(adapter);
-                mastermindLeaderSpinner.setSelection(mastermindList.indexOf(henchmen.getMastermindLeader()));
+                new Handler(Looper.getMainLooper()).post(() -> {
+                    mastermindLeaderSpinner.setAdapter(adapter);
+                    mastermindLeaderSpinner.setSelection(mastermindList.indexOf(henchmen.getMastermindLeader()));
 
-                mastermindLeaderSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(final AdapterView<?> parent,
-                            final View view,
-                            final int position,
-                            final long id) {
-                        mastermindList.get(position).setAlwaysLeadsHenchmen(henchmen);
-                    }
+                    mastermindLeaderSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(final AdapterView<?> parent,
+                                final View view,
+                                final int position,
+                                final long id) {
+                            mastermindList.get(position).setAlwaysLeadsHenchmen(henchmen);
+                        }
 
-                    @Override
-                    public void onNothingSelected(final AdapterView<?> parent) {
+                        @Override
+                        public void onNothingSelected(final AdapterView<?> parent) {
 
-                    }
+                        }
+                    });
                 });
             } else {
                 adapter = new ArrayAdapter<>(
@@ -83,8 +87,10 @@ public class HenchmenInfoActivity extends CardInfoActivity {
 
                 adapter.setDropDownViewResource(R.layout.spinner_layout);
 
-                mastermindLeaderSpinner.setAdapter(adapter);
-                mastermindLeaderSpinner.setEnabled(false);
+                new Handler(Looper.getMainLooper()).post(() -> {
+                    mastermindLeaderSpinner.setAdapter(adapter);
+                    mastermindLeaderSpinner.setEnabled(false);
+                });
             }
         });
     }
