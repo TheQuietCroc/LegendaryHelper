@@ -43,12 +43,25 @@ public class GameSet extends BaseGameComponent {
     }
 
     @Override
+    public void setEnabled(final boolean isEnabled) {
+        super.setEnabled(isEnabled);
+
+        new DbAsyncTask(() -> {
+            getMastermindList().stream().forEach(mastermind -> mastermind.setEnabled(isEnabled()));
+            getSchemeList().stream().forEach(scheme -> scheme.setEnabled(isEnabled()));
+            getVillainsList().stream().forEach(villains -> villains.setEnabled(isEnabled()));
+            getHenchmenList().stream().forEach(henchmen -> henchmen.setEnabled(isEnabled()));
+            getHeroList().stream().forEach(hero -> hero.setEnabled(isEnabled()));
+        });
+    }
+
+    @Override
     public GameSetEntity toEntity() {
         return new GameSetEntity(this);
     }
 
     public List<Mastermind> getMastermindList() {
-        if (mastermindList.isEmpty()) {
+        if (getId() != null && mastermindList.isEmpty()) {
 
             final MastermindDao mastermindDao = LegendaryDatabase.getInstance().mastermindDao();
 
@@ -63,7 +76,7 @@ public class GameSet extends BaseGameComponent {
     }
 
     public List<Scheme> getSchemeList() {
-        if (schemeList.isEmpty()) {
+        if (getId() != null && schemeList.isEmpty()) {
 
             final SchemeDao schemeDao = LegendaryDatabase.getInstance().schemeDao();
 
@@ -78,7 +91,7 @@ public class GameSet extends BaseGameComponent {
     }
 
     public List<Villains> getVillainsList() {
-        if (villainsList.isEmpty()) {
+        if (getId() != null && villainsList.isEmpty()) {
 
             final VillainsDao villainsDao = LegendaryDatabase.getInstance().villainsDao();
 
@@ -93,7 +106,7 @@ public class GameSet extends BaseGameComponent {
     }
 
     public List<Henchmen> getHenchmenList() {
-        if (henchmenList.isEmpty()) {
+        if (getId() != null && henchmenList.isEmpty()) {
 
             final HenchmenDao henchmenDao = LegendaryDatabase.getInstance().henchmenDao();
 
@@ -108,7 +121,7 @@ public class GameSet extends BaseGameComponent {
     }
 
     public List<Hero> getHeroList() {
-        if (heroList.isEmpty()) {
+        if (getId() != null && heroList.isEmpty()) {
 
             final HeroDao heroDao = LegendaryDatabase.getInstance().heroDao();
 
@@ -125,37 +138,25 @@ public class GameSet extends BaseGameComponent {
     public void dbSave() {
         new DbAsyncTask(() -> {
 
-            final List<Mastermind> mastermindsInSet = getMastermindList();
-            final List<Scheme> schemesInSet = getSchemeList();
-            final List<Villains> villainsInSet = getVillainsList();
-            final List<Henchmen> henchmenInSet = getHenchmenList();
-            final List<Hero> heroesInSet = getHeroList();
-
-            mastermindsInSet.stream().forEach(mastermind -> mastermind.setEnabled(isEnabled()));
-            schemesInSet.stream().forEach(scheme -> scheme.setEnabled(isEnabled()));
-            villainsInSet.stream().forEach(villains -> villains.setEnabled(isEnabled()));
-            henchmenInSet.stream().forEach(henchmen -> henchmen.setEnabled(isEnabled()));
-            heroesInSet.stream().forEach(heroes -> heroes.setEnabled(isEnabled()));
-
             final LegendaryDatabase db = LegendaryDatabase.getInstance();
 
-            db.mastermindDao().update(mastermindsInSet
+            db.mastermindDao().update(getMastermindList()
                     .stream()
                     .map(Mastermind::toEntity)
                     .collect(Collectors.toList()));
-            db.schemeDao().update(schemesInSet
+            db.schemeDao().update(getSchemeList()
                     .stream()
                     .map(Scheme::toEntity)
                     .collect(Collectors.toList()));
-            db.villainsDao().update(villainsInSet
+            db.villainsDao().update(getVillainsList()
                     .stream()
                     .map(Villains::toEntity)
                     .collect(Collectors.toList()));
-            db.henchmenDao().update(henchmenInSet
+            db.henchmenDao().update(getHenchmenList()
                     .stream()
                     .map(Henchmen::toEntity)
                     .collect(Collectors.toList()));
-            db.heroDao().update(heroesInSet
+            db.heroDao().update(getHeroList()
                     .stream()
                     .map(Hero::toEntity)
                     .collect(Collectors.toList()));

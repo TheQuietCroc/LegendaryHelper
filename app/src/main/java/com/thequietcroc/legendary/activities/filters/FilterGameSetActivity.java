@@ -26,7 +26,7 @@ public class FilterGameSetActivity extends FilterActivity {
         setTitle(getString(R.string.filterGameSets));
 
         filterRecyclerView.setAdapter(gameComponentRecyclerAdapter);
-        gameComponentRecyclerAdapter.setDbUpdateConsumer(GameSet::dbSave);
+        gameComponentRecyclerAdapter.setCheckboxOnClickConsumer(GameSet::dbSave);
         gameComponentRecyclerAdapter.setInfoButtonAction(gameSet ->
                 startNewActivity(gameSet, GameSetInfoActivity.class));
 
@@ -39,7 +39,9 @@ public class FilterGameSetActivity extends FilterActivity {
                         .map(GameSetEntity::toModel)
                         .collect(Collectors.toList()));
 
-                gameComponentRecyclerAdapter.notifyDataSetChanged();
+                filterRecyclerView.setAdapter(gameComponentRecyclerAdapter);
+                gameComponentRecyclerAdapter.setInfoButtonAction(gameSet ->
+                        startNewActivity(gameSet, GameSetInfoActivity.class));
             });
         });
     }

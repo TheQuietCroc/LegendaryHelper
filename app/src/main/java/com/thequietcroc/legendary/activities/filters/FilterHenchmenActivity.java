@@ -26,7 +26,7 @@ public class FilterHenchmenActivity extends FilterActivity {
         setTitle(getString(R.string.filterHenchmen));
 
         filterRecyclerView.setAdapter(gameComponentRecyclerAdapter);
-        gameComponentRecyclerAdapter.setDbUpdateConsumer(Henchmen::dbSave);
+        gameComponentRecyclerAdapter.setCheckboxOnClickConsumer(Henchmen::dbSave);
         gameComponentRecyclerAdapter.setInfoButtonAction(henchmen ->
                 startNewActivity(henchmen, HenchmenInfoActivity.class));
 
@@ -39,7 +39,9 @@ public class FilterHenchmenActivity extends FilterActivity {
                         .map(HenchmenEntity::toModel)
                         .collect(Collectors.toList()));
 
-                gameComponentRecyclerAdapter.notifyDataSetChanged();
+                filterRecyclerView.setAdapter(gameComponentRecyclerAdapter);
+                gameComponentRecyclerAdapter.setInfoButtonAction(henchmen ->
+                        startNewActivity(henchmen, HenchmenInfoActivity.class));
             });
         });
     }

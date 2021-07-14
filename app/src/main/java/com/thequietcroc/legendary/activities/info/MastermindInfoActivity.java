@@ -22,7 +22,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class MastermindInfoActivity extends CardInfoActivity {
+public class MastermindInfoActivity extends CardInfoActivity<Mastermind> {
 
     Spinner alwaysLeadsVillainsSpinner;
     Spinner alwaysLeadsHenchmenSpinner;
@@ -41,7 +41,7 @@ public class MastermindInfoActivity extends CardInfoActivity {
         componentControlsLayout.addView(mastermindInfoControls);
 
         new DbAsyncTask(() -> {
-            final Mastermind mastermind = (Mastermind) componentAtomicReference.get();
+            final Mastermind mastermind = componentAtomicReference.get();
             final ArrayAdapter<Villains> villainsAdapter;
             final ArrayAdapter<Henchmen> henchmenAdapter;
 

@@ -49,6 +49,27 @@ public class Mastermind extends BaseCard {
         setAlwaysLeadsHenchmen(Henchmen.NONE);
         setAlwaysLeadsVillains(Villains.NONE);
     }
+
+    @Override
+    public void setEnabled(final boolean isEnabled) {
+        super.setEnabled(isEnabled);
+
+        new DbAsyncTask(() -> {
+            if (isEnabled()) {
+                final Villains alwaysLeadsVillains = getAlwaysLeadsVillains();
+
+                if (alwaysLeadsVillains.getId() != 0) {
+                    alwaysLeadsVillains.setEnabled(isEnabled());
+                }
+
+                final Henchmen alwaysLeadsHenchmen = getAlwaysLeadsHenchmen();
+
+                if (alwaysLeadsHenchmen.getId() != 0) {
+                    alwaysLeadsHenchmen.setEnabled(isEnabled());
+                }
+            }
+        });
+    }
     
     public boolean isEpic() {
         return isEpic;
@@ -81,22 +102,8 @@ public class Mastermind extends BaseCard {
 
     public void dbSave() {
         new DbAsyncTask(() -> {
-            if (isEnabled()) {
-                final Villains alwaysLeadsVillains = getAlwaysLeadsVillains();
-
-                if (alwaysLeadsVillains.getId() != 0) {
-                    alwaysLeadsVillains.setEnabled(isEnabled());
-                    alwaysLeadsVillains.dbSave();
-                }
-
-                final Henchmen alwaysLeadsHenchmen = getAlwaysLeadsHenchmen();
-
-                if (alwaysLeadsHenchmen.getId() != 0) {
-                    alwaysLeadsHenchmen.setEnabled(isEnabled());
-                    alwaysLeadsHenchmen.dbSave();
-                }
-            }
-
+            getAlwaysLeadsVillains().dbSave();
+            getAlwaysLeadsHenchmen().dbSave();
             dbSave(LegendaryDatabase.getInstance().mastermindDao(), toEntity());
         });
     }

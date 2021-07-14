@@ -26,7 +26,7 @@ public class FilterHeroActivity extends FilterActivity {
         setTitle(getString(R.string.filterHeroes));
 
         filterRecyclerView.setAdapter(gameComponentRecyclerAdapter);
-        gameComponentRecyclerAdapter.setDbUpdateConsumer(Hero::dbSave);
+        gameComponentRecyclerAdapter.setCheckboxOnClickConsumer(Hero::dbSave);
         gameComponentRecyclerAdapter.setInfoButtonAction(hero ->
                 startNewActivity(hero, HeroInfoActivity.class));
 
@@ -39,7 +39,9 @@ public class FilterHeroActivity extends FilterActivity {
                         .map(HeroEntity::toModel)
                         .collect(Collectors.toList()));
 
-                gameComponentRecyclerAdapter.notifyDataSetChanged();
+                filterRecyclerView.setAdapter(gameComponentRecyclerAdapter);
+                gameComponentRecyclerAdapter.setInfoButtonAction(hero ->
+                        startNewActivity(hero, HeroInfoActivity.class));
             });
         });
     }

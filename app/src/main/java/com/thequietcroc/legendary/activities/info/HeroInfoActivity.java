@@ -9,7 +9,7 @@ import android.widget.ToggleButton;
 import com.thequietcroc.legendary.R;
 import com.thequietcroc.legendary.models.gamecomponents.cards.Hero;
 
-public class HeroInfoActivity extends CardInfoActivity {
+public class HeroInfoActivity extends CardInfoActivity<Hero> {
 
     ToggleButton heroCovertToggleButton;
     ToggleButton heroInstinctToggleButton;
@@ -37,7 +37,7 @@ public class HeroInfoActivity extends CardInfoActivity {
 
         componentControlsLayout.addView(heroInfoControls);
 
-        final Hero hero = (Hero) componentAtomicReference.get();
+        final Hero hero = componentAtomicReference.get();
 
         heroCovertToggleButton.setChecked(hero.hasCovert());
         heroInstinctToggleButton.setChecked(hero.hasInstinct());

@@ -26,7 +26,7 @@ public class FilterMastermindActivity extends FilterActivity {
         setTitle(getString(R.string.filterMasterminds));
 
         filterRecyclerView.setAdapter(gameComponentRecyclerAdapter);
-        gameComponentRecyclerAdapter.setDbUpdateConsumer(Mastermind::dbSave);
+        gameComponentRecyclerAdapter.setCheckboxOnClickConsumer(Mastermind::dbSave);
         gameComponentRecyclerAdapter.setInfoButtonAction(mastermind ->
                 startNewActivity(mastermind, MastermindInfoActivity.class));
 
@@ -39,7 +39,9 @@ public class FilterMastermindActivity extends FilterActivity {
                         .map(MastermindEntity::toModel)
                         .collect(Collectors.toList()));
 
-                gameComponentRecyclerAdapter.notifyDataSetChanged();
+                filterRecyclerView.setAdapter(gameComponentRecyclerAdapter);
+                gameComponentRecyclerAdapter.setInfoButtonAction(mastermind ->
+                        startNewActivity(mastermind, MastermindInfoActivity.class));
             });
         });
     }

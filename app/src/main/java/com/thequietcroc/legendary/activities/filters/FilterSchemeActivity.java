@@ -26,7 +26,7 @@ public class FilterSchemeActivity extends FilterActivity {
         setTitle(getString(R.string.filterSchemes));
 
         filterRecyclerView.setAdapter(gameComponentRecyclerAdapter);
-        gameComponentRecyclerAdapter.setDbUpdateConsumer(Scheme::dbSave);
+        gameComponentRecyclerAdapter.setCheckboxOnClickConsumer(Scheme::dbSave);
         gameComponentRecyclerAdapter.setInfoButtonAction(scheme ->
                 startNewActivity(scheme, SchemeInfoActivity.class));
 
@@ -39,7 +39,9 @@ public class FilterSchemeActivity extends FilterActivity {
                         .map(SchemeEntity::toModel)
                         .collect(Collectors.toList()));
 
-                gameComponentRecyclerAdapter.notifyDataSetChanged();
+                filterRecyclerView.setAdapter(gameComponentRecyclerAdapter);
+                gameComponentRecyclerAdapter.setInfoButtonAction(scheme ->
+                        startNewActivity(scheme, SchemeInfoActivity.class));
             });
         });
     }

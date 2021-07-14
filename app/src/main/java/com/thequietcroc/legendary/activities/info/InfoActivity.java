@@ -21,9 +21,9 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import static com.thequietcroc.legendary.activities.filters.FilterActivity.COMPONENT_EXTRA;
 
-public abstract class InfoActivity extends AppCompatActivity {
+public abstract class InfoActivity<T extends BaseGameComponent> extends AppCompatActivity {
 
-    final AtomicReference<BaseGameComponent> componentAtomicReference = new AtomicReference<>();
+    final AtomicReference<T> componentAtomicReference = new AtomicReference<>();
 
     EditText infoNameEditText;
     LinearLayout componentControlsLayout;
@@ -39,7 +39,7 @@ public abstract class InfoActivity extends AppCompatActivity {
 
         final Intent intent = getIntent();
 
-        componentAtomicReference.set((BaseGameComponent) intent.getSerializableExtra(COMPONENT_EXTRA));
+        componentAtomicReference.set((T) intent.getSerializableExtra(COMPONENT_EXTRA));
 
         infoNameEditText.setText(componentAtomicReference.get().getName());
 
@@ -60,6 +60,8 @@ public abstract class InfoActivity extends AppCompatActivity {
                 .getActionView().findViewById(R.id.menuItemSwitch);
 
         enabledSwitch.setChecked(component.isEnabled());
+
+        enabledSwitch.setOnClickListener(v -> component.setEnabled(enabledSwitch.isChecked()));
 
         return true;
     }
@@ -116,7 +118,7 @@ public abstract class InfoActivity extends AppCompatActivity {
 
     private void deleteComponent() {
         new DbAsyncTask(() -> {
-            final BaseGameComponent component = componentAtomicReference.get();
+            final T component = componentAtomicReference.get();
 
             component.dbDelete();
             NavUtils.navigateUpFromSameTask(this);
@@ -124,10 +126,9 @@ public abstract class InfoActivity extends AppCompatActivity {
     }
 
     protected void saveComponent() {
-        final BaseGameComponent component = componentAtomicReference.get();
+        final T component = componentAtomicReference.get();
 
         component.setName(infoNameEditText.getText().toString());
-        component.setEnabled(enabledSwitch.isChecked());
 
         component.dbSave();
     }

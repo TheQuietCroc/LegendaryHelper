@@ -20,7 +20,7 @@ public class GameComponentRecyclerAdapter<T extends BaseGameComponent>
         extends RecyclerView.Adapter<GameComponentRecyclerAdapter.ViewHolder> {
 
     private final List<T> componentList;
-    private Consumer<T> dbUpdateConsumer;
+    private Consumer<T> checkboxOnClickConsumer;
     private Consumer<T> infoButtonConsumer;
 
     public List<T> getComponentList() {
@@ -57,8 +57,8 @@ public class GameComponentRecyclerAdapter<T extends BaseGameComponent>
         this.componentList = componentList;
     }
 
-    public void setDbUpdateConsumer(final Consumer<T> dbUpdateConsumer) {
-        this.dbUpdateConsumer = dbUpdateConsumer;
+    public void setCheckboxOnClickConsumer(final Consumer<T> checkboxOnClickConsumer) {
+        this.checkboxOnClickConsumer = checkboxOnClickConsumer;
     }
 
     public void setInfoButtonAction(final Consumer<T> infoButtonConsumer) {
@@ -75,10 +75,13 @@ public class GameComponentRecyclerAdapter<T extends BaseGameComponent>
         final ViewHolder viewHolder = new ViewHolder(view);
 
         viewHolder.getGameComponentEnabledCheckbox().setOnClickListener(v -> {
-            final T entity = componentList.get(viewHolder.getAdapterPosition());
+            final T component = componentList.get(viewHolder.getAdapterPosition());
 
-            entity.setEnabled(((CheckBox)v).isChecked());
-            dbUpdateConsumer.accept(entity);
+            component.setEnabled(((CheckBox)v).isChecked());
+
+            if (null != checkboxOnClickConsumer) {
+                checkboxOnClickConsumer.accept(component);
+            }
         });
 
         viewHolder.getGameComponentName().setOnClickListener(v -> viewHolder.getGameComponentEnabledCheckbox().performClick());
@@ -86,7 +89,9 @@ public class GameComponentRecyclerAdapter<T extends BaseGameComponent>
         viewHolder.getGameComponentInfoButton().setOnClickListener(v -> {
             final T gameComponent = componentList.get(viewHolder.getAdapterPosition());
 
-            infoButtonConsumer.accept(gameComponent);
+            if (null != infoButtonConsumer) {
+                infoButtonConsumer.accept(gameComponent);
+            }
         });
 
         return viewHolder;
@@ -95,10 +100,10 @@ public class GameComponentRecyclerAdapter<T extends BaseGameComponent>
     // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(final ViewHolder viewHolder, final int position) {
-        final T entity = componentList.get(position);
+        final T component = componentList.get(position);
 
-        viewHolder.getGameComponentName().setText(entity.getName());
-        viewHolder.getGameComponentEnabledCheckbox().setChecked(entity.isEnabled());
+        viewHolder.getGameComponentName().setText(component.getName());
+        viewHolder.getGameComponentEnabledCheckbox().setChecked(component.isEnabled());
     }
 
     // Return the size of your dataset (invoked by the layout manager)

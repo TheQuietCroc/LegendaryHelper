@@ -20,7 +20,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class VillainsInfoActivity extends CardInfoActivity {
+public class VillainsInfoActivity extends CardInfoActivity<Villains> {
 
     Spinner mastermindLeaderSpinner;
 
@@ -37,7 +37,7 @@ public class VillainsInfoActivity extends CardInfoActivity {
         componentControlsLayout.addView(villainsInfoControls);
 
         new DbAsyncTask(() -> {
-            final Villains villains = (Villains) componentAtomicReference.get();
+            final Villains villains = componentAtomicReference.get();
             final ArrayAdapter<Mastermind> adapter;
 
             if (villains.isCustom()) {

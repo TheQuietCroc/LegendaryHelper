@@ -20,7 +20,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class HenchmenInfoActivity extends CardInfoActivity {
+public class HenchmenInfoActivity extends CardInfoActivity<Henchmen> {
 
     Spinner mastermindLeaderSpinner;
 
@@ -37,7 +37,7 @@ public class HenchmenInfoActivity extends CardInfoActivity {
         componentControlsLayout.addView(henchmenInfoControls);
 
         new DbAsyncTask(() -> {
-            final Henchmen henchmen = (Henchmen) componentAtomicReference.get();
+            final Henchmen henchmen = componentAtomicReference.get();
             final ArrayAdapter<Mastermind> adapter;
 
             if (henchmen.isCustom()) {

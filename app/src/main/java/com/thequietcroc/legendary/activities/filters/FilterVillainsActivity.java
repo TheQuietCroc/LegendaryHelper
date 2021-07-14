@@ -26,7 +26,7 @@ public class FilterVillainsActivity extends FilterActivity {
         setTitle(getString(R.string.filterVillains));
 
         filterRecyclerView.setAdapter(gameComponentRecyclerAdapter);
-        gameComponentRecyclerAdapter.setDbUpdateConsumer(Villains::dbSave);
+        gameComponentRecyclerAdapter.setCheckboxOnClickConsumer(Villains::dbSave);
         gameComponentRecyclerAdapter.setInfoButtonAction(villains ->
                 startNewActivity(villains, VillainsInfoActivity.class));
 
@@ -39,7 +39,9 @@ public class FilterVillainsActivity extends FilterActivity {
                         .map(VillainsEntity::toModel)
                         .collect(Collectors.toList()));
 
-                gameComponentRecyclerAdapter.notifyDataSetChanged();
+                filterRecyclerView.setAdapter(gameComponentRecyclerAdapter);
+                gameComponentRecyclerAdapter.setInfoButtonAction(villains ->
+                        startNewActivity(villains, VillainsInfoActivity.class));
             });
         });
     }

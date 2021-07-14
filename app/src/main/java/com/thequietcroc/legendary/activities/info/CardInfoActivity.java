@@ -20,7 +20,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public abstract class CardInfoActivity extends InfoActivity {
+public abstract class CardInfoActivity<T extends BaseCard> extends InfoActivity<T> {
 
     Spinner cardInfoGameSetSpinner;
 
@@ -36,7 +36,7 @@ public abstract class CardInfoActivity extends InfoActivity {
         componentControlsLayout.addView(cardInfoControls);
 
         new DbAsyncTask(() -> {
-            final BaseCard card = (BaseCard) componentAtomicReference.get();
+            final T card = componentAtomicReference.get();
             final ArrayAdapter<GameSet> adapter;
 
             if (card.isCustom()) {
@@ -95,7 +95,7 @@ public abstract class CardInfoActivity extends InfoActivity {
 
     @Override
     protected void saveComponent() {
-        final BaseCard card = (BaseCard) componentAtomicReference.get();
+        final T card = componentAtomicReference.get();
 
         card.setGameSet((GameSet) cardInfoGameSetSpinner.getSelectedItem());
 
