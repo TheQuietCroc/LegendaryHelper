@@ -23,10 +23,6 @@ public class GameComponentRecyclerAdapter<T extends BaseGameComponent>
     private Consumer<T> checkboxOnClickConsumer;
     private Consumer<T> infoButtonConsumer;
 
-    public List<T> getComponentList() {
-        return componentList;
-    }
-
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView gameComponentName;
         private final CheckBox gameComponentEnabledCheckbox;
@@ -57,6 +53,10 @@ public class GameComponentRecyclerAdapter<T extends BaseGameComponent>
         this.componentList = componentList;
     }
 
+    public List<T> getComponentList() {
+        return componentList;
+    }
+
     public void setCheckboxOnClickConsumer(final Consumer<T> checkboxOnClickConsumer) {
         this.checkboxOnClickConsumer = checkboxOnClickConsumer;
     }
@@ -71,7 +71,7 @@ public class GameComponentRecyclerAdapter<T extends BaseGameComponent>
     public ViewHolder onCreateViewHolder(final ViewGroup viewGroup, final int viewType) {
         // Create a new view, which defines the UI of the list item
         final View view = LayoutInflater.from(viewGroup.getContext())
-                .inflate(R.layout.game_component_list_item, viewGroup, false);
+                .inflate(R.layout.game_component_recycler_view_item, viewGroup, false);
         final ViewHolder viewHolder = new ViewHolder(view);
 
         viewHolder.getGameComponentEnabledCheckbox().setOnClickListener(v -> {

@@ -12,9 +12,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.thequietcroc.legendary.R;
-import com.thequietcroc.legendary.custom.adapters.GameComponentRecyclerAdapter;
+import com.thequietcroc.legendary.custom.adapters.BasicRecyclerAdapter;
 import com.thequietcroc.legendary.models.gamecomponents.GameSet;
-import com.thequietcroc.legendary.models.gamecomponents.cards.BaseCard;
 import com.thequietcroc.legendary.models.gamecomponents.cards.Henchmen;
 import com.thequietcroc.legendary.models.gamecomponents.cards.Hero;
 import com.thequietcroc.legendary.models.gamecomponents.cards.Mastermind;
@@ -32,17 +31,11 @@ public class GameSetInfoActivity extends InfoActivity<GameSet> {
     RecyclerView henchmenRecyclerView;
     RecyclerView heroesRecyclerView;
 
-    GameComponentRecyclerAdapter<Mastermind> mastermindsAdapter;
-    GameComponentRecyclerAdapter<Scheme> schemesAdapter;
-    GameComponentRecyclerAdapter<Villains> villainsAdapter;
-    GameComponentRecyclerAdapter<Henchmen> henchmenAdapter;
-    GameComponentRecyclerAdapter<Hero> heroesAdapter;
-
-    SwitchCompat mastermindsEnabledSwitch;
-    SwitchCompat schemesEnabledSwitch;
-    SwitchCompat villainsEnabledSwitch;
-    SwitchCompat henchmenEnabledSwitch;
-    SwitchCompat heroesEnabledSwitch;
+    BasicRecyclerAdapter<Mastermind> mastermindsAdapter;
+    BasicRecyclerAdapter<Scheme> schemesAdapter;
+    BasicRecyclerAdapter<Villains> villainsAdapter;
+    BasicRecyclerAdapter<Henchmen> henchmenAdapter;
+    BasicRecyclerAdapter<Hero> heroesAdapter;
 
     @Override
     public void onCreate(final Bundle savedInstanceState) {
@@ -63,12 +56,6 @@ public class GameSetInfoActivity extends InfoActivity<GameSet> {
         villainsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         henchmenRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         heroesRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        mastermindsEnabledSwitch = gameSetInfoControls.findViewById(R.id.gameSetInfoMastermindsEnabledSwitch);
-        schemesEnabledSwitch = gameSetInfoControls.findViewById(R.id.gameSetInfoSchemesEnabledSwitch);
-        villainsEnabledSwitch = gameSetInfoControls.findViewById(R.id.gameSetInfoVillainsEnabledSwitch);
-        henchmenEnabledSwitch = gameSetInfoControls.findViewById(R.id.gameSetInfoHenchmenEnabledSwitch);
-        heroesEnabledSwitch = gameSetInfoControls.findViewById(R.id.gameSetInfoHeroesEnabledSwitch);
 
         componentControlsLayout.addView(gameSetInfoControls);
 
@@ -112,65 +99,11 @@ public class GameSetInfoActivity extends InfoActivity<GameSet> {
                 }
             });
 
-            mastermindsAdapter = new GameComponentRecyclerAdapter<>(mastermindList);
-            schemesAdapter = new GameComponentRecyclerAdapter<>(schemeList);
-            villainsAdapter = new GameComponentRecyclerAdapter<>(villainsList);
-            henchmenAdapter = new GameComponentRecyclerAdapter<>(henchmenList);
-            heroesAdapter = new GameComponentRecyclerAdapter<>(heroList);
-
-            mastermindsAdapter.setCheckboxOnClickConsumer(mastermind -> {
-                if (mastermind.isEnabled()) {
-
-                    final Villains alwaysLeadsVillains = mastermind.getAlwaysLeadsVillains();
-
-                    if (alwaysLeadsVillains.getId() != 0) {
-                        villainsAdapter.notifyItemChanged(villainsList.indexOf(alwaysLeadsVillains));
-                    }
-
-                    final Henchmen alwaysLeadsHenchmen = mastermind.getAlwaysLeadsHenchmen();
-
-                    if (alwaysLeadsHenchmen.getId() != 0) {
-                        henchmenAdapter.notifyItemChanged(henchmenList.indexOf(alwaysLeadsHenchmen));
-                    }
-                }
-            });
-
-            villainsAdapter.setCheckboxOnClickConsumer(villains -> {
-                if (!villains.isEnabled()) {
-                    mastermindsAdapter.notifyItemChanged(mastermindList.indexOf(villains.getMastermindLeader()));
-                }
-            });
-
-            henchmenAdapter.setCheckboxOnClickConsumer(henchmen -> {
-                if (!henchmen.isEnabled()) {
-                    mastermindsAdapter.notifyItemChanged(mastermindList.indexOf(henchmen.getMastermindLeader()));
-                }
-            });
-
-            setupEnabledSwitch(mastermindsEnabledSwitch, mastermindList, mastermindsAdapter);
-            setupEnabledSwitch(schemesEnabledSwitch, schemeList, schemesAdapter);
-            setupEnabledSwitch(villainsEnabledSwitch, villainsList, villainsAdapter);
-            setupEnabledSwitch(henchmenEnabledSwitch, henchmenList, henchmenAdapter);
-            setupEnabledSwitch(heroesEnabledSwitch, heroList, heroesAdapter);
-
-            mastermindsEnabledSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
-                if (isChecked) {
-                    villainsAdapter.notifyDataSetChanged();
-                    henchmenAdapter.notifyDataSetChanged();
-                }
-            });
-
-            villainsEnabledSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
-                if (!isChecked) {
-                    mastermindsAdapter.notifyDataSetChanged();
-                }
-            });
-
-            henchmenEnabledSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
-                if (!isChecked) {
-                    mastermindsAdapter.notifyDataSetChanged();
-                }
-            });
+            mastermindsAdapter = new BasicRecyclerAdapter<>(mastermindList);
+            schemesAdapter = new BasicRecyclerAdapter<>(schemeList);
+            villainsAdapter = new BasicRecyclerAdapter<>(villainsList);
+            henchmenAdapter = new BasicRecyclerAdapter<>(henchmenList);
+            heroesAdapter = new BasicRecyclerAdapter<>(heroList);
 
             new Handler(Looper.getMainLooper()).post(() -> {
                 mastermindsRecyclerView.setAdapter(mastermindsAdapter);
@@ -194,12 +127,6 @@ public class GameSetInfoActivity extends InfoActivity<GameSet> {
 
                 new Handler(Looper.getMainLooper()).post(() -> {
 
-                    mastermindsEnabledSwitch.setChecked(isEnabled);
-                    schemesEnabledSwitch.setChecked(isEnabled);
-                    villainsEnabledSwitch.setChecked(isEnabled);
-                    henchmenEnabledSwitch.setChecked(isEnabled);
-                    heroesEnabledSwitch.setChecked(isEnabled);
-
                     mastermindsAdapter.notifyDataSetChanged();
                     schemesAdapter.notifyDataSetChanged();
                     villainsAdapter.notifyDataSetChanged();
@@ -210,32 +137,5 @@ public class GameSetInfoActivity extends InfoActivity<GameSet> {
         });
 
         return true;
-    }
-
-    private <T extends BaseCard> void setupEnabledSwitch(final SwitchCompat cardGroupEnabledSwitch,
-            final List<T> cardList,
-            final GameComponentRecyclerAdapter<T> cardAdapter) {
-        new Handler(Looper.getMainLooper()).post(() -> {
-            cardGroupEnabledSwitch.setChecked(cardList.stream().anyMatch(T::isEnabled));
-            cardGroupEnabledSwitch.setOnClickListener(v -> {
-                final boolean isChecked = ((SwitchCompat) v).isChecked();
-
-                setIsEnabledForList(cardList, cardAdapter, isChecked);
-                if (isChecked) {
-                    enabledSwitch.setChecked(true);
-                }
-            });
-        });
-    }
-
-    private <T extends BaseCard> void setIsEnabledForList(final List<T> cardList,
-            final GameComponentRecyclerAdapter<T> cardAdapter,
-            final boolean isEnabled) {
-
-        cardList.stream().forEach(card -> {
-            card.setEnabled(isEnabled);
-        });
-
-        new Handler(Looper.getMainLooper()).post(cardAdapter::notifyDataSetChanged);
     }
 }
