@@ -33,7 +33,8 @@ public class Villains extends BaseCard {
     public void setEnabled(final boolean isEnabled) {
         super.setEnabled(isEnabled);
 
-        if (!isEnabled()) {
+        if (!isEnabled()
+            && null != getMastermindLeader()) {
             getMastermindLeader().setEnabled(isEnabled());
         }
     }
@@ -64,10 +65,7 @@ public class Villains extends BaseCard {
     }
 
     public void dbSave() {
-        new DbAsyncTask(() -> {
-            getMastermindLeader().dbSave();
-            dbSave(LegendaryDatabase.getInstance().villainsDao(), toEntity());
-        });
+        dbSave(LegendaryDatabase.getInstance().villainsDao(), toEntity());
     }
 
     public void dbDelete() {

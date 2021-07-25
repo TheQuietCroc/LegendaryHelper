@@ -20,7 +20,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public abstract class CardInfoActivity<T extends BaseCard> extends InfoActivity<T> {
+public abstract class CardInfoActivity<T extends BaseCard> extends InfoActivity<T> implements AdapterView.OnItemSelectedListener {
 
     Spinner cardInfoGameSetSpinner;
 
@@ -61,20 +61,7 @@ public abstract class CardInfoActivity<T extends BaseCard> extends InfoActivity<
                     cardInfoGameSetSpinner.setAdapter(adapter);
                     cardInfoGameSetSpinner.setSelection(gameSetList.indexOf(card.getGameSet()));
 
-                    cardInfoGameSetSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                        @Override
-                        public void onItemSelected(final AdapterView<?> parent,
-                                final View view,
-                                final int position,
-                                final long id) {
-                            card.setGameSet(gameSetList.get(position));
-                        }
-
-                        @Override
-                        public void onNothingSelected(final AdapterView<?> parent) {
-
-                        }
-                    });
+                    cardInfoGameSetSpinner.setOnItemSelectedListener(this);
                 });
             } else {
                 adapter = new ArrayAdapter<>(
@@ -100,5 +87,20 @@ public abstract class CardInfoActivity<T extends BaseCard> extends InfoActivity<
         card.setGameSet((GameSet) cardInfoGameSetSpinner.getSelectedItem());
 
         super.saveComponent();
+    }
+
+    @Override
+    public void onItemSelected(final AdapterView<?> parent,
+            final View view,
+            final int position,
+            final long id) {
+        final T card = componentAtomicReference.get();
+
+        card.setGameSet((GameSet) cardInfoGameSetSpinner.getSelectedItem());
+    }
+
+    @Override
+    public void onNothingSelected(final AdapterView<?> parent) {
+
     }
 }

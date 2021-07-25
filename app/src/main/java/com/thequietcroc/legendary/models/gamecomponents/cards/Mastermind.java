@@ -101,11 +101,7 @@ public class Mastermind extends BaseCard {
     }
 
     public void dbSave() {
-        new DbAsyncTask(() -> {
-            getAlwaysLeadsVillains().dbSave();
-            getAlwaysLeadsHenchmen().dbSave();
-            dbSave(LegendaryDatabase.getInstance().mastermindDao(), toEntity());
-        });
+        dbSave(LegendaryDatabase.getInstance().mastermindDao(), toEntity());
     }
 
     public void dbDelete() {

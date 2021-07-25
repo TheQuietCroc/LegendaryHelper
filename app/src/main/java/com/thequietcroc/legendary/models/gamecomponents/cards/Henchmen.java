@@ -33,7 +33,8 @@ public class Henchmen extends BaseCard {
     public void setEnabled(final boolean isEnabled) {
         super.setEnabled(isEnabled);
 
-        if (!isEnabled()) {
+        if (!isEnabled()
+            && null != getMastermindLeader()) {
             getMastermindLeader().setEnabled(isEnabled());
         }
     }
@@ -64,10 +65,7 @@ public class Henchmen extends BaseCard {
     }
 
     public void dbSave() {
-        new DbAsyncTask(() -> {
-            getMastermindLeader().dbSave();
-            dbSave(LegendaryDatabase.getInstance().henchmenDao(), toEntity());
-        });
+        dbSave(LegendaryDatabase.getInstance().henchmenDao(), toEntity());
     }
 
     public void dbDelete() {
