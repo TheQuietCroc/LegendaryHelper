@@ -20,60 +20,77 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public abstract class CardInfoActivity<T extends BaseCard> extends InfoActivity<T> implements AdapterView.OnItemSelectedListener {
+public abstract class CardInfoActivity<T extends BaseCard> extends InfoActivity<T> {
 
+    T card;
     Spinner cardInfoGameSetSpinner;
+    ArrayAdapter<GameSet> gameSetArrayAdapter;
 
     @Override
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        final View cardInfoControls = LayoutInflater.from(componentControlsLayout.getContext())
-                .inflate(R.layout.card_info_controls, componentControlsLayout, false);
+        card = componentAtomicReference.get();
 
-        cardInfoGameSetSpinner = cardInfoControls.findViewById(R.id.cardInfoGameSetSpinner);
+        final View cardInfoControls = LayoutInflater.from(componentControlsLayout.getContext())
+                .inflate(
+                        R.layout.card_info_controls,
+                        componentControlsLayout,
+                        false);
 
         componentControlsLayout.addView(cardInfoControls);
 
+        cardInfoGameSetSpinner = cardInfoControls.findViewById(R.id.cardInfoGameSetSpinner);
+
         new DbAsyncTask(() -> {
-            final T card = componentAtomicReference.get();
-            final ArrayAdapter<GameSet> adapter;
 
             if (card.isCustom()) {
-                final List<GameSet> gameSetList = LegendaryDatabase.getInstance()
-                        .gameSetDao()
-                        .getAllCustom()
-                        .stream()
-                        .map(GameSetEntity::toModel)
-                        .collect(Collectors.toList());
+                final List<GameSet> gameSetList = getCustomGameSetList();
 
-                gameSetList.add(0, GameSet.NONE);
-                adapter = new ArrayAdapter<>(
+                gameSetArrayAdapter = new ArrayAdapter<>(
                         cardInfoGameSetSpinner.getContext(),
                         R.layout.spinner_layout,
                         gameSetList
                 );
 
-                adapter.setDropDownViewResource(R.layout.spinner_layout);
+                gameSetArrayAdapter.setDropDownViewResource(R.layout.spinner_layout);
 
                 new Handler(Looper.getMainLooper()).post(() -> {
 
-                    cardInfoGameSetSpinner.setAdapter(adapter);
+                    cardInfoGameSetSpinner.setAdapter(gameSetArrayAdapter);
                     cardInfoGameSetSpinner.setSelection(gameSetList.indexOf(card.getGameSet()));
 
-                    cardInfoGameSetSpinner.setOnItemSelectedListener(this);
+                    cardInfoGameSetSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(final AdapterView<?> parent,
+                                final View view,
+                                final int position,
+                                final long id) {
+
+                            final GameSet selectedGameSet = gameSetArrayAdapter.getItem(position);
+
+                            if (!card.getGameSet().equals(selectedGameSet)) {
+                                onGameSetChanged();
+                            }
+                        }
+
+                        @Override
+                        public void onNothingSelected(final AdapterView<?> parent) {
+
+                        }
+                    });
                 });
             } else {
-                adapter = new ArrayAdapter<>(
+                gameSetArrayAdapter = new ArrayAdapter<>(
                         cardInfoGameSetSpinner.getContext(),
                         R.layout.spinner_layout,
                         Collections.singletonList(card.getGameSet())
                 );
 
-                adapter.setDropDownViewResource(R.layout.spinner_layout);
+                gameSetArrayAdapter.setDropDownViewResource(R.layout.spinner_layout);
 
                 new Handler(Looper.getMainLooper()).post(() -> {
-                    cardInfoGameSetSpinner.setAdapter(adapter);
+                    cardInfoGameSetSpinner.setAdapter(gameSetArrayAdapter);
                     cardInfoGameSetSpinner.setEnabled(false);
                 });
             }
@@ -82,25 +99,37 @@ public abstract class CardInfoActivity<T extends BaseCard> extends InfoActivity<
 
     @Override
     protected void saveComponent() {
-        final T card = componentAtomicReference.get();
 
-        card.setGameSet((GameSet) cardInfoGameSetSpinner.getSelectedItem());
+        new DbAsyncTask(() -> {
 
-        super.saveComponent();
-    }
+            card.setGameSet(getSelectedGameSet());
 
-    @Override
-    public void onItemSelected(final AdapterView<?> parent,
-            final View view,
-            final int position,
-            final long id) {
-        final T card = componentAtomicReference.get();
-
-        card.setGameSet((GameSet) cardInfoGameSetSpinner.getSelectedItem());
-    }
-
-    @Override
-    public void onNothingSelected(final AdapterView<?> parent) {
+            super.saveComponent();
+        });
 
     }
+
+    protected final List<GameSet> getCustomGameSetList() {
+
+        final List<GameSet> gameSetList = LegendaryDatabase.getInstance()
+                .gameSetDao()
+                .getAllCustom()
+                .stream()
+                .map(GameSetEntity::toModel)
+                .collect(Collectors.toList());
+
+        gameSetList.add(0, GameSet.NONE);
+
+        return gameSetList;
+    }
+
+    protected final GameSet getSelectedGameSet() {
+        if (cardInfoGameSetSpinner.getSelectedItem() == null) {
+            return card.getGameSet();
+        }
+
+        return (GameSet) cardInfoGameSetSpinner.getSelectedItem();
+    }
+
+    protected abstract void onGameSetChanged();
 }

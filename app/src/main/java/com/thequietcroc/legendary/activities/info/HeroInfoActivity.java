@@ -11,6 +11,7 @@ import com.thequietcroc.legendary.models.gamecomponents.cards.Hero;
 
 public class HeroInfoActivity extends CardInfoActivity<Hero> {
 
+    Hero hero;
     ToggleButton heroCovertToggleButton;
     ToggleButton heroInstinctToggleButton;
     ToggleButton heroRangedToggleButton;
@@ -23,9 +24,13 @@ public class HeroInfoActivity extends CardInfoActivity<Hero> {
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTitle(getString(R.string.heroInfo));
-        
+
+        hero = componentAtomicReference.get();
+
         final View heroInfoControls = LayoutInflater.from(componentControlsLayout.getContext())
                 .inflate(R.layout.card_info_hero_controls, componentControlsLayout, false);
+
+        componentControlsLayout.addView(heroInfoControls);
 
         heroCovertToggleButton = heroInfoControls.findViewById(R.id.cardInfoHeroCovertToggle);
         heroInstinctToggleButton = heroInfoControls.findViewById(R.id.cardInfoHeroInstinctToggle);
@@ -35,10 +40,6 @@ public class HeroInfoActivity extends CardInfoActivity<Hero> {
         heroGunCheckbox = heroInfoControls.findViewById(R.id.cardInfoHeroGunCheckbox);
         heroFlavorCheckbox = heroInfoControls.findViewById(R.id.cardInfoHeroFlavortextCheckbox);
 
-        componentControlsLayout.addView(heroInfoControls);
-
-        final Hero hero = componentAtomicReference.get();
-
         heroCovertToggleButton.setChecked(hero.hasCovert());
         heroInstinctToggleButton.setChecked(hero.hasInstinct());
         heroRangedToggleButton.setChecked(hero.hasRanged());
@@ -47,15 +48,7 @@ public class HeroInfoActivity extends CardInfoActivity<Hero> {
         heroGunCheckbox.setChecked(hero.hasGun());
         heroFlavorCheckbox.setChecked(hero.hasFlavorText());
 
-        if (hero.isCustom()) {
-            heroCovertToggleButton.setOnClickListener(v -> hero.setHasCovert(heroCovertToggleButton.isChecked()));
-            heroInstinctToggleButton.setOnClickListener(v -> hero.setHasInstinct(heroInstinctToggleButton.isChecked()));
-            heroRangedToggleButton.setOnClickListener(v -> hero.setHasRanged(heroRangedToggleButton.isChecked()));
-            heroStrengthToggleButton.setOnClickListener(v -> hero.setHasStrength(heroStrengthToggleButton.isChecked()));
-            heroTechToggleButton.setOnClickListener(v -> hero.setHasTech(heroTechToggleButton.isChecked()));
-            heroGunCheckbox.setOnClickListener(v -> hero.setHasGun(heroGunCheckbox.isChecked()));
-            heroFlavorCheckbox.setOnClickListener(v -> hero.setHasFlavorText(heroFlavorCheckbox.isChecked()));
-        } else {
+        if (!hero.isCustom()) {
             heroCovertToggleButton.setEnabled(false);
             heroInstinctToggleButton.setEnabled(false);
             heroRangedToggleButton.setEnabled(false);
@@ -64,5 +57,24 @@ public class HeroInfoActivity extends CardInfoActivity<Hero> {
             heroGunCheckbox.setEnabled(false);
             heroFlavorCheckbox.setEnabled(false);
         }
+    }
+
+    @Override
+    protected void saveComponent() {
+
+        hero.setHasCovert(heroCovertToggleButton.isChecked());
+        hero.setHasInstinct(heroInstinctToggleButton.isChecked());
+        hero.setHasRanged(heroRangedToggleButton.isChecked());
+        hero.setHasStrength(heroStrengthToggleButton.isChecked());
+        hero.setHasTech(heroTechToggleButton.isChecked());
+        hero.setHasGun(heroGunCheckbox.isChecked());
+        hero.setHasFlavorText(heroFlavorCheckbox.isChecked());
+
+        super.saveComponent();
+    }
+
+    @Override
+    protected void onGameSetChanged() {
+
     }
 }

@@ -5,15 +5,14 @@ import android.os.Handler;
 import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 import com.thequietcroc.legendary.R;
 import com.thequietcroc.legendary.database.LegendaryDatabase;
 import com.thequietcroc.legendary.database.entities.gamecomponents.cards.MastermindEntity;
-import com.thequietcroc.legendary.models.gamecomponents.cards.Mastermind;
 import com.thequietcroc.legendary.models.gamecomponents.cards.Villains;
+import com.thequietcroc.legendary.models.gamecomponents.cards.Mastermind;
 import com.thequietcroc.legendary.utilities.DbAsyncTask;
 
 import java.util.Collections;
@@ -22,9 +21,9 @@ import java.util.stream.Collectors;
 
 public class VillainsInfoActivity extends CardInfoActivity<Villains> {
 
+    Villains villains;
     Spinner mastermindLeaderSpinner;
     ArrayAdapter<Mastermind> mastermindArrayAdapter;
-    Villains villains;
 
     @Override
     public void onCreate(final Bundle savedInstanceState) {
@@ -34,13 +33,18 @@ public class VillainsInfoActivity extends CardInfoActivity<Villains> {
         villains = componentAtomicReference.get();
 
         final View villainsInfoControls = LayoutInflater.from(componentControlsLayout.getContext())
-                .inflate(R.layout.card_info_villain_henchmen_controls, componentControlsLayout, false);
-
-        mastermindLeaderSpinner = villainsInfoControls.findViewById(R.id.cardInfoVHMastermindLeaderSpinner);
+                .inflate(
+                        R.layout.card_info_villain_henchmen_controls,
+                        componentControlsLayout,
+                        false);
 
         componentControlsLayout.addView(villainsInfoControls);
 
+        mastermindLeaderSpinner = villainsInfoControls.findViewById(R.id.cardInfoVHMastermindLeaderSpinner);
+
         new DbAsyncTask(() -> {
+
+            final Mastermind mastermindLeader = villains.getMastermindLeader();
 
             if (villains.isCustom()) {
 
@@ -55,30 +59,16 @@ public class VillainsInfoActivity extends CardInfoActivity<Villains> {
                 mastermindArrayAdapter.setDropDownViewResource(R.layout.spinner_layout);
 
                 new Handler(Looper.getMainLooper()).post(() -> {
+
                     mastermindLeaderSpinner.setAdapter(mastermindArrayAdapter);
-                    mastermindLeaderSpinner.setSelection(mastermindList.indexOf(villains.getMastermindLeader()));
-
-                    mastermindLeaderSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                        @Override
-                        public void onItemSelected(final AdapterView<?> parent,
-                                final View view,
-                                final int position,
-                                final long id) {
-                            villains.setMastermindLeader(mastermindList.get(position));
-                            villains.getMastermindLeader().setAlwaysLeadsVillains(villains);
-                        }
-
-                        @Override
-                        public void onNothingSelected(final AdapterView<?> parent) {
-
-                        }
-                    });
+                    mastermindLeaderSpinner.setSelection(
+                            mastermindList.indexOf(mastermindLeader));
                 });
             } else {
                 mastermindArrayAdapter = new ArrayAdapter<>(
                         mastermindLeaderSpinner.getContext(),
                         R.layout.spinner_layout,
-                        Collections.singletonList(villains.getMastermindLeader())
+                        Collections.singletonList(mastermindLeader)
                 );
 
                 mastermindArrayAdapter.setDropDownViewResource(R.layout.spinner_layout);
@@ -92,19 +82,30 @@ public class VillainsInfoActivity extends CardInfoActivity<Villains> {
     }
 
     @Override
-    public void saveComponent() {
-        super.saveComponent();
+    protected void saveComponent() {
 
-        villains.getMastermindLeader().dbSave();
+        new DbAsyncTask(() -> {
+
+            final Mastermind oldMastermind = villains.getMastermindLeader();
+            final Mastermind newMastermind = getSelectedMastermind();
+
+            if (!oldMastermind.equals(newMastermind)) {
+
+                oldMastermind.setAlwaysLeadsVillains(Villains.NONE);
+                oldMastermind.dbSave();
+
+                newMastermind.setAlwaysLeadsVillains(villains);
+                newMastermind.dbSave();
+
+                villains.setMastermindLeader(newMastermind);
+            }
+
+            super.saveComponent();
+        });
     }
 
     @Override
-    public void onItemSelected(final AdapterView<?> parent,
-            final View view,
-            final int position,
-            final long id) {
-        super.onItemSelected(parent, view, position, id);
-
+    public void onGameSetChanged() {
         new DbAsyncTask(() -> {
 
             final List<Mastermind> mastermindList = getMastermindList();
@@ -115,16 +116,13 @@ public class VillainsInfoActivity extends CardInfoActivity<Villains> {
                 mastermindArrayAdapter.notifyDataSetChanged();
                 mastermindLeaderSpinner.setSelection(0);
             });
-
-            villains.getMastermindLeader().setAlwaysLeadsVillains(Villains.NONE);
-            villains.setMastermindLeader(Mastermind.NONE);
         });
     }
 
     private List<Mastermind> getMastermindList() {
         final List<Mastermind> mastermindList = LegendaryDatabase.getInstance()
                 .mastermindDao()
-                .getAllBySetId(componentAtomicReference.get().getGameSet().getId())
+                .getAllBySetId(getSelectedGameSet().getId())
                 .stream()
                 .map(MastermindEntity::toModel)
                 .collect(Collectors.toList());
@@ -132,5 +130,9 @@ public class VillainsInfoActivity extends CardInfoActivity<Villains> {
         mastermindList.add(0, Mastermind.NONE);
 
         return mastermindList;
+    }
+
+    private Mastermind getSelectedMastermind() {
+        return (Mastermind) mastermindLeaderSpinner.getSelectedItem();
     }
 }

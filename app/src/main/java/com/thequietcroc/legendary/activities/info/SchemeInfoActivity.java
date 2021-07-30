@@ -11,4 +11,9 @@ public class SchemeInfoActivity extends CardInfoActivity {
         super.onCreate(savedInstanceState);
         setTitle(getString(R.string.schemeInfo));
     }
+
+    @Override
+    protected void onGameSetChanged() {
+
+    }
 }

@@ -1,5 +1,7 @@
 package com.thequietcroc.legendary.activities.info;
 
+import static com.thequietcroc.legendary.activities.filters.FilterActivity.COMPONENT_EXTRA;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -19,8 +21,6 @@ import com.thequietcroc.legendary.utilities.DbAsyncTask;
 
 import java.util.concurrent.atomic.AtomicReference;
 
-import static com.thequietcroc.legendary.activities.filters.FilterActivity.COMPONENT_EXTRA;
-
 public abstract class InfoActivity<T extends BaseGameComponent> extends AppCompatActivity {
 
     final AtomicReference<T> componentAtomicReference = new AtomicReference<>();
@@ -32,6 +32,7 @@ public abstract class InfoActivity<T extends BaseGameComponent> extends AppCompa
     @Override
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_component_info);
 
         infoNameEditText = findViewById(R.id.infoName);
@@ -40,6 +41,10 @@ public abstract class InfoActivity<T extends BaseGameComponent> extends AppCompa
         final Intent intent = getIntent();
 
         componentAtomicReference.set((T) intent.getSerializableExtra(COMPONENT_EXTRA));
+
+        if (null == componentAtomicReference.get().getId()) {
+            componentAtomicReference.get().dbSave();
+        }
 
         infoNameEditText.setText(componentAtomicReference.get().getName());
 

@@ -5,15 +5,14 @@ import android.os.Handler;
 import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 import com.thequietcroc.legendary.R;
 import com.thequietcroc.legendary.database.LegendaryDatabase;
 import com.thequietcroc.legendary.database.entities.gamecomponents.cards.MastermindEntity;
-import com.thequietcroc.legendary.models.gamecomponents.cards.Mastermind;
 import com.thequietcroc.legendary.models.gamecomponents.cards.Henchmen;
+import com.thequietcroc.legendary.models.gamecomponents.cards.Mastermind;
 import com.thequietcroc.legendary.utilities.DbAsyncTask;
 
 import java.util.Collections;
@@ -22,9 +21,9 @@ import java.util.stream.Collectors;
 
 public class HenchmenInfoActivity extends CardInfoActivity<Henchmen> {
 
+    Henchmen henchmen;
     Spinner mastermindLeaderSpinner;
     ArrayAdapter<Mastermind> mastermindArrayAdapter;
-    Henchmen henchmen;
 
     @Override
     public void onCreate(final Bundle savedInstanceState) {
@@ -34,13 +33,18 @@ public class HenchmenInfoActivity extends CardInfoActivity<Henchmen> {
         henchmen = componentAtomicReference.get();
 
         final View henchmenInfoControls = LayoutInflater.from(componentControlsLayout.getContext())
-                .inflate(R.layout.card_info_villain_henchmen_controls, componentControlsLayout, false);
-
-        mastermindLeaderSpinner = henchmenInfoControls.findViewById(R.id.cardInfoVHMastermindLeaderSpinner);
+                .inflate(
+                        R.layout.card_info_villain_henchmen_controls,
+                        componentControlsLayout,
+                        false);
 
         componentControlsLayout.addView(henchmenInfoControls);
 
+        mastermindLeaderSpinner = henchmenInfoControls.findViewById(R.id.cardInfoVHMastermindLeaderSpinner);
+
         new DbAsyncTask(() -> {
+
+            final Mastermind mastermindLeader = henchmen.getMastermindLeader();
 
             if (henchmen.isCustom()) {
 
@@ -55,30 +59,16 @@ public class HenchmenInfoActivity extends CardInfoActivity<Henchmen> {
                 mastermindArrayAdapter.setDropDownViewResource(R.layout.spinner_layout);
 
                 new Handler(Looper.getMainLooper()).post(() -> {
+
                     mastermindLeaderSpinner.setAdapter(mastermindArrayAdapter);
-                    mastermindLeaderSpinner.setSelection(mastermindList.indexOf(henchmen.getMastermindLeader()));
-
-                    mastermindLeaderSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                        @Override
-                        public void onItemSelected(final AdapterView<?> parent,
-                                final View view,
-                                final int position,
-                                final long id) {
-                            henchmen.setMastermindLeader(mastermindList.get(position));
-                            henchmen.getMastermindLeader().setAlwaysLeadsHenchmen(henchmen);
-                        }
-
-                        @Override
-                        public void onNothingSelected(final AdapterView<?> parent) {
-
-                        }
-                    });
+                    mastermindLeaderSpinner.setSelection(
+                            mastermindList.indexOf(mastermindLeader));
                 });
             } else {
                 mastermindArrayAdapter = new ArrayAdapter<>(
                         mastermindLeaderSpinner.getContext(),
                         R.layout.spinner_layout,
-                        Collections.singletonList(henchmen.getMastermindLeader())
+                        Collections.singletonList(mastermindLeader)
                 );
 
                 mastermindArrayAdapter.setDropDownViewResource(R.layout.spinner_layout);
@@ -92,19 +82,30 @@ public class HenchmenInfoActivity extends CardInfoActivity<Henchmen> {
     }
 
     @Override
-    public void saveComponent() {
-        super.saveComponent();
+    protected void saveComponent() {
 
-        henchmen.getMastermindLeader().dbSave();
+        new DbAsyncTask(() -> {
+
+            final Mastermind oldMastermind = henchmen.getMastermindLeader();
+            final Mastermind newMastermind = getSelectedMastermind();
+
+            if (!oldMastermind.equals(newMastermind)) {
+
+                oldMastermind.setAlwaysLeadsHenchmen(Henchmen.NONE);
+                oldMastermind.dbSave();
+
+                newMastermind.setAlwaysLeadsHenchmen(henchmen);
+                newMastermind.dbSave();
+
+                henchmen.setMastermindLeader(newMastermind);
+            }
+
+            super.saveComponent();
+        });
     }
 
     @Override
-    public void onItemSelected(final AdapterView<?> parent,
-            final View view,
-            final int position,
-            final long id) {
-        super.onItemSelected(parent, view, position, id);
-
+    public void onGameSetChanged() {
         new DbAsyncTask(() -> {
 
             final List<Mastermind> mastermindList = getMastermindList();
@@ -115,16 +116,13 @@ public class HenchmenInfoActivity extends CardInfoActivity<Henchmen> {
                 mastermindArrayAdapter.notifyDataSetChanged();
                 mastermindLeaderSpinner.setSelection(0);
             });
-
-            henchmen.getMastermindLeader().setAlwaysLeadsHenchmen(Henchmen.NONE);
-            henchmen.setMastermindLeader(Mastermind.NONE);
         });
     }
 
     private List<Mastermind> getMastermindList() {
         final List<Mastermind> mastermindList = LegendaryDatabase.getInstance()
                 .mastermindDao()
-                .getAllBySetId(componentAtomicReference.get().getGameSet().getId())
+                .getAllBySetId(getSelectedGameSet().getId())
                 .stream()
                 .map(MastermindEntity::toModel)
                 .collect(Collectors.toList());
@@ -132,5 +130,9 @@ public class HenchmenInfoActivity extends CardInfoActivity<Henchmen> {
         mastermindList.add(0, Mastermind.NONE);
 
         return mastermindList;
+    }
+
+    private Mastermind getSelectedMastermind() {
+        return (Mastermind) mastermindLeaderSpinner.getSelectedItem();
     }
 }

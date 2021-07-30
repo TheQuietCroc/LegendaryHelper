@@ -5,7 +5,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
@@ -24,125 +23,181 @@ import java.util.stream.Collectors;
 
 public class MastermindInfoActivity extends CardInfoActivity<Mastermind> {
 
+    Mastermind mastermind;
     Spinner alwaysLeadsVillainsSpinner;
     Spinner alwaysLeadsHenchmenSpinner;
+    ArrayAdapter<Villains> villainsArrayAdapter;
+    ArrayAdapter<Henchmen> henchmenArrayAdapter;
 
     @Override
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTitle(getString(R.string.mastermindInfo));
 
-        final View mastermindInfoControls = LayoutInflater.from(componentControlsLayout.getContext())
-                .inflate(R.layout.card_info_mastermind_controls, componentControlsLayout, false);
+        mastermind = componentAtomicReference.get();
 
-        alwaysLeadsVillainsSpinner = mastermindInfoControls.findViewById(R.id.cardInfoMastermindVillainsSpinner);
-        alwaysLeadsHenchmenSpinner = mastermindInfoControls.findViewById(R.id.cardInfoMastermindHenchmenSpinner);
+        final View mastermindInfoControls = LayoutInflater.from(componentControlsLayout.getContext())
+                .inflate(
+                        R.layout.card_info_mastermind_controls,
+                        componentControlsLayout,
+                        false);
 
         componentControlsLayout.addView(mastermindInfoControls);
 
+        alwaysLeadsVillainsSpinner = mastermindInfoControls
+                .findViewById(R.id.cardInfoMastermindVillainsSpinner);
+        alwaysLeadsHenchmenSpinner = mastermindInfoControls
+                .findViewById(R.id.cardInfoMastermindHenchmenSpinner);
+
         new DbAsyncTask(() -> {
-            final Mastermind mastermind = componentAtomicReference.get();
-            final ArrayAdapter<Villains> villainsAdapter;
-            final ArrayAdapter<Henchmen> henchmenAdapter;
 
             if (mastermind.isCustom()) {
 
-                final List<Villains> villainsList = LegendaryDatabase.getInstance()
-                        .villainsDao()
-                        .getAllBySetId(mastermind.getGameSet().getId())
-                        .stream()
-                        .map(VillainsEntity::toModel)
-                        .collect(Collectors.toList());
+                final List<Villains> villainsList = getVillainsList();
 
-                villainsList.add(0, Villains.NONE);
-
-                villainsAdapter = new ArrayAdapter<>(
+                villainsArrayAdapter = new ArrayAdapter<>(
                         alwaysLeadsVillainsSpinner.getContext(),
                         R.layout.spinner_layout,
                         villainsList
                 );
 
-                villainsAdapter.setDropDownViewResource(R.layout.spinner_layout);
+                villainsArrayAdapter.setDropDownViewResource(R.layout.spinner_layout);
 
-                final List<Henchmen> henchmenList = LegendaryDatabase.getInstance()
-                        .henchmenDao()
-                        .getAllBySetId(mastermind.getGameSet().getId())
-                        .stream()
-                        .map(HenchmenEntity::toModel)
-                        .collect(Collectors.toList());
+                final List<Henchmen> henchmenList = getHenchmenList();
 
-                henchmenList.add(0, Henchmen.NONE);
-
-                henchmenAdapter = new ArrayAdapter<>(
+                henchmenArrayAdapter = new ArrayAdapter<>(
                         alwaysLeadsHenchmenSpinner.getContext(),
                         R.layout.spinner_layout,
                         henchmenList
                 );
 
-                henchmenAdapter.setDropDownViewResource(R.layout.spinner_layout);
+                henchmenArrayAdapter.setDropDownViewResource(R.layout.spinner_layout);
 
                 new Handler(Looper.getMainLooper()).post(() -> {
-                    alwaysLeadsVillainsSpinner.setAdapter(villainsAdapter);
-                    alwaysLeadsVillainsSpinner.setSelection(villainsList.indexOf(mastermind.getAlwaysLeadsVillains()));
 
-                    alwaysLeadsVillainsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                        @Override
-                        public void onItemSelected(final AdapterView<?> parent,
-                                final View view,
-                                final int position,
-                                final long id) {
-                            mastermind.setAlwaysLeadsVillains(villainsList.get(position));
-                        }
+                    alwaysLeadsVillainsSpinner.setAdapter(villainsArrayAdapter);
+                    alwaysLeadsVillainsSpinner.setSelection(
+                            villainsList.indexOf(mastermind.getAlwaysLeadsVillains()));
 
-                        @Override
-                        public void onNothingSelected(final AdapterView<?> parent) {
-
-                        }
-                    });
-
-                    alwaysLeadsHenchmenSpinner.setAdapter(henchmenAdapter);
-                    alwaysLeadsHenchmenSpinner.setSelection(henchmenList.indexOf(mastermind.getAlwaysLeadsHenchmen()));
-
-                    alwaysLeadsHenchmenSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                        @Override
-                        public void onItemSelected(final AdapterView<?> parent,
-                                final View view,
-                                final int position,
-                                final long id) {
-                            mastermind.setAlwaysLeadsHenchmen(henchmenList.get(position));
-                        }
-
-                        @Override
-                        public void onNothingSelected(final AdapterView<?> parent) {
-
-                        }
-                    });
+                    alwaysLeadsHenchmenSpinner.setAdapter(henchmenArrayAdapter);
+                    alwaysLeadsHenchmenSpinner.setSelection(
+                            henchmenList.indexOf(mastermind.getAlwaysLeadsHenchmen()));
                 });
             } else {
-                villainsAdapter = new ArrayAdapter<>(
+                villainsArrayAdapter = new ArrayAdapter<>(
                         alwaysLeadsVillainsSpinner.getContext(),
                         R.layout.spinner_layout,
                         Collections.singletonList(mastermind.getAlwaysLeadsVillains())
                 );
 
-                villainsAdapter.setDropDownViewResource(R.layout.spinner_layout);
+                villainsArrayAdapter.setDropDownViewResource(R.layout.spinner_layout);
 
-                henchmenAdapter = new ArrayAdapter<>(
+                henchmenArrayAdapter = new ArrayAdapter<>(
                         alwaysLeadsHenchmenSpinner.getContext(),
                         R.layout.spinner_layout,
                         Collections.singletonList(mastermind.getAlwaysLeadsHenchmen())
                 );
 
-                henchmenAdapter.setDropDownViewResource(R.layout.spinner_layout);
+                henchmenArrayAdapter.setDropDownViewResource(R.layout.spinner_layout);
 
                 new Handler(Looper.getMainLooper()).post(() -> {
-                    alwaysLeadsVillainsSpinner.setAdapter(villainsAdapter);
+                    alwaysLeadsVillainsSpinner.setAdapter(villainsArrayAdapter);
                     alwaysLeadsVillainsSpinner.setEnabled(false);
 
-                    alwaysLeadsHenchmenSpinner.setAdapter(henchmenAdapter);
+                    alwaysLeadsHenchmenSpinner.setAdapter(henchmenArrayAdapter);
                     alwaysLeadsHenchmenSpinner.setEnabled(false);
                 });
             }
         });
+    }
+
+    @Override
+    protected void saveComponent() {
+
+        new DbAsyncTask(() -> {
+
+            final Villains oldVillains = mastermind.getAlwaysLeadsVillains();
+            final Villains selectedVillains = getSelectedVillains();
+            final Henchmen oldHenchmen = mastermind.getAlwaysLeadsHenchmen();
+            final Henchmen selectedHenchmen = getSelectedHenchmen();
+
+            if (!oldVillains.equals(selectedVillains)) {
+                final Mastermind oldMastermindLeader = selectedVillains.getMastermindLeader();
+
+                oldMastermindLeader.setAlwaysLeadsVillains(Villains.NONE);
+                oldMastermindLeader.dbSave();
+
+                mastermind.setAlwaysLeadsVillains(selectedVillains);
+            }
+
+            if (!oldHenchmen.equals(selectedHenchmen)) {
+                final Mastermind oldMastermindLeader = selectedHenchmen.getMastermindLeader();
+
+                oldMastermindLeader.setAlwaysLeadsHenchmen(Henchmen.NONE);
+                oldMastermindLeader.dbSave();
+
+                mastermind.setAlwaysLeadsHenchmen(selectedHenchmen);
+            }
+
+            super.saveComponent();
+        });
+    }
+    
+    @Override
+    public void onGameSetChanged() {
+        
+        new DbAsyncTask(() -> {
+            
+            final List<Villains> villainsList = getVillainsList();
+            final List<Henchmen> henchmenList = getHenchmenList();
+            
+            new Handler(Looper.getMainLooper()).post(() -> {
+                villainsArrayAdapter.clear();
+                villainsArrayAdapter.addAll(villainsList);
+                villainsArrayAdapter.notifyDataSetChanged();
+                alwaysLeadsVillainsSpinner.setSelection(0);
+
+                henchmenArrayAdapter.clear();
+                henchmenArrayAdapter.addAll(henchmenList);
+                henchmenArrayAdapter.notifyDataSetChanged();
+                alwaysLeadsHenchmenSpinner.setSelection(0);
+            });
+        });
+    }
+
+    private List<Henchmen> getHenchmenList() {
+
+        final List<Henchmen> henchmenList = LegendaryDatabase.getInstance()
+                .henchmenDao()
+                .getAllBySetId(getSelectedGameSet().getId())
+                .stream()
+                .map(HenchmenEntity::toModel)
+                .collect(Collectors.toList());
+        
+        henchmenList.add(0, Henchmen.NONE);
+        
+        return henchmenList;
+    }
+
+    private List<Villains> getVillainsList() {
+
+        final List<Villains> villainsList = LegendaryDatabase.getInstance()
+                .villainsDao()
+                .getAllBySetId(getSelectedGameSet().getId())
+                .stream()
+                .map(VillainsEntity::toModel)
+                .collect(Collectors.toList());
+        
+        villainsList.add(0, Villains.NONE);
+        
+        return villainsList;
+    }
+
+    private Henchmen getSelectedHenchmen() {
+        return (Henchmen) alwaysLeadsHenchmenSpinner.getSelectedItem();
+    }
+
+    private Villains getSelectedVillains() {
+        return (Villains) alwaysLeadsVillainsSpinner.getSelectedItem();
     }
 }

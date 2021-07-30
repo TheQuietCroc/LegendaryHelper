@@ -11,7 +11,7 @@ public abstract class BaseItem implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private Integer id = null;
+    private volatile Integer id = null;
     private String name = "";
 
     public BaseItem(final BaseEntity baseEntity) {
