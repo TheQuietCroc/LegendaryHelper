@@ -7,28 +7,23 @@ import android.view.MenuItem;
 
 import com.thequietcroc.legendary.R;
 import com.thequietcroc.legendary.activities.info.SchemeInfoActivity;
-import com.thequietcroc.legendary.custom.adapters.GameComponentRecyclerAdapter;
 import com.thequietcroc.legendary.database.entities.gamecomponents.cards.SchemeEntity;
 import com.thequietcroc.legendary.models.gamecomponents.cards.Scheme;
 import com.thequietcroc.legendary.utilities.DbAsyncTask;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class FilterSchemeActivity extends FilterActivity {
-
-    final GameComponentRecyclerAdapter<Scheme> gameComponentRecyclerAdapter = new GameComponentRecyclerAdapter<>(new ArrayList<>());
+public class FilterSchemeActivity extends FilterActivity<Scheme> {
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTitle(getString(R.string.filterSchemes));
 
-        filterRecyclerView.setAdapter(gameComponentRecyclerAdapter);
-        gameComponentRecyclerAdapter.setCheckboxOnClickConsumer(Scheme::dbSave);
-        gameComponentRecyclerAdapter.setInfoButtonAction(scheme ->
-                startNewActivity(scheme, SchemeInfoActivity.class));
+        gameComponentRecyclerAdapter.setInfoButtonOnClickConsumer(vh -> {
+            startNewActivity(getGameComponent(vh), SchemeInfoActivity.class);
+        });
 
         new DbAsyncTask(() -> {
             final List<SchemeEntity> results = db.schemeDao().getAll();
@@ -39,9 +34,7 @@ public class FilterSchemeActivity extends FilterActivity {
                         .map(SchemeEntity::toModel)
                         .collect(Collectors.toList()));
 
-                filterRecyclerView.setAdapter(gameComponentRecyclerAdapter);
-                gameComponentRecyclerAdapter.setInfoButtonAction(scheme ->
-                        startNewActivity(scheme, SchemeInfoActivity.class));
+                gameComponentRecyclerAdapter.notifyDataSetChanged();
             });
         });
     }

@@ -7,28 +7,23 @@ import android.view.MenuItem;
 
 import com.thequietcroc.legendary.R;
 import com.thequietcroc.legendary.activities.info.MastermindInfoActivity;
-import com.thequietcroc.legendary.custom.adapters.GameComponentRecyclerAdapter;
 import com.thequietcroc.legendary.database.entities.gamecomponents.cards.MastermindEntity;
 import com.thequietcroc.legendary.models.gamecomponents.cards.Mastermind;
 import com.thequietcroc.legendary.utilities.DbAsyncTask;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class FilterMastermindActivity extends FilterActivity {
-
-    final GameComponentRecyclerAdapter<Mastermind> gameComponentRecyclerAdapter = new GameComponentRecyclerAdapter<>(new ArrayList<>());
+public class FilterMastermindActivity extends FilterActivity<Mastermind> {
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTitle(getString(R.string.filterMasterminds));
 
-        filterRecyclerView.setAdapter(gameComponentRecyclerAdapter);
-        gameComponentRecyclerAdapter.setCheckboxOnClickConsumer(Mastermind::dbSave);
-        gameComponentRecyclerAdapter.setInfoButtonAction(mastermind ->
-                startNewActivity(mastermind, MastermindInfoActivity.class));
+        gameComponentRecyclerAdapter.setInfoButtonOnClickConsumer(vh -> {
+            startNewActivity(getGameComponent(vh), MastermindInfoActivity.class);
+        });
 
         new DbAsyncTask(() -> {
             final List<MastermindEntity> results = db.mastermindDao().getAll();
@@ -39,9 +34,7 @@ public class FilterMastermindActivity extends FilterActivity {
                         .map(MastermindEntity::toModel)
                         .collect(Collectors.toList()));
 
-                filterRecyclerView.setAdapter(gameComponentRecyclerAdapter);
-                gameComponentRecyclerAdapter.setInfoButtonAction(mastermind ->
-                        startNewActivity(mastermind, MastermindInfoActivity.class));
+                gameComponentRecyclerAdapter.notifyDataSetChanged();
             });
         });
     }

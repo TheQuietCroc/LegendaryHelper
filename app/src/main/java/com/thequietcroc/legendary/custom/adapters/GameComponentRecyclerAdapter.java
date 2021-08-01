@@ -20,8 +20,9 @@ public class GameComponentRecyclerAdapter<T extends BaseGameComponent>
         extends RecyclerView.Adapter<GameComponentRecyclerAdapter.ViewHolder> {
 
     private final List<T> componentList;
-    private Consumer<T> checkboxOnClickConsumer;
-    private Consumer<T> infoButtonConsumer;
+    private final boolean displayInfoButton;
+    private Consumer<ViewHolder> checkboxOnClickConsumer = vh -> {};
+    private Consumer<ViewHolder> infoButtonOnClickConsumer = vh -> {};
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView gameComponentName;
@@ -51,18 +52,25 @@ public class GameComponentRecyclerAdapter<T extends BaseGameComponent>
 
     public GameComponentRecyclerAdapter(final List<T> componentList) {
         this.componentList = componentList;
+        this.displayInfoButton = true;
+    }
+
+    public GameComponentRecyclerAdapter(final List<T> componentList,
+            final boolean displayInfoButton) {
+        this.componentList = componentList;
+        this.displayInfoButton = displayInfoButton;
     }
 
     public List<T> getComponentList() {
         return componentList;
     }
 
-    public void setCheckboxOnClickConsumer(final Consumer<T> checkboxOnClickConsumer) {
+    public void setCheckboxOnClickCosumer(final Consumer<ViewHolder> checkboxOnClickConsumer) {
         this.checkboxOnClickConsumer = checkboxOnClickConsumer;
     }
 
-    public void setInfoButtonAction(final Consumer<T> infoButtonConsumer) {
-        this.infoButtonConsumer = infoButtonConsumer;
+    public void setInfoButtonOnClickConsumer(final Consumer<ViewHolder> infoButtonOnClickConsumer) {
+        this.infoButtonOnClickConsumer = infoButtonOnClickConsumer;
     }
 
     // Create new views (invoked by the layout manager)
@@ -75,24 +83,17 @@ public class GameComponentRecyclerAdapter<T extends BaseGameComponent>
         final ViewHolder viewHolder = new ViewHolder(view);
 
         viewHolder.getGameComponentEnabledCheckbox().setOnClickListener(v -> {
-            final T component = componentList.get(viewHolder.getAdapterPosition());
-
-            component.setEnabled(((CheckBox)v).isChecked());
-
-            if (null != checkboxOnClickConsumer) {
-                checkboxOnClickConsumer.accept(component);
-            }
+            checkboxOnClickConsumer.accept(viewHolder);
         });
 
         viewHolder.getGameComponentName().setOnClickListener(v -> viewHolder.getGameComponentEnabledCheckbox().performClick());
 
-        viewHolder.getGameComponentInfoButton().setOnClickListener(v -> {
-            final T gameComponent = componentList.get(viewHolder.getAdapterPosition());
-
-            if (null != infoButtonConsumer) {
-                infoButtonConsumer.accept(gameComponent);
-            }
-        });
+        if (displayInfoButton) {
+            viewHolder.getGameComponentInfoButton().setOnClickListener(v -> {
+                infoButtonOnClickConsumer.accept(viewHolder);
+            });
+        } else
+            viewHolder.getGameComponentInfoButton().setVisibility(View.GONE);
 
         return viewHolder;
     }

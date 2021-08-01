@@ -7,28 +7,23 @@ import android.view.MenuItem;
 
 import com.thequietcroc.legendary.R;
 import com.thequietcroc.legendary.activities.info.GameSetInfoActivity;
-import com.thequietcroc.legendary.custom.adapters.GameComponentRecyclerAdapter;
 import com.thequietcroc.legendary.database.entities.gamecomponents.GameSetEntity;
 import com.thequietcroc.legendary.models.gamecomponents.GameSet;
 import com.thequietcroc.legendary.utilities.DbAsyncTask;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class FilterGameSetActivity extends FilterActivity {
-
-    final GameComponentRecyclerAdapter<GameSet> gameComponentRecyclerAdapter = new GameComponentRecyclerAdapter<>(new ArrayList<>());
+public class FilterGameSetActivity extends FilterActivity<GameSet> {
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTitle(getString(R.string.filterGameSets));
 
-        filterRecyclerView.setAdapter(gameComponentRecyclerAdapter);
-        gameComponentRecyclerAdapter.setCheckboxOnClickConsumer(GameSet::dbSave);
-        gameComponentRecyclerAdapter.setInfoButtonAction(gameSet ->
-                startNewActivity(gameSet, GameSetInfoActivity.class));
+        gameComponentRecyclerAdapter.setInfoButtonOnClickConsumer(vh -> {
+            startNewActivity(getGameComponent(vh), GameSetInfoActivity.class);
+        });
 
         new DbAsyncTask(() -> {
             final List<GameSetEntity> results = db.gameSetDao().getAll();
@@ -39,9 +34,7 @@ public class FilterGameSetActivity extends FilterActivity {
                         .map(GameSetEntity::toModel)
                         .collect(Collectors.toList()));
 
-                filterRecyclerView.setAdapter(gameComponentRecyclerAdapter);
-                gameComponentRecyclerAdapter.setInfoButtonAction(gameSet ->
-                        startNewActivity(gameSet, GameSetInfoActivity.class));
+                gameComponentRecyclerAdapter.notifyDataSetChanged();
             });
         });
     }

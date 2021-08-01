@@ -12,14 +12,18 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.thequietcroc.legendary.R;
+import com.thequietcroc.legendary.custom.adapters.GameComponentRecyclerAdapter;
 import com.thequietcroc.legendary.database.LegendaryDatabase;
 import com.thequietcroc.legendary.models.gamecomponents.BaseGameComponent;
 
-public abstract class FilterActivity extends AppCompatActivity {
+import java.util.ArrayList;
+
+public abstract class FilterActivity<T extends BaseGameComponent> extends AppCompatActivity {
 
     public static final String COMPONENT_EXTRA = "component";
 
     final LegendaryDatabase db = LegendaryDatabase.getInstance();
+    final GameComponentRecyclerAdapter<T> gameComponentRecyclerAdapter = new GameComponentRecyclerAdapter<>(new ArrayList<>());
     RecyclerView filterRecyclerView;
 
     @Override
@@ -29,6 +33,14 @@ public abstract class FilterActivity extends AppCompatActivity {
 
         filterRecyclerView = findViewById(R.id.filterRecyclerView);
         filterRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        filterRecyclerView.setAdapter(gameComponentRecyclerAdapter);
+
+        gameComponentRecyclerAdapter.setCheckboxOnClickCosumer(vh -> {
+            final T component = getGameComponent(vh);
+
+            component.setEnabled(vh.getGameComponentEnabledCheckbox().isChecked());
+            component.dbSave();
+        });
     }
 
     @Override
@@ -48,7 +60,7 @@ public abstract class FilterActivity extends AppCompatActivity {
         return true;
     }
 
-    protected <T extends BaseGameComponent> void startNewActivity(final T component, final Class<?> activityClass) {
+    protected void startNewActivity(final T component, final Class<?> activityClass) {
         final Intent intent = new Intent(this, activityClass);
 
         intent.putExtra(COMPONENT_EXTRA, component);
@@ -62,5 +74,9 @@ public abstract class FilterActivity extends AppCompatActivity {
         } else if (null != getSupportActionBar()) {
             getSupportActionBar().setTitle(title);
         }
+    }
+
+    protected T getGameComponent(final GameComponentRecyclerAdapter.ViewHolder vh) {
+        return gameComponentRecyclerAdapter.getComponentList().get(vh.getAdapterPosition());
     }
 }

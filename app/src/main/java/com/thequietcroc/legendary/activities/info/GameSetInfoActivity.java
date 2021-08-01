@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.thequietcroc.legendary.R;
-import com.thequietcroc.legendary.custom.adapters.BasicRecyclerAdapter;
+import com.thequietcroc.legendary.custom.adapters.GameComponentRecyclerAdapter;
 import com.thequietcroc.legendary.models.gamecomponents.GameSet;
 import com.thequietcroc.legendary.models.gamecomponents.cards.Henchmen;
 import com.thequietcroc.legendary.models.gamecomponents.cards.Hero;
@@ -31,11 +31,11 @@ public class GameSetInfoActivity extends InfoActivity<GameSet> {
     RecyclerView henchmenRecyclerView;
     RecyclerView heroesRecyclerView;
 
-    BasicRecyclerAdapter<Mastermind> mastermindsAdapter;
-    BasicRecyclerAdapter<Scheme> schemesAdapter;
-    BasicRecyclerAdapter<Villains> villainsAdapter;
-    BasicRecyclerAdapter<Henchmen> henchmenAdapter;
-    BasicRecyclerAdapter<Hero> heroesAdapter;
+    GameComponentRecyclerAdapter<Mastermind> mastermindsAdapter;
+    GameComponentRecyclerAdapter<Scheme> schemesAdapter;
+    GameComponentRecyclerAdapter<Villains> villainsAdapter;
+    GameComponentRecyclerAdapter<Henchmen> henchmenAdapter;
+    GameComponentRecyclerAdapter<Hero> heroesAdapter;
 
     @Override
     public void onCreate(final Bundle savedInstanceState) {
@@ -99,11 +99,11 @@ public class GameSetInfoActivity extends InfoActivity<GameSet> {
                 }
             });
 
-            mastermindsAdapter = new BasicRecyclerAdapter<>(mastermindList);
-            schemesAdapter = new BasicRecyclerAdapter<>(schemeList);
-            villainsAdapter = new BasicRecyclerAdapter<>(villainsList);
-            henchmenAdapter = new BasicRecyclerAdapter<>(henchmenList);
-            heroesAdapter = new BasicRecyclerAdapter<>(heroList);
+            mastermindsAdapter = new GameComponentRecyclerAdapter<>(mastermindList, false);
+            schemesAdapter = new GameComponentRecyclerAdapter<>(schemeList, false);
+            villainsAdapter = new GameComponentRecyclerAdapter<>(villainsList, false);
+            henchmenAdapter = new GameComponentRecyclerAdapter<>(henchmenList, false);
+            heroesAdapter = new GameComponentRecyclerAdapter<>(heroList, false);
 
             new Handler(Looper.getMainLooper()).post(() -> {
                 mastermindsRecyclerView.setAdapter(mastermindsAdapter);

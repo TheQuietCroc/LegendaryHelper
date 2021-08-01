@@ -7,28 +7,23 @@ import android.view.MenuItem;
 
 import com.thequietcroc.legendary.R;
 import com.thequietcroc.legendary.activities.info.VillainsInfoActivity;
-import com.thequietcroc.legendary.custom.adapters.GameComponentRecyclerAdapter;
 import com.thequietcroc.legendary.database.entities.gamecomponents.cards.VillainsEntity;
 import com.thequietcroc.legendary.models.gamecomponents.cards.Villains;
 import com.thequietcroc.legendary.utilities.DbAsyncTask;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class FilterVillainsActivity extends FilterActivity {
-
-    final GameComponentRecyclerAdapter<Villains> gameComponentRecyclerAdapter = new GameComponentRecyclerAdapter<>(new ArrayList<>());
+public class FilterVillainsActivity extends FilterActivity<Villains> {
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTitle(getString(R.string.filterVillains));
 
-        filterRecyclerView.setAdapter(gameComponentRecyclerAdapter);
-        gameComponentRecyclerAdapter.setCheckboxOnClickConsumer(Villains::dbSave);
-        gameComponentRecyclerAdapter.setInfoButtonAction(villains ->
-                startNewActivity(villains, VillainsInfoActivity.class));
+        gameComponentRecyclerAdapter.setInfoButtonOnClickConsumer(vh -> {
+            startNewActivity(getGameComponent(vh), VillainsInfoActivity.class);
+        });
 
         new DbAsyncTask(() -> {
             final List<VillainsEntity> results = db.villainsDao().getAll();
@@ -39,9 +34,7 @@ public class FilterVillainsActivity extends FilterActivity {
                         .map(VillainsEntity::toModel)
                         .collect(Collectors.toList()));
 
-                filterRecyclerView.setAdapter(gameComponentRecyclerAdapter);
-                gameComponentRecyclerAdapter.setInfoButtonAction(villains ->
-                        startNewActivity(villains, VillainsInfoActivity.class));
+                gameComponentRecyclerAdapter.notifyDataSetChanged();
             });
         });
     }

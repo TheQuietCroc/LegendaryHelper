@@ -7,28 +7,23 @@ import android.view.MenuItem;
 
 import com.thequietcroc.legendary.R;
 import com.thequietcroc.legendary.activities.info.HeroInfoActivity;
-import com.thequietcroc.legendary.custom.adapters.GameComponentRecyclerAdapter;
 import com.thequietcroc.legendary.database.entities.gamecomponents.cards.HeroEntity;
 import com.thequietcroc.legendary.models.gamecomponents.cards.Hero;
 import com.thequietcroc.legendary.utilities.DbAsyncTask;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class FilterHeroActivity extends FilterActivity {
-
-    final GameComponentRecyclerAdapter<Hero> gameComponentRecyclerAdapter = new GameComponentRecyclerAdapter<>(new ArrayList<>());
+public class FilterHeroActivity extends FilterActivity<Hero> {
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTitle(getString(R.string.filterHeroes));
 
-        filterRecyclerView.setAdapter(gameComponentRecyclerAdapter);
-        gameComponentRecyclerAdapter.setCheckboxOnClickConsumer(Hero::dbSave);
-        gameComponentRecyclerAdapter.setInfoButtonAction(hero ->
-                startNewActivity(hero, HeroInfoActivity.class));
+        gameComponentRecyclerAdapter.setInfoButtonOnClickConsumer(vh -> {
+            startNewActivity(getGameComponent(vh), HeroInfoActivity.class);
+        });
 
         new DbAsyncTask(() -> {
             final List<HeroEntity> results = db.heroDao().getAll();
@@ -39,9 +34,7 @@ public class FilterHeroActivity extends FilterActivity {
                         .map(HeroEntity::toModel)
                         .collect(Collectors.toList()));
 
-                filterRecyclerView.setAdapter(gameComponentRecyclerAdapter);
-                gameComponentRecyclerAdapter.setInfoButtonAction(hero ->
-                        startNewActivity(hero, HeroInfoActivity.class));
+                gameComponentRecyclerAdapter.notifyDataSetChanged();
             });
         });
     }
