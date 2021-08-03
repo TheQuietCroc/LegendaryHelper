@@ -49,27 +49,6 @@ public class Mastermind extends BaseCard {
         setAlwaysLeadsHenchmen(Henchmen.NONE);
         setAlwaysLeadsVillains(Villains.NONE);
     }
-
-    @Override
-    public void setEnabled(final boolean isEnabled) {
-        super.setEnabled(isEnabled);
-
-        new DbAsyncTask(() -> {
-            if (isEnabled()) {
-                final Villains alwaysLeadsVillains = getAlwaysLeadsVillains();
-
-                if (alwaysLeadsVillains.getId() != 0) {
-                    alwaysLeadsVillains.setEnabled(isEnabled());
-                }
-
-                final Henchmen alwaysLeadsHenchmen = getAlwaysLeadsHenchmen();
-
-                if (alwaysLeadsHenchmen.getId() != 0) {
-                    alwaysLeadsHenchmen.setEnabled(isEnabled());
-                }
-            }
-        });
-    }
     
     public boolean isEpic() {
         return isEpic;

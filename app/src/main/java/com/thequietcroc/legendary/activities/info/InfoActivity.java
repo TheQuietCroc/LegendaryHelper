@@ -66,8 +66,6 @@ public abstract class InfoActivity<T extends BaseGameComponent> extends AppCompa
 
         enabledSwitch.setChecked(component.isEnabled());
 
-        enabledSwitch.setOnClickListener(v -> component.setEnabled(enabledSwitch.isChecked()));
-
         return true;
     }
 
@@ -134,6 +132,7 @@ public abstract class InfoActivity<T extends BaseGameComponent> extends AppCompa
         final T component = componentAtomicReference.get();
 
         component.setName(infoNameEditText.getText().toString());
+        component.setEnabled(enabledSwitch.isChecked());
 
         component.dbSave();
     }

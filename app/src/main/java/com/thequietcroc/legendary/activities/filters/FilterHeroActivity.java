@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import com.thequietcroc.legendary.R;
 import com.thequietcroc.legendary.activities.info.HeroInfoActivity;
 import com.thequietcroc.legendary.database.entities.gamecomponents.cards.HeroEntity;
+import com.thequietcroc.legendary.models.gamecomponents.GameSet;
 import com.thequietcroc.legendary.models.gamecomponents.cards.Hero;
 import com.thequietcroc.legendary.utilities.DbAsyncTask;
 
@@ -21,9 +22,28 @@ public class FilterHeroActivity extends FilterActivity<Hero> {
         super.onCreate(savedInstanceState);
         setTitle(getString(R.string.filterHeroes));
 
-        gameComponentRecyclerAdapter.setInfoButtonOnClickConsumer(vh -> {
-            startNewActivity(getGameComponent(vh), HeroInfoActivity.class);
+        gameComponentRecyclerAdapter.setCheckboxOnClickCosumer(vh -> {
+            final boolean isChecked = vh.getGameComponentEnabledCheckbox().isChecked();
+            final Hero hero = gameComponentRecyclerAdapter.getComponentList()
+                    .get(vh.getAdapterPosition());
+
+            new DbAsyncTask(() -> {
+                hero.setEnabled(isChecked);
+                hero.dbSave();
+
+                final GameSet gameSet = hero.getGameSet();
+
+                if (isChecked) {
+                    gameSet.setEnabled(true);
+                } else {
+                    gameSet.setEnabled(gameSet.areAllItemsEnabled());
+                }
+
+                gameSet.dbSave();
+            });
         });
+        gameComponentRecyclerAdapter.setInfoButtonOnClickConsumer(vh
+                -> startNewActivity(getGameComponent(vh), HeroInfoActivity.class));
 
         new DbAsyncTask(() -> {
             final List<HeroEntity> results = db.heroDao().getAll();

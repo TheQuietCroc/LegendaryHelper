@@ -8,7 +8,9 @@ import android.view.MenuItem;
 import com.thequietcroc.legendary.R;
 import com.thequietcroc.legendary.activities.info.HenchmenInfoActivity;
 import com.thequietcroc.legendary.database.entities.gamecomponents.cards.HenchmenEntity;
+import com.thequietcroc.legendary.models.gamecomponents.GameSet;
 import com.thequietcroc.legendary.models.gamecomponents.cards.Henchmen;
+import com.thequietcroc.legendary.models.gamecomponents.cards.Mastermind;
 import com.thequietcroc.legendary.utilities.DbAsyncTask;
 
 import java.util.List;
@@ -21,9 +23,35 @@ public class FilterHenchmenActivity extends FilterActivity<Henchmen> {
         super.onCreate(savedInstanceState);
         setTitle(getString(R.string.filterHenchmen));
 
-        gameComponentRecyclerAdapter.setInfoButtonOnClickConsumer(vh -> {
-            startNewActivity(getGameComponent(vh), HenchmenInfoActivity.class);
+        gameComponentRecyclerAdapter.setCheckboxOnClickCosumer(vh -> {
+            final boolean isChecked = vh.getGameComponentEnabledCheckbox().isChecked();
+            final Henchmen henchmen = gameComponentRecyclerAdapter.getComponentList()
+                    .get(vh.getAdapterPosition());
+
+            new DbAsyncTask(() -> {
+                henchmen.setEnabled(isChecked);
+                henchmen.dbSave();
+
+                final GameSet gameSet = henchmen.getGameSet();
+
+                if (isChecked)  {
+                    gameSet.setEnabled(true);
+                } else {
+                    final Mastermind mastermindLeader = henchmen.getMastermindLeader();
+
+                    if (mastermindLeader.getId() > 0) {
+                        mastermindLeader.setEnabled(false);
+                        mastermindLeader.dbSave();
+                    }
+
+                    gameSet.setEnabled(gameSet.areAllItemsEnabled());
+                }
+
+                gameSet.dbSave();
+            });
         });
+        gameComponentRecyclerAdapter.setInfoButtonOnClickConsumer(vh
+                -> startNewActivity(getGameComponent(vh), HenchmenInfoActivity.class));
 
         new DbAsyncTask(() -> {
             final List<HenchmenEntity> results = db.henchmenDao().getAll();

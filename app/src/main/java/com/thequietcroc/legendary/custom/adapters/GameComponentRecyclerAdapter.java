@@ -13,14 +13,18 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.thequietcroc.legendary.R;
 import com.thequietcroc.legendary.models.gamecomponents.BaseGameComponent;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 
 public class GameComponentRecyclerAdapter<T extends BaseGameComponent>
         extends RecyclerView.Adapter<GameComponentRecyclerAdapter.ViewHolder> {
 
     private final List<T> componentList;
+    private final Map<T, CheckBox> checkboxMap = new HashMap<>();
     private final boolean displayInfoButton;
+
     private Consumer<ViewHolder> checkboxOnClickConsumer = vh -> {};
     private Consumer<ViewHolder> infoButtonOnClickConsumer = vh -> {};
 
@@ -73,6 +77,10 @@ public class GameComponentRecyclerAdapter<T extends BaseGameComponent>
         this.infoButtonOnClickConsumer = infoButtonOnClickConsumer;
     }
 
+    public Map<T, CheckBox> getCheckboxMap() {
+        return checkboxMap;
+    }
+
     // Create new views (invoked by the layout manager)
     @Override
     @NonNull
@@ -105,6 +113,10 @@ public class GameComponentRecyclerAdapter<T extends BaseGameComponent>
 
         viewHolder.getGameComponentName().setText(component.getName());
         viewHolder.getGameComponentEnabledCheckbox().setChecked(component.isEnabled());
+
+        if (!checkboxMap.containsKey(component)) {
+            checkboxMap.put(component, viewHolder.getGameComponentEnabledCheckbox());
+        }
     }
 
     // Return the size of your dataset (invoked by the layout manager)

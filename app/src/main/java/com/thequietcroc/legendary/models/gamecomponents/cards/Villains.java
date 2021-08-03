@@ -29,16 +29,6 @@ public class Villains extends BaseCard {
         setMastermindLeader(Mastermind.NONE);
     }
 
-    @Override
-    public void setEnabled(final boolean isEnabled) {
-        super.setEnabled(isEnabled);
-
-        if (!isEnabled()
-            && null != getMastermindLeader()) {
-            getMastermindLeader().setEnabled(isEnabled());
-        }
-    }
-
     public Mastermind getMastermindLeader() {
         if (mastermindLeaderAtomicReference.get() == null) {
 

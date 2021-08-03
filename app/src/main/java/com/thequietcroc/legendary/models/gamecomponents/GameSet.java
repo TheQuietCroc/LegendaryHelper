@@ -43,19 +43,6 @@ public class GameSet extends BaseGameComponent {
     }
 
     @Override
-    public void setEnabled(final boolean isEnabled) {
-        super.setEnabled(isEnabled);
-
-        new DbAsyncTask(() -> {
-            getMastermindList().stream().forEach(mastermind -> mastermind.setEnabled(isEnabled()));
-            getSchemeList().stream().forEach(scheme -> scheme.setEnabled(isEnabled()));
-            getVillainsList().stream().forEach(villains -> villains.setEnabled(isEnabled()));
-            getHenchmenList().stream().forEach(henchmen -> henchmen.setEnabled(isEnabled()));
-            getHeroList().stream().forEach(hero -> hero.setEnabled(isEnabled()));
-        });
-    }
-
-    @Override
     public GameSetEntity toEntity() {
         return new GameSetEntity(this);
     }
@@ -136,37 +123,19 @@ public class GameSet extends BaseGameComponent {
     }
 
     public void dbSave() {
-        new DbAsyncTask(() -> {
-
-            final LegendaryDatabase db = LegendaryDatabase.getInstance();
-
-            db.mastermindDao().update(getMastermindList()
-                    .stream()
-                    .map(Mastermind::toEntity)
-                    .collect(Collectors.toList()));
-            db.schemeDao().update(getSchemeList()
-                    .stream()
-                    .map(Scheme::toEntity)
-                    .collect(Collectors.toList()));
-            db.villainsDao().update(getVillainsList()
-                    .stream()
-                    .map(Villains::toEntity)
-                    .collect(Collectors.toList()));
-            db.henchmenDao().update(getHenchmenList()
-                    .stream()
-                    .map(Henchmen::toEntity)
-                    .collect(Collectors.toList()));
-            db.heroDao().update(getHeroList()
-                    .stream()
-                    .map(Hero::toEntity)
-                    .collect(Collectors.toList()));
-
-            dbSave(LegendaryDatabase.getInstance().gameSetDao(), toEntity());
-        });
+        dbSave(LegendaryDatabase.getInstance().gameSetDao(), toEntity());
     }
 
     public void dbDelete() {
         dbDelete(LegendaryDatabase.getInstance().gameSetDao(), toEntity());
+    }
+
+    public boolean areAllItemsEnabled() {
+        return getMastermindList().stream().anyMatch(BaseGameComponent::isEnabled)
+                || getSchemeList().stream().anyMatch(BaseGameComponent::isEnabled)
+                || getVillainsList().stream().anyMatch(BaseGameComponent::isEnabled)
+                || getHenchmenList().stream().anyMatch(BaseGameComponent::isEnabled)
+                || getHeroList().stream().anyMatch(BaseGameComponent::isEnabled);
     }
 
     @Override

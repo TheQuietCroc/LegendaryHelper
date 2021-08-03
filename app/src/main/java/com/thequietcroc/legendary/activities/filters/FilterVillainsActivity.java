@@ -8,6 +8,8 @@ import android.view.MenuItem;
 import com.thequietcroc.legendary.R;
 import com.thequietcroc.legendary.activities.info.VillainsInfoActivity;
 import com.thequietcroc.legendary.database.entities.gamecomponents.cards.VillainsEntity;
+import com.thequietcroc.legendary.models.gamecomponents.GameSet;
+import com.thequietcroc.legendary.models.gamecomponents.cards.Mastermind;
 import com.thequietcroc.legendary.models.gamecomponents.cards.Villains;
 import com.thequietcroc.legendary.utilities.DbAsyncTask;
 
@@ -21,9 +23,35 @@ public class FilterVillainsActivity extends FilterActivity<Villains> {
         super.onCreate(savedInstanceState);
         setTitle(getString(R.string.filterVillains));
 
-        gameComponentRecyclerAdapter.setInfoButtonOnClickConsumer(vh -> {
-            startNewActivity(getGameComponent(vh), VillainsInfoActivity.class);
+        gameComponentRecyclerAdapter.setCheckboxOnClickCosumer(vh -> {
+            final boolean isChecked = vh.getGameComponentEnabledCheckbox().isChecked();
+            final Villains villains = gameComponentRecyclerAdapter.getComponentList()
+                    .get(vh.getAdapterPosition());
+
+            new DbAsyncTask(() -> {
+                villains.setEnabled(isChecked);
+                villains.dbSave();
+
+                final GameSet gameSet = villains.getGameSet();
+
+                if (isChecked) {
+                    gameSet.setEnabled(true);
+                } else {
+                    final Mastermind mastermindLeader = villains.getMastermindLeader();
+
+                    if (mastermindLeader.getId() > 0) {
+                        mastermindLeader.setEnabled(false);
+                        mastermindLeader.dbSave();
+                    }
+
+                    gameSet.setEnabled(gameSet.areAllItemsEnabled());
+                }
+
+                gameSet.dbSave();
+            });
         });
+        gameComponentRecyclerAdapter.setInfoButtonOnClickConsumer(vh
+                -> startNewActivity(getGameComponent(vh), VillainsInfoActivity.class));
 
         new DbAsyncTask(() -> {
             final List<VillainsEntity> results = db.villainsDao().getAll();

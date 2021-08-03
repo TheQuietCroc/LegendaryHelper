@@ -12,68 +12,148 @@
             android:orientation="vertical">
 
         <!-- Masterminds -->
-        <TextView
-                android:text="@string/masterminds"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-        <androidx.recyclerview.widget.RecyclerView
+        <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/gameSetInfoMastermindsRecycler"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp" />
+                android:layout_height="match_parent">
+
+            <TextView
+                    android:text="@string/masterminds"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:id="@+id/textView2"
+                    app:layout_constraintEnd_toStartOf="@+id/gameSetInfoMastermindsSwitch"
+                    app:layout_constraintBaseline_toBaselineOf="@+id/gameSetInfoMastermindsSwitch" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/gameSetInfoMastermindsSwitch"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/gameSetInfoMastermindsRecycler"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/gameSetInfoMastermindsSwitch" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <!-- Schemes -->
-        <TextView
-                android:text="@string/schemes"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-        <androidx.recyclerview.widget.RecyclerView
+        <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/gameSetInfoSchemesRecycler"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp" />
+                android:layout_height="match_parent">
+
+            <TextView
+                    android:text="@string/schemes"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/textView3"
+                    app:layout_constraintBaseline_toBaselineOf="@+id/gameSetInfoSchemesSwitch"
+                    app:layout_constraintEnd_toStartOf="@+id/gameSetInfoSchemesSwitch"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/gameSetInfoSchemesSwitch"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/gameSetInfoSchemesRecycler"
+                    app:layout_constraintTop_toBottomOf="@+id/gameSetInfoSchemesSwitch" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <!-- Villains -->
-        <TextView
-                android:text="@string/villains"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-        <androidx.recyclerview.widget.RecyclerView
+        <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/gameSetInfoVillainsRecycler"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp" />
+                android:layout_height="match_parent">
+
+            <TextView
+                    android:text="@string/villains"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/gameSetInfoVillainsSwitch"
+                    app:layout_constraintBaseline_toBaselineOf="@+id/gameSetInfoVillainsSwitch" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/gameSetInfoVillainsSwitch"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/gameSetInfoVillainsRecycler"
+                    app:layout_constraintTop_toBottomOf="@+id/gameSetInfoVillainsSwitch" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <!-- Henchmen -->
-        <TextView
-                android:text="@string/henchmen"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-
-        <androidx.recyclerview.widget.RecyclerView
+        <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/gameSetInfoHenchmenRecycler"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp" />
+                android:layout_height="match_parent">
+
+            <TextView
+                    android:text="@string/henchmen"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toStartOf="@+id/gameSetInfoHenchmenSwitch"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBaseline_toBaselineOf="@+id/gameSetInfoHenchmenSwitch" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/gameSetInfoHenchmenSwitch"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/gameSetInfoHenchmenRecycler"
+                    app:layout_constraintTop_toBottomOf="@+id/gameSetInfoHenchmenSwitch" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <!-- Heroes -->
-        <TextView
-                android:text="@string/heroes"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-        <androidx.recyclerview.widget.RecyclerView
+        <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/gameSetInfoHeroesRecycler"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp" />
+                android:layout_height="match_parent">
+
+            <TextView
+                    android:text="@string/heroes"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/textView4"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/gameSetInfoHeroesSwitch"
+                    app:layout_constraintBaseline_toBaselineOf="@+id/gameSetInfoHeroesSwitch" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/gameSetInfoHeroesSwitch"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/gameSetInfoHeroesRecycler"
+                    app:layout_constraintTop_toBottomOf="@+id/gameSetInfoHeroesSwitch" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

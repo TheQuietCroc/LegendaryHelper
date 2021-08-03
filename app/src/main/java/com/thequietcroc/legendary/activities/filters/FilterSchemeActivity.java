@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import com.thequietcroc.legendary.R;
 import com.thequietcroc.legendary.activities.info.SchemeInfoActivity;
 import com.thequietcroc.legendary.database.entities.gamecomponents.cards.SchemeEntity;
+import com.thequietcroc.legendary.models.gamecomponents.GameSet;
 import com.thequietcroc.legendary.models.gamecomponents.cards.Scheme;
 import com.thequietcroc.legendary.utilities.DbAsyncTask;
 
@@ -21,9 +22,27 @@ public class FilterSchemeActivity extends FilterActivity<Scheme> {
         super.onCreate(savedInstanceState);
         setTitle(getString(R.string.filterSchemes));
 
-        gameComponentRecyclerAdapter.setInfoButtonOnClickConsumer(vh -> {
-            startNewActivity(getGameComponent(vh), SchemeInfoActivity.class);
+        gameComponentRecyclerAdapter.setCheckboxOnClickCosumer(vh -> {
+            final boolean isChecked = vh.getGameComponentEnabledCheckbox().isChecked();
+            final Scheme scheme = gameComponentRecyclerAdapter.getComponentList()
+                    .get(vh.getAdapterPosition());
+
+            new DbAsyncTask(() -> {
+                scheme.setEnabled(isChecked);
+                scheme.dbSave();
+
+                final GameSet gameSet = scheme.getGameSet();
+                    if (isChecked) {
+                        gameSet.setEnabled(true);
+                    } else {
+                        gameSet.setEnabled(gameSet.areAllItemsEnabled());
+                    }
+
+                    gameSet.dbSave();
+            });
         });
+        gameComponentRecyclerAdapter.setInfoButtonOnClickConsumer(vh
+                -> startNewActivity(getGameComponent(vh), SchemeInfoActivity.class));
 
         new DbAsyncTask(() -> {
             final List<SchemeEntity> results = db.schemeDao().getAll();
