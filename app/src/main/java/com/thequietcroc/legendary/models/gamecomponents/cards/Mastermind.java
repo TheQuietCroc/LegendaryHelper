@@ -24,23 +24,25 @@ public class Mastermind extends BaseCard {
 
         setIsEpic(mastermindEntity.isEpic());
 
-        if (mastermindEntity.getVillainId() > 0) {
-            new DbAsyncTask(() -> setAlwaysLeadsVillains(LegendaryDatabase.getInstance()
-                    .villainsDao()
-                    .findById(mastermindEntity.getVillainId())
-                    .toModel()));
-        } else {
-            setAlwaysLeadsVillains(Villains.NONE);
-        }
+        new DbAsyncTask(() -> {
+            if (mastermindEntity.getVillainId() > 0) {
+                setAlwaysLeadsVillains(LegendaryDatabase.getInstance()
+                        .villainsDao()
+                        .findById(mastermindEntity.getVillainId())
+                        .toModel());
+            } else {
+                setAlwaysLeadsVillains(Villains.NONE);
+            }
 
-        if (mastermindEntity.getHenchmenId() > 0) {
-            new DbAsyncTask(() -> setAlwaysLeadsHenchmen(LegendaryDatabase.getInstance()
-                    .henchmenDao()
-                    .findById(mastermindEntity.getHenchmenId())
-                    .toModel()));
-        } else {
-            setAlwaysLeadsHenchmen(Henchmen.NONE);
-        }
+            if (mastermindEntity.getHenchmenId() > 0) {
+                setAlwaysLeadsHenchmen(LegendaryDatabase.getInstance()
+                        .henchmenDao()
+                        .findById(mastermindEntity.getHenchmenId())
+                        .toModel());
+            } else {
+                setAlwaysLeadsHenchmen(Henchmen.NONE);
+            }
+        });
     }
 
     public Mastermind(final String name) {

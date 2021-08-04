@@ -24,6 +24,10 @@
     <string name="confirmDeleteTitle">Confirm Deletion</string>
     <string name="confirmSave">Would you like to save before exiting?</string>
     <string name="addAlwaysLeaderDescription">Sets this card to always be lead by the selected Mastermind</string>
+    <string name="noGameSetsFound">No custom game sets found</string>
+    <string name="noMastermindsFound">No custom masterminds found</string>
+    <string name="noVillainsFound">No custom villains found</string>
+    <string name="noHenchmenFound">No custom henchmen found</string>
 
     <string name="filter">Filter</string>
     <string name="enabled">Enabled</string>

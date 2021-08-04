@@ -105,6 +105,9 @@ public abstract class CardInfoActivity<T extends BaseCard> extends InfoActivity<
             card.setGameSet(getSelectedGameSet());
 
             super.saveComponent();
+
+            card.getGameSet().setEnabled(card.getGameSet().areAllItemsEnabled());
+            card.getGameSet().dbSave();
         });
 
     }
@@ -118,7 +121,15 @@ public abstract class CardInfoActivity<T extends BaseCard> extends InfoActivity<
                 .map(GameSetEntity::toModel)
                 .collect(Collectors.toList());
 
-        gameSetList.add(0, GameSet.NONE);
+        if (gameSetList.size() > 0) {
+            gameSetList.add(0, GameSet.NONE);
+        } else {
+            //final GameSet noGameSetsFound = new GameSet(getString(R.string.noGameSetsFound));
+            final GameSet noGameSetsFound = new GameSet(GameSet.NONE.toEntity());
+            noGameSetsFound.setName(getString(R.string.noGameSetsFound));
+
+            gameSetList.add(noGameSetsFound);
+        }
 
         return gameSetList;
     }

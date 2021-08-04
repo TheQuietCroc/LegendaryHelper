@@ -17,6 +17,7 @@ import com.thequietcroc.legendary.models.gamecomponents.cards.Mastermind;
 import com.thequietcroc.legendary.models.gamecomponents.cards.Villains;
 import com.thequietcroc.legendary.utilities.DbAsyncTask;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -118,8 +119,6 @@ public class MastermindInfoActivity extends CardInfoActivity<Mastermind> {
 
             final Villains oldVillains = mastermind.getAlwaysLeadsVillains();
             final Villains selectedVillains = getSelectedVillains();
-            final Henchmen oldHenchmen = mastermind.getAlwaysLeadsHenchmen();
-            final Henchmen selectedHenchmen = getSelectedHenchmen();
 
             if (!oldVillains.equals(selectedVillains)) {
                 final Mastermind oldMastermindLeader = selectedVillains.getMastermindLeader();
@@ -130,6 +129,9 @@ public class MastermindInfoActivity extends CardInfoActivity<Mastermind> {
                 mastermind.setAlwaysLeadsVillains(selectedVillains);
             }
 
+            final Henchmen oldHenchmen = mastermind.getAlwaysLeadsHenchmen();
+            final Henchmen selectedHenchmen = getSelectedHenchmen();
+
             if (!oldHenchmen.equals(selectedHenchmen)) {
                 final Mastermind oldMastermindLeader = selectedHenchmen.getMastermindLeader();
 
@@ -137,6 +139,14 @@ public class MastermindInfoActivity extends CardInfoActivity<Mastermind> {
                 oldMastermindLeader.dbSave();
 
                 mastermind.setAlwaysLeadsHenchmen(selectedHenchmen);
+            }
+
+            if (enabledSwitch.isChecked()) {
+                mastermind.getAlwaysLeadsVillains().setEnabled(true);
+                mastermind.getAlwaysLeadsHenchmen().setEnabled(true);
+
+                mastermind.getAlwaysLeadsVillains().dbSave();
+                mastermind.getAlwaysLeadsHenchmen().dbSave();
             }
 
             super.saveComponent();
@@ -167,28 +177,53 @@ public class MastermindInfoActivity extends CardInfoActivity<Mastermind> {
 
     private List<Henchmen> getHenchmenList() {
 
-        final List<Henchmen> henchmenList = LegendaryDatabase.getInstance()
+        final List<Henchmen> henchmenList = new ArrayList<>();
+
+        if (getSelectedGameSet() != null
+                && getSelectedGameSet().getId() > 0) {
+        henchmenList.addAll(LegendaryDatabase.getInstance()
                 .henchmenDao()
                 .getAllBySetId(getSelectedGameSet().getId())
                 .stream()
                 .map(HenchmenEntity::toModel)
-                .collect(Collectors.toList());
-        
-        henchmenList.add(0, Henchmen.NONE);
+                .collect(Collectors.toList()));
+        }
+
+        if (henchmenList.size() > 0) {
+            henchmenList.add(0, Henchmen.NONE);
+        } else {
+            final Henchmen noHenchmenFound = new Henchmen(Henchmen.NONE.toEntity());
+            noHenchmenFound.setName(getString(R.string.noHenchmenFound));
+
+            henchmenList.add(noHenchmenFound);
+        }
         
         return henchmenList;
     }
 
     private List<Villains> getVillainsList() {
 
-        final List<Villains> villainsList = LegendaryDatabase.getInstance()
-                .villainsDao()
-                .getAllBySetId(getSelectedGameSet().getId())
-                .stream()
-                .map(VillainsEntity::toModel)
-                .collect(Collectors.toList());
-        
-        villainsList.add(0, Villains.NONE);
+        final List<Villains> villainsList = new ArrayList<>();
+
+        if (getSelectedGameSet() != null
+                && getSelectedGameSet().getId() > 0) {
+            villainsList.addAll(LegendaryDatabase.getInstance()
+                    .villainsDao()
+                    .getAllBySetId(getSelectedGameSet().getId())
+                    .stream()
+                    .map(VillainsEntity::toModel)
+                    .collect(Collectors.toList()));
+        }
+
+        if (villainsList.size() > 0) {
+            villainsList.add(0, Villains.NONE);
+        } else {
+            final Villains noVillainsFound = new Villains(Villains.NONE.toEntity());
+            noVillainsFound.setName(getString(R.string.noVillainsFound));
+
+            villainsList.add(noVillainsFound);
+        }
+
         
         return villainsList;
     }

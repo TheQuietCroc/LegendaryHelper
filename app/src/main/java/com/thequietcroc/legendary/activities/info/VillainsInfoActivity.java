@@ -15,6 +15,7 @@ import com.thequietcroc.legendary.models.gamecomponents.cards.Villains;
 import com.thequietcroc.legendary.models.gamecomponents.cards.Mastermind;
 import com.thequietcroc.legendary.utilities.DbAsyncTask;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -100,6 +101,11 @@ public class VillainsInfoActivity extends CardInfoActivity<Villains> {
                 villains.setMastermindLeader(newMastermind);
             }
 
+            if (!enabledSwitch.isChecked()) {
+                villains.getMastermindLeader().setEnabled(false);
+                villains.getMastermindLeader().dbSave();
+            }
+
             super.saveComponent();
         });
     }
@@ -120,14 +126,27 @@ public class VillainsInfoActivity extends CardInfoActivity<Villains> {
     }
 
     private List<Mastermind> getMastermindList() {
-        final List<Mastermind> mastermindList = LegendaryDatabase.getInstance()
-                .mastermindDao()
-                .getAllBySetId(getSelectedGameSet().getId())
-                .stream()
-                .map(MastermindEntity::toModel)
-                .collect(Collectors.toList());
 
-        mastermindList.add(0, Mastermind.NONE);
+        final List<Mastermind> mastermindList = new ArrayList<>();
+
+        if (getSelectedGameSet() != null
+                && getSelectedGameSet().getId() > 0) {
+            mastermindList.addAll(LegendaryDatabase.getInstance()
+                    .mastermindDao()
+                    .getAllBySetId(getSelectedGameSet().getId())
+                    .stream()
+                    .map(MastermindEntity::toModel)
+                    .collect(Collectors.toList()));
+        }
+
+        if (mastermindList.size() > 0) {
+            mastermindList.add(0, Mastermind.NONE);
+        } else {
+            final Mastermind noMastermindsFound = new Mastermind(Mastermind.NONE.toEntity());
+            noMastermindsFound.setName(getString(R.string.noMastermindsFound));
+
+            mastermindList.add(noMastermindsFound);
+        }
 
         return mastermindList;
     }
