@@ -28,15 +28,15 @@ public abstract class BaseGameComponentEntity extends BaseEntity {
         return isCustom;
     }
 
-    public void setCustom(boolean custom) {
-        isCustom = custom;
+    public void setCustom(boolean isCustom) {
+        this.isCustom = isCustom;
     }
 
     public boolean isEnabled() {
         return isEnabled;
     }
 
-    public void setEnabled(boolean enabled) {
-        isEnabled = enabled;
+    public void setEnabled(boolean isEnabled) {
+        this.isEnabled = isEnabled;
     }
 }

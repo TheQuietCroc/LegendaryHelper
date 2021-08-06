@@ -8,6 +8,7 @@ import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 
 import com.thequietcroc.legendary.database.daos.gamecomponents.GameSetDao;
+import com.thequietcroc.legendary.database.daos.gamecomponents.KeywordDao;
 import com.thequietcroc.legendary.database.daos.gamecomponents.cards.HenchmenDao;
 import com.thequietcroc.legendary.database.daos.gamecomponents.cards.HeroDao;
 import com.thequietcroc.legendary.database.daos.gamecomponents.cards.MastermindDao;
@@ -15,6 +16,7 @@ import com.thequietcroc.legendary.database.daos.gamecomponents.cards.SchemeDao;
 import com.thequietcroc.legendary.database.daos.gamecomponents.cards.VillainsDao;
 import com.thequietcroc.legendary.database.entities.gamecomponents.GameSetEntity;
 import com.thequietcroc.legendary.database.entities.GameSetupEntity;
+import com.thequietcroc.legendary.database.entities.gamecomponents.KeywordEntity;
 import com.thequietcroc.legendary.database.entities.gamecomponents.cards.HenchmenEntity;
 import com.thequietcroc.legendary.database.entities.gamecomponents.cards.HeroEntity;
 import com.thequietcroc.legendary.database.entities.gamecomponents.cards.MastermindEntity;
@@ -29,7 +31,8 @@ import com.thequietcroc.legendary.database.entities.gamecomponents.cards.Villain
                 HeroEntity.class,
                 MastermindEntity.class,
                 SchemeEntity.class,
-                VillainsEntity.class
+                VillainsEntity.class,
+                KeywordEntity.class
         },
         version = 1
 )
@@ -70,4 +73,6 @@ public abstract class LegendaryDatabase extends RoomDatabase {
     public abstract SchemeDao schemeDao();
 
     public abstract VillainsDao villainsDao();
+
+    public abstract KeywordDao keywordDao();
 }
